@@ -1,0 +1,118 @@
+PROC SH811 (INT BROJ, INT SVE, INT SMERB, real UNUT)
+DEF INT PRAVAC
+;potprogram za reznje navoja sa LEĐNOM OBRADOM
+;sa masine FB357
+DEF INT MM,JJ,HODC
+DEF REAL DD,izbrus,DELTAC
+;start kamena
+ZV400(broj)
+CLRINT(8)
+;sinhrona akcija za spanovanje sa osom XV
+ID=1 DO $$SA_LEAD_OFFSET_OUT_POS[X]=$AA_IM[XV]
+;ucitavanje tabele
+TB100(BROJ)
+;proracun promenljivih za odskok
+STOPRE
+PREKIDX = SVE*PREC[BROJ,0]+2*UNUT*DODB[BROJ,3]
+PREKIDZ = POZZ[BROJ,0]
+;prekid
+SETINT(8) PRIO=1 SH680
+STOPRE
+;Z, X i XV na poziciju za brusenje
+G0 Z=PREKIDZ
+G0 X=PREKIDX XV=UNUT*DODB[BROJ,3]
+;vezivanje tabele
+LEADON(X,C,1)      ; vezivanje osa
+FFWON              ; feed fowrvard control
+;start vode
+ZV100(BROJ)
+
+STOPRE
+;podesavanje promenljivih
+HODC=360/thst
+JJ=2 ; faza brusenja
+DD=DODB[broj,jj] ; dodatak brusenja
+;ugao C koji se prelazi za jedan hod 
+DELTAC=abs(POZZ[broj,1]-POZZ[broj,0])*360/(thpi*thst)
+if(thha<>0);ako je levi navoj okreni znak
+  DeltaC=-DeltaC
+endif
+;glavna petlja
+FAZA:
+;broj izbrusavanja za fazu
+    izbrus = izbr[broj,jj];
+;poruka ako je faza grubo brušenje
+    if (JJ==2) 
+	   MSG("$66001"<<"-"<<komentar[broj]) ;grubo brusenje
+	endif
+;poruka ako je faza fino brusenje
+	if (JJ==1)
+	   MSG("$66002"<<"-"<<komentar[broj]) ;fino brusenje
+	endif
+;poruka ako je faza zavrsno brusenje
+	if (JJ==0)
+	   MSG("$66003"<<"-"<<komentar[broj]) ;zavrsno brusenje
+	endif 
+;petlja za fazu brusenja
+PROLAZ:
+     STOPRE
+     MM=0 ; pocetak navoja koji se brusi
+;ako je broj izbrusavanja pao na nulu kraj faze brusenja
+    if (izbrus< 0) gotof izlaz
+;spanujemo
+    DD = DD - KORAK[broj,jj]
+;provera u kojoj smo fazi	
+	if (jj<=0)
+;ako je zavrsno
+	   if (dd<=0)
+;ako je dodatak ispod nule
+	       dd=0
+;izjednaci sa nulom i smanji broj izbrusavanja
+		   Izbrus = izbrus -1
+		endif
+	else
+;ako je faza nije zavrsno brusenje
+	   if (dd<=DODB[broj,jj-1])
+; i ako je dodatak manji o dodatka za sledecu fazu
+;stavi dodatak na dodatak za sledecu fazu 
+	      dd=dodB[broj,jj-1]
+;i smanji preostali broj izbrusavanja za jedan
+		  izbrus=izbrus-1
+		endif
+	endif
+HOD_NAVOJA:
+    STOPRE
+;spanovanje
+    G1 XV=UNUT*DD F=BRZU[BROJ,3]
+;pređi na suprotnu stranu sa kamenom
+    G01 XV=UNUT*(DD+thko) Z=POZZ[broj,1] F=BRZO[Broj,jj] C=IC(DELTAC)
+;odmicanje
+    G01 XV=unut*(thko+DODB[BROJ,3]) F=BRZU[BROJ,3]
+;zauzmi pocetnu poziciju
+    if (thha==0) ;ako je desni navoj
+       G00 XV=unut*DODB[broj,3] Z=POZZ[broj,0] C=acp(((MM+1) MOD THST)*HODC)
+    else 
+       G00 XV=unut*DODB[broj,3] Z=POZZ[broj,0] C=acn(((MM+1) MOD THST)*HODC)
+    endif
+    ;promeni mm - broj hoda koji se brusi
+	MM=MM+1
+    ;ako ima još hodova nazad na ho
+    if (mm<thst) gotoB HOD_NAVOJA
+;sledeći prolaz
+gotob PROLAZ
+IZLAZ:
+STOPRE
+;smanji fazu za 1
+JJ=JJ-1
+;proveri da li ima još brusenja 
+if (jj>=0) gotob FAZA
+;ako nema kraj
+KRAJ:
+G00 XV=UNUT*DODB[BROJ,3]
+;brisemo poruku
+msg("")
+;i zavrsavamo
+FFWOF
+LEADOF(X,C)
+KRAJ_SKROZ:
+M17

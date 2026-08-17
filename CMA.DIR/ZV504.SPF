@@ -1,0 +1,81 @@
+PROC ZV500(INT BROJ,REAL XDOD, REAL ZDOD, REAL MENJAC,INT COSA)
+;doskok OBICAN
+
+DEF REAL SMER_UGLA
+DEF REAL UGAO
+DEF REAL UNUT
+SETINT(1) PRIO=1 SH607
+
+PREKIDX = PREC[BROJ,0]+XDOD*DODB[BROJ,3]
+PREKIDZ = POZZ[BROJ,0]+ZDOD*DODB[BROJ,3]
+R3=0 R4=0 R6=0 R7=0
+STOPRE
+
+IF (PRILAZ_BRUS[BROJ]<>0) ;unutrasnje 
+   DIAMOF
+   G0 G53 X=BezbedniX
+   STOPRE
+   IF (MENJAC>0)
+      M3 S=MENJAC
+   ELSE 
+      IF (MENJAC<0) 
+         M4 S=MENJAC
+      ENDIF
+   ENDIF
+	;IZMENA 5/Mar/2019 8:55
+	ZV100(BROJ)
+   G0 Z=PREKIDZ
+   DIAMON
+   G0 X=PREKIDX
+ELSE ;spoljno
+   ;IZMENA 1/Mar/2019 8:09
+   STOPRE
+   IF (MENJAC>0)
+      M3 S=MENJAC
+   ELSE 
+      IF (MENJAC<0) 
+         M4 S=MENJAC
+      ENDIF
+   ENDIF
+   ;================
+	;IZMENA 5/Mar/2019 8:55
+	ZV100(TOCILO[BROJ])
+  
+    ;IZMENA 23.avg.2019 12:22
+    ;promenuti ako se uspostavi M24
+   G0 Z=PREKIDZ ;M24 ;start kompenzatora
+   ;G0 Z=PREKIDZ
+   DIAMON
+   
+   ;IZMENA 23.avg.2019 10:16
+   ;G0 X=PREKIDX
+   IF (GLAVA[BROJ]<>0)
+      G0 X=PREKIDX M26 ;merna glava napred u prilazenju
+      ;IZMENA 11.okt.2019 3:42
+      ;G04 F8
+      R070=KORX[BROJ]
+      impuls_glave[3]=0
+      impuls_glave[2]=0
+      impuls_glave[1]=0
+      impuls_glave[0]=0
+      
+   ELSE
+      G0 X=PREKIDX
+   ENDIF
+   
+ENDIF
+
+;IZMENA 5/Mar/2019 8:55
+;ZV100(TOCILO[BROJ])
+
+;IZMENA 24.maj.2019 13:17
+;dok prilazi do dodatka za grubo brusenje ceka signal kompenzatora
+impuls_glave[4]=0
+SETINT(4) PRIO=1 SH640
+G1 X=PREC[BROJ,0]+XDOD*DODB[BROJ,2] Z=POZZ[BROJ,0]+ZDOD*DODB[BROJ,2] F=BRZU[BROJ,3]
+ClrInt(4)
+STOPRE
+ClrInt(2)
+STOPRE
+M17
+

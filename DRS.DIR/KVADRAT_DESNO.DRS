@@ -1,0 +1,21 @@
+
+
+
+E_LAB_A_KVADRAT_DESNO: ;#SM Z:8
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z-13 X0 ;*GP*
+G1 Z-6 RND=.3 ;*GP*
+X2 RND=.3 ;*GP*
+Z-3 ;*GP*
+;CON,V64,2,0.0000,3,3,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:-13,EY:0,ASE:90;*GP*;*RO*;*HD*
+;LR,EX:-6;*GP*;*RO*;*HD*
+;R,RROUND:.3;*GP*;*RO*;*HD*
+;LU,EY:2;*GP*;*RO*;*HD*
+;R,RROUND:.3;*GP*;*RO*;*HD*
+;LR,EX:-3;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_KVADRAT_DESNO:
+
+M17

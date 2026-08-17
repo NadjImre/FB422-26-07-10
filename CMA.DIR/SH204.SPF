@@ -1,0 +1,84 @@
+PROC SH204(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;Za FB350
+;kombinovano brusenje spolja ili unutra sa leve strane
+
+DEF INT BROJAC 
+DEF REAL DUZINAX
+DEF INT BROJUSEC
+DEF REAL DUZZ2
+DEF INT BRTOC; broj tocila
+
+ZV400(BROJ)
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+BRTOC = GETT(NazivToc[BROJ])
+DUZZ2=POZZ[BROJ,1]-POZZ[BROJ,0]
+BROJUSEC=0
+IF DUZZ2<>0 
+   BROJUSEC=1+TRUNC(ABS(DUZZ2)/$TC_TPG5[BRTOC])
+   DUZINAX=DUZZ2/BROJUSEC
+Endif
+Stopre
+
+SETINT(8) PRIO=1 SH602
+R2=0 R1=0 
+
+FA[Z]=BRZO[broj,3] FA[X]=BRZU[broj,3]
+OSP1[Z]=POZZ[broj,0]              
+OSP2[Z]=POZZ[broj,1] 
+OST1[Z]=ZADR[broj,0]  OST2[Z]=ZADR[broj,1]                    
+OSNSC[Z]=0                
+OSCTRL[Z]=(1+32+16+256,4+8+64)
+STOPRE
+
+ID=7 EVERY $A_IN[7]<>0 DO $R1=1
+ID=8 EVERY ($AA_IM[Z]<>$SA_OSCILL_REVERSE_POS1[Z]) AND ($R2<=0) DO $R1=1
+ID=9 EVERY ($AA_IM[Z]<>$SA_OSCILL_REVERSE_POS2[Z]) AND ($R2>=0) DO $R1=1
+ID=5 WHENEVER $AA_DTEPW[X]==0 DO $R1=0
+ID=6 WHENEVER ($R1==0) AND ($$SA_OSCILL_IS_ACTIVE[Z]<>0) DO $AA_OVR[X]=0
+STOPRE
+
+GRUBO:
+msg("$66001"<<"- "<<komentar[broj]) ; poruka
+S=BROB[BROJ,2]
+For BROJAC=0 to BROJUSEC
+    SETINT(4) PRIO=1 SH604
+    G1 X=XVAZDUH F=BRZU[BROJ,3] 
+    G0 Z=POZZ[BROJ,0]+DUZINAX*BROJAC
+    G1 X=XGRUBO F=BRZU[BROJ,2]
+    G04 F=IZBR[broj,2]
+ENDFOR
+STOPRE
+
+CISTO:
+msg("$66002"<<"- "<<komentar[broj])
+S=BROB[BROJ,1]
+R2 = PRIM[BROJ,1]
+FA[Z]=BRZO[BROJ,1] 
+OSNSC[Z]=IZBR[BROJ,1]
+OST1[Z]=ZADR[broj,2]  OST2[Z]=ZADR[broj,3]  ; zadrzavanje
+x=xgrubo+brob_n[broj,2]
+STOPRE
+OSCILL[Z]=(X) POSP[X]=(XCISTO,KORAK[BROJ,1]/2,0)
+
+FINO:
+msg("$66003"<<"- "<<komentar[broj])
+S=BROB[BROJ,0]
+R2 = PRIM[BROJ,0]
+FA[Z]=BRZO[BROJ,0] 
+OSNSC[Z]=IZBR[BROJ,0]
+OST1[Z]=ZADR[broj,0]  OST2[Z]=ZADR[broj,1]  ; zadrzavanje
+x=xcisto+brob_n[broj,1]
+STOPRE
+OSCILL[Z]=(X) POSP[X]=(XFINO,KORAK[BROJ,0]/2,0)
+
+KRAJ:
+CANCEL(5,6,7,8,9)
+msg("")
+X=PREKIDX F=BRZU[BROJ,3]
+OS[Z]=0 
+STOPRE
+TRANS
+WaitP(Z)
+
+M17
+

@@ -1,0 +1,122 @@
+PROC _DRESSING_SETUP(STRING[32] BRTOC,INT DBROJTOC1,STRING[32] BrAbriht,Int DbrojAbriht,Int DbrojAbriht2,Int NacinAbriht,String[32] ProgAbrihtL, String[32] ProgAbrihtD ,Int BrojMaRpossCiklusA,Int Zaokret,Real TackaX,Real TackaZ,Real UgaoB,Int Komadavar,Int Preostalovar,Int HLAD_A,Int Status,INT DBrojToc2, REAL KORPOZ,  Real PodhodXVar, Real PodhodZVar,String[100] KOMENT)
+
+Def Int levo,desno
+
+ds_tool=brtoc
+ds_tool_num=gett(brtoc)
+ds_tool_dnum1=dbrojtoc1
+ds_tool_dnum2=dbrojtoc2
+ds_dresser=brabriht
+ds_dresser_num=gett(brabriht)
+ds_dresser_dnum1=DBrojAbriht
+ds_dresser_dnum2=DBrojAbriht2
+
+IF(DS_TOOL_NUM<=0) GOTOF NEMA_KAMENA
+IF(DS_DRESSER_NUM<=0) GOTOF NEMA_ABRIHTER
+IF ($TC_DP3[DS_TOOL_NUM,DS_TOOL_DNUM1]<=0) GOTOF PRECNIKNULA
+IF ($TC_TPG5[DS_TOOL_NUM]<=0) GOTOF SIRINANULA
+IF ($TC_TPG1[DS_TOOL_NUM]<=1) GOTOF NEMAVRETENA
+stopre
+
+;preuzimanje sirine kamena
+ds_tool_width = $TC_TPG5[ds_tool_num]
+levo = NacinAbriht mod 10
+desno = NacinAbriht div 10
+ds_profile=0
+if (levo>0)
+   ds_profile = ds_profile+1
+endif
+if (desno>0)
+   ds_profile = ds_profile+2
+endif
+if (levo==1)
+   ds_conture1="PLANE_LEFT"
+endif
+if (levo==2)
+   ds_conture1="FACE_LEFT"
+endif
+if (levo==3)
+   ds_conture1="FULL_LEFT"
+endif
+if (levo==4)
+   ds_conture1=ProgAbrihtL
+endif
+if (levo==5)
+   ds_conture1="ROLIK"
+endif
+if (desno==1)
+   ds_conture2="PLANE_RIGHT"
+endif
+if (desno==2)
+   ds_conture2="FACE_RIGHT"
+endif
+if (desno==3)
+   ds_conture2="FULL_RIGHT"
+endif
+if (desno==4)
+   ds_conture2=ProgAbrihtD
+endif
+
+ds_marposs=(brojMarpossCiklusa mod 10)+80
+ds_swivelpointX=TackaX
+ds_swivelpointZ=TackaZ
+ds_approach=zaokret
+ds_BAxisAngle=UgaoB
+DS_WORKPIECES=komadavar
+ds_workpieces_left=preostalovar
+ds_coolant=hlad_a
+ds_type=Status B_and 01
+ds_comment=koment
+ds_podhodX = PodhodXVar
+ds_podhodZ = PodHodZVar
+if ((levo==1) or (levo==3))
+   ds_podhodXL=PODHODXVAR
+   ds_podhodZL=-ds_tool_width - PODHODZVAR
+else
+   ds_podhodXL=PODHODXVAR
+   ds_podhodZL=PODHODZVAR
+endif
+if (levo==2)
+   ds_podhodZL=0
+endif
+if ((desno==1) or (desno==3))
+   ds_podhodXR=PODHODXVAR
+   ds_podhodZR=ds_tool_width + PODHODZVAR
+endif
+if (desno==2)
+   ds_podhodXR=PODHODXVAR
+   ds_podhodZR=0
+endif
+if (desno==4)
+   ds_podhodXR=PODHODXVAR
+   ds_podhodZR=-ds_tool_width - PODHODZVAR
+endif
+ds_direction=0;SMERABRIHT
+ds_poscorrection=KORPOZ
+
+STOPRE
+
+
+M17
+
+NEMA_KAMENA:
+   SETAL(65105,BRTOC)
+   GOTOF KRAJ
+NEMA_ABRIHTER:
+   SETAL(65106,brabriht)
+   GOTOF KRAJ
+PRECNIKNULA:
+   SETAL(65107,BRTOC)
+   GOTOF KRAJ
+SIRINANULA:
+   SETAL(65108,BRTOC)
+   GOTOF KRAJ
+NEMAVRETENA:
+   SETAL(65109,BRTOC)
+KRAJ:
+M00
+STOPRE
+M96
+M1
+M96
+

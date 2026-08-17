@@ -1,0 +1,6 @@
+PROC SH314(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje PRECNIKA I cela sa kosiim kamenom
+SH304(Broj,Sve,SmerB,Unut)
+M17
+

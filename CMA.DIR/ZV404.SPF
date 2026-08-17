@@ -1,0 +1,44 @@
+PROC ZV400(INT BROJ,INT JELABRIHT)
+;Ver2Rev1
+DEF INT KORD
+DEF REAL BPOZ
+Def int Kocenje
+
+Def int DBroj
+
+IF (JELABRIHT==0)
+   KORD=KORDSYS[BROJ]
+   Kocenje = kocnica[broj]
+   BPOZ=POZB[BROJ]
+ELSE
+   KORD=0
+   kocenje = kocnica_a[broj]
+   BPOZ=0
+ENDIF
+
+G[8]=KORD
+STOPRE
+;IZMENA 15.jun.2019 9:55
+IF ($AA_IW[B]<>BPOZ)
+   DIAMOF
+   G75X0
+   G75Z0
+   M5 M2=5 M3=5 M4=5
+ENDIF
+
+STOPRE
+G[8]=KORD G0 B=BPOZ
+
+;kocenje 
+if(kocenje==1)
+  KOCNICA_NORM
+endif
+if(kocenje==2)
+  KOCNICA_JAkA
+endif
+
+ZV000(BROJ,JELABRIHT)
+
+STOPRE
+M17
+

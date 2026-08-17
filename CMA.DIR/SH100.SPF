@@ -1,0 +1,63 @@
+PROC SH100(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB350, MAJ 2023
+; brusenje usecanjem spolja i unutran sa leve strane
+ZV400(broj)
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+STOPRE
+
+SETINT(8) PRIO=1 SH602
+
+OSP1[Z]=POZZ[BROJ,0]
+OST1[Z]=-2 OST2[Z]=-2
+OSNSC[Z]=0
+OSCTRL[Z]=(1+2,16+32+64)
+STOPRE
+
+GRUBO:
+MSG("$66001"<<"-"<<komentar[broj]) ;grubo brusenje
+IF OSCA[BROJ,2]<>0 
+   FA[Z]=BRZO[BROJ,2]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,2]   
+   OS[Z]=1
+ENDIF
+STOPRE
+S=BROB[BROJ,2] 
+G1 X=XGRUBO F=BRZU[BROJ,2]
+ClrInt(6)
+STOPRE
+G04 F=IZBR[BROJ,2] ;istrcavanje
+
+CISTO:
+MSG("$66002"<<"-"<<komentar[broj]) ;fino brusenje
+IF OSCA[BROJ,1]<>0 
+   FA[Z]=BRZO[BROJ,1]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,1]   
+   OS[Z]=1
+ENDIF
+STOPRE
+S=BROB[BROJ,1]
+G01 X=XCISTO F=BRZU[BROJ,1]
+G04 F=IZBR[BROJ,1]
+STOPRE
+
+FINO:
+MSG("$66003"<<"-"<<komentar[broj]) ;zavrsno brusenje
+IF OSCA[BROJ,0]<>0 
+   FA[Z]=BRZO[BROJ,0]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,0]   
+   OS[Z]=1
+ENDIF
+STOPRE
+S=BROB[BROJ,0]
+G01 X=XFINO F=BRZU[BROJ,0]
+G04 F=IZBR[BROJ,0]
+STOPRE
+
+KRAJ:
+msg("")
+G01 X=PREKIDX F=BRZU[BROJ,3]
+OS[Z]=0 
+WAITP(Z)
+
+M17
+

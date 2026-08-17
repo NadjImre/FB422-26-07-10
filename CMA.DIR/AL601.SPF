@@ -1,0 +1,28 @@
+PROC AL601
+DEF INT BROJ
+;odskok sa pomeranjem po Z osi
+;ako je X u minusu u suprotnom samo odskok po X
+; koristi se u AL200, AL210, AL300 i AL310
+G40
+MSG("$66007")
+
+IF (PREKIDU==FALSE)
+   IF ($AA_IW[X]<0) 
+      G1 G60 G90 Z=PREKIDZA F=RABHOD
+   ENDIF
+   G1 G90 X=PREKIDXA F=RABHOD
+   DIAMOF
+   G75X0 M11 M2=5 M3=5 M5
+   M20
+ELSE
+   IF ($AA_IW[X]>0) 
+      G1 G60 G90 Z=PREKIDZA F=RABHOD
+   ENDIF
+   G1 G90 X=PREKIDXA F=RABHOD
+   G75Z0 M11 M2=5 M3=5 M5
+ENDIF
+
+M96 
+STOPRE
+M17
+

@@ -1,0 +1,49 @@
+PROC ZV502(INT BROJ,REAL XPOZ, REAL ZPOZ, REAL CPOZ,REAL APOZ)
+;doskok NAVOJ
+;VER2REV0
+if (smer_n[broj]==0)
+   g0 c=ic(360)
+else
+   g0 c=ic(-360)
+endif
+
+M70
+
+IF (OBLIKAM[TOCILO[BROJ]]<>0) ;unutrasnje 
+   ;IZMENA 5/Mar/2019 9:38
+   ZV100(TOCILO[BROJ])
+   PREKIDX = XPOZ-DODB[BROJ,3]
+   PREKIDZ = ZPOZ
+   DIAMOF
+   G0 G53 X=BEZPREC[TOCILO[BROJ]]
+   if (smer_n[broj]==0)
+      G0 Z=PREKIDZ C=acp(Cpoz)
+   else
+      G0 Z=PREKIDZ C=acn(Cpoz)
+   endif
+   DIAMON
+   G0 X=PREKIDX
+   ;IZMENA 5/Mar/2019 9:38
+   ;ZV100(TOCILO[BROJ])
+   G1 X=XPOZ-DODB[BROJ,2] F=BRZU[BROJ,3]
+ELSE ;spoljno
+   ;IZMENA 5/Mar/2019 9:38
+   ZV100(TOCILO[BROJ])
+   PREKIDX = XPOZ+DODB[BROJ,3]
+   PREKIDZ = ZPOZ 
+   if (smer_n[broj]==0)
+      G0 Z=PREKIDZ C=acp(Cpoz)
+   else
+      G0 Z=PREKIDZ C=acn(Cpoz)
+   endif
+   diamon
+   G0 x=PREKIDx
+   ;IZMENA 5/Mar/2019 9:38
+   ;ZV100(TOCILO[BROJ])
+   G1 X=XPOZ+DODB[BROJ,2] F=BRZU[BROJ,3]
+ENDIF
+
+
+
+M17
+

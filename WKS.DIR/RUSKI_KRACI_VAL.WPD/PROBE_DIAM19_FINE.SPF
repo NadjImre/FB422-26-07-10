@@ -1,0 +1,64 @@
+PROC PROBE_DIAM19
+
+DEF INT BROJAC
+
+FOR BROJAC=0 TO 9
+  ME_RUNOUT[BROJAC]=0
+  ME_DIAM[BROJAC]=0
+ENDFOR
+ 
+G500X0G0T0D0
+G0B180A0
+
+me_tool="zond"
+me_tool_number = gett("zond")
+me_tool_Dnumber = 1
+me_diameter = 19.38
+me_position = 450
+me_distance = 2
+me_feed = 60
+me_ProbeUp = 33
+me_ProbeDown = 32
+me_probe_number = 2
+me_status = 15317
+me_frame = 2
+me_tolerance = 0.1
+me_with_Caxis = 1
+me_Caxis_Position = 45
+me_RepetitionCount = 2
+me_MeasureCount = 8
+me_ReturnMode = 16
+me_Probe_AutoUP =  64
+
+T=me_tool D=me_tool_Dnumber 
+G0 Z=me_position
+MS140
+STOPRE
+me_position = 355
+ME_RUNOUT[0]=ME_SPAN/2
+ME_DIAM[0]=ME_AVG
+MS140
+STOPRE
+ME_RUNOUT[1]=ME_SPAN/2
+ME_DIAM[1]=ME_AVG
+me_position = 260
+MS140
+STOPRE
+ME_RUNOUT[2]=ME_SPAN/2
+ME_DIAM[2]=ME_AVG
+me_position = 165
+MS140
+STOPRE
+ME_RUNOUT[3]=ME_SPAN/2
+ME_DIAM[3]=ME_AVG
+me_position = 70
+MS140
+STOPRE
+ME_RUNOUT[4]=ME_SPAN/2
+ME_DIAM[4]=ME_AVG
+
+G500X0G0T0D0
+M32
+
+M17
+

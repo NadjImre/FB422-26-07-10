@@ -1,0 +1,14 @@
+
+TEST=1
+;NCG#KorisnickiProfil#cporavnavanje2.com#NCCODE3#*NCG;*RO*;*HD*
+;#13#1#10#1#1#3#11#12#1#1#1#1#1#1#1#0#1#1#1#1#2#10#1#*NCG;*RO*;*HD*
+_USER_DRESSING("NORTON_400_20",1,"TEST_ROLNA",1,2,310,"ROLIK2_LEVO","ROLIK2_DESNO",3,0,0,0,0,0,0,0,0,1,0,12,"ABRIHT-M20")
+;#END#*NCG;*RO*;*HD*
+
+G500
+;NCG#poravnavanje7#cporavnavanje2.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#2#4#1#2#5#*NCG;*RO*;*HD*
+AL007(33,2,0.02,0,90,-3000)
+;#END#*NCG;*RO*;*HD*
+M17
+

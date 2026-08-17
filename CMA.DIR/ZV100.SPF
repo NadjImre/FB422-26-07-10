@@ -1,0 +1,21 @@
+PROC ZV100(INT BROJ,int JEL_A)
+;start vode
+
+DEF INT SPINU
+DEF INT MVODA
+Def Int BRTOC
+
+IF (JEL_A<>0)
+   MVODA=HLADJENJE_A[BROJ]
+   brtoc = gett(NazivToc_A[Broj])
+ELSE
+   MVODA=HLADJENJE[BROJ]
+   brtoc = gett(NazivToc[Broj])
+ENDIF
+SPINU=$TC_TPG1[BRTOC]
+IF (TEST<>0)
+   waits(SPINU)
+   M=MVODA
+ENDIF
+
+M17

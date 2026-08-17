@@ -1,0 +1,6 @@
+PROC SH510(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje sfere usecanjem
+SH410(BROJ,SVE,SMERB,UNUT)
+M17
+

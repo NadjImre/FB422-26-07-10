@@ -1,0 +1,65 @@
+Proc Al130(int broj)
+
+
+;Navoj sa zasekom
+DEF INT BREG
+DEF REAL XA
+DEF REAL ZA
+DEF REAL XB
+DEF REAL ZB
+DEF REAL XC
+DEF REAL ZC
+DEF REAL XD
+DEF REAL ZD
+DEF REAL XE
+DEF REAL ZE
+DEF REAL XF
+DEF REAL ZF
+DEF REAL XG
+DEF REAL ZG
+DEF REAL XHH
+DEF REAL ZHH
+DEF INT BRTOC
+DEF REAL SIRINA
+Def Real unut
+
+;preuzimanje sirine tocila
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+XA=0 ZA=thph
+XB=0 ZB=-thx3+(thh1+thx1)*TAN(tha1)
+XC=unut*(thh1+thx1) ZC=-thx3
+XD=unut*thh ZD=ZC
+XE=unut*thh ZE=ZD-thb3
+XF=unut*(thh1+thx1) ZF=ZE
+XG=0 ZG=ZF-(thh1+thx1)*TAN(tha2)
+XHh=0 ZHh=-thph-SIRINA
+
+STOPRE
+D2
+G1 G451 X=XA G42
+X=XB Z=ZB rnd=thr1
+X=XC Z=ZC
+X=XD Z=ZD RND=thr2
+X=XE Z=ZE-1 
+D1 X=XE+unut
+G0 Z=ZHh
+G1 X=XHh G41
+X=XG Z=ZG rnd=thr1
+X=XF Z=ZF
+X=XE Z=ZE RND=thr2
+Z=ZD+1 X=XD
+D2 G0 Z=ZA G40 
+
+M17
+

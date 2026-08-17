@@ -1,0 +1,111 @@
+PROC SM100(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB290
+;brusenje usecanjem sa mernom glavom
+
+;nulovanje parametara glave
+impuls_glave[3]=0
+impuls_glave[2]=0
+impuls_glave[1]=0
+impuls_glave[0]=0   
+GLAVA_NAPRED
+G04 F7
+
+;korinatni sistem i start kamena
+ZV400(BROJ)
+;prilaz koamdu i strat menjaca
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+STOPRE
+
+SETINT(8) PRIO=1 SH602
+
+;pomocni parametar koristi se pri brusenju mernom glavom
+R075=XFINO 
+
+;parametri oscilovanja
+OSP1[Z]=POZZ[BROJ,0] ; prva tacka oscilovanja
+OST1[Z]=-2 OST2[Z]=-2 ; nema zadrzavanja na kraju
+OSNSC[Z]=0 ; nema izbrusavanja
+OSCTRL[Z]=(1+2,16+32+64) ; prekid momentalno
+STOPRE
+
+GRUBO:
+;grubo brusenje - ispis poruke
+MSG("$66001"<<"-"<<komentar[broj])
+;start osccilacija ako je programirana duzina za grubo
+IF OSCA[BROJ,2]<>0 
+   FA[Z]=BRZO[BROJ,2]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,2]   
+   OS[Z]=1
+ENDIF
+STOPRE
+;na treci impulas poziva se sh630 - DRUGI impuls mora biti na int 3
+SETINT(3) PRIO=1 SH630
+;broj obrtaja grubo
+S=BROB[BROJ,2] 
+;brusenje grubo
+G1 X=XGRUBO F=BRZU[BROJ,2]
+;ne prtaimo vise treci impuls
+ClrInt(3)
+STOPRE
+;izbrusavanje posle grubog
+G04 F=IZBR[BROJ,2] 
+
+CISTO:
+;fino brusenje - ispisivanje poruke
+MSG("$66002")
+;oscilacije ako je programirana duzina za fino
+IF OSCA[BROJ,1]<>0 
+   FA[Z]=BRZO[BROJ,1]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,1]   
+   OS[Z]=1
+ENDIF
+STOPRE
+;na drugi impuls poziva se SH620 - PRVI impuls mora biti an int 2 
+SETINT(2) PRIO=1 SH620
+;broj obrtaja fino
+S=BROB[BROJ,1]
+;brusenje fino
+G01 X=XCISTO F=BRZU[BROJ,1]
+;ne pratimo drugi impuls
+ClrInt(2)
+;izbrusavanje posle finog
+G04 F=IZBR[BROJ,1]
+STOPRE
+
+FINO:
+;zavrsno brusenje - poruka
+MSG("$66003") ;zavrsno brusenje
+;oscilacije za zavrsno brusenje
+IF OSCA[BROJ,0]<>0 
+   FA[Z]=BRZO[BROJ,0]
+   OSP2[Z]=POZZ[BROJ,0]+OSCA[BROJ,0]   
+   OS[Z]=1
+ENDIF
+STOPRE
+;na NULTI impuls pozivi SH620 - prvi impus mora biti na int 1
+SETINT(1) PRIO=1 SH610
+;broj obrtaja zavrsno
+S=BROB[BROJ,0]
+;brusenje zavrsno
+G01 X=XFINO F=BRZU[BROJ,0]
+;ne pratimo vise prvi imuls
+ClrInt(1)
+STOPRE
+;nulti impuls na izbrusavanju
+;SETINT(1) PRIO=1 SH610
+;izbrusavanje
+;G04 F=IZBR[BROJ,0]
+;ne pratimo nulti impuls
+;ClrInt(1)
+STOPRE
+
+KRAJ:
+msg("")
+G01 X=PREKIDX F=BRZU[BROJ,3] GLAVA_NAZAD
+OS[Z]=0 
+WAITP(Z)
+
+
+
+M17
+

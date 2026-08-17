@@ -1,0 +1,99 @@
+PROC  MS150
+;merenje za pozicioniranje preko sredine zljeba
+;za mašinu FB422, maj 2026
+;korekcija - 0 samo merenje, 1 merenje sa korekcijom , 2 podesavanje/kalibracija, 3 rekalibracija
+;PROMENLJIVE
+;pocetna pozicija pre merenja
+Def Real start_x,start_z
+;brojac merenja
+Def Int Brojac=0
+;ravan , koordinatni sistem i alat
+g18g500 t=me_tool d=me_tool_dnumber
+;zapamti pocetnu poziciju
+start_x=$aa_iw[x] start_z=$aa_iw[z]
+stopre
+;da li je podesavanje ili kalibracija
+if (me_W_type==4) gotof Kalibracija
+;poruka
+msg("$66020")
+;podizanje sonde
+;m=me_ProbeUp
+
+;zauzimanje pozicije za merenje - ako ima kontakta to je greska
+G0 Z=me_W_position MEAS=me_probe_number
+IF(($AC_MEA[me_probe_number]==1) AND (TEST>0)) GOTOF GRESKA
+;zauzimanje pocetne tacke merenja po X u - ako ima kontakta to je greska
+G0 X=me_W_diameter MEAS=me_probe_number
+IF(($AC_MEA[me_probe_number]==1) AND (TEST>0)) GOTOF GRESKA
+STOPRE
+;merenje zljeba
+MERENJE_ZLJEBA:
+;merimo u plus
+G1 Z=IC(me_W_width) F=me_feed MEAS=me_probe_number
+;ako ako nema kontakta greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA
+;ako ima onda belezimo rezultat
+me_W_results[0,0,0]=$AA_MW[Z]
+;i vracamo se nazad
+G0 Z=me_W_position
+;i merimo u suprotnom smeru
+G1 Z=IC(-me_W_width) F=me_feed MEAS=me_probe_number
+;ako nemamo kontakt to je greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0) ) GOTOF GRESKA
+;ako ima onda belezimo rezultat
+me_W_results[0,0,1]=$AA_MW[Z]
+;i vracamo se nazad
+G0 Z=me_W_position
+;proracun sredine
+me_W_result = me_W_position - 0.5*(me_W_results[0,0,0] + me_W_results[0,0,1])
+;ispis poruke
+msg("$66021 "<<me_W_result)
+;vracanje na pocetnu tacku
+g0 x=start_x
+;g0 z=start_z
+;podizanje sonde
+;m=me_probeDown
+
+
+m17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17
+
+;pocetak kalibracije
+KALIBRACIJA:
+;sonda mora biti rucno podignuta i dovedena u  žljeb na komadu
+;trazimo kontakt po Z osi u plus smeru
+g1 Z=START_Z+me_W_width F=me_feed MEAS=me_probe_number
+;ako nemamo kontak  - greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
+;u slucaju kontakta prepsujemo belezimo rezulztat
+Me_W_Results[0,0,0]=$AA_MW[Z]
+;varcamo se nazad
+G0 Z=Start_Z
+;i merimo u suprotnu stranu
+g1 Z=start_z-me_w_width F=me_feed MEAS=me_probe_number
+;ako nemamo kontak  - greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
+;u slucaju kontakta prepsujemo belezimo rezulztat
+Me_W_Results[0,0,1]=$AA_MW[Z]
+;podesavanje ostalih promenljivih
+me_W_diameter = start_X
+me_W_position = 0.5*(me_W_results[0,0,0] + me_W_results[0,0,1])
+me_w_width = abs(me_W_results[0,0,0] - me_W_results[0,0,1])
+;ispis poruke
+msg("$66021 "<<Me_W_Position)
+Z=Start_z 
+m00
+M17
+
+GRESKA_KALIBRACIJE:
+MSG("GRESKA_KALIBRACIJE")
+M00
+M17
+

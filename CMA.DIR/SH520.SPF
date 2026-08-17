@@ -1,0 +1,6 @@
+PROC SH520(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje sfere celom kamena
+SH410(BROJ,SVE,SMERB,UNUT)
+M17
+

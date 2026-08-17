@@ -1,0 +1,17 @@
+U=205.485 F1800
+
+M24;merna glava napred
+;M37;lineta steze
+;F5G4
+M50
+M00
+;M36;lineta otpusta
+M25;merna glava nazad
+;M39;lineta nazad
+U0
+M17
+
+;NCG#MeasurinHead#csonda.com#NCCODE3#*NCG;*RO*;*HD*
+;#5#1#1#1#2#2#2#1##1#1###1#1##*NCG;*RO*;*HD*
+MS120("zonda",1,0,0,10,60,23,1,,2,0 , 0 , 0)
+;#END#*NCG;*RO*;*HD*

@@ -1,0 +1,14 @@
+G90 G18 DIAM90
+X0 Z=ds_tool_width+ds_podhodZ
+if ((ds_taper_length2>0) and (ds_taper_angle2<>0))
+   X0 Z=ds_taper_length2
+   X=-ds_taper_length2*tan(ds_taper_angle2) Z0 Rnd=ds_radius2
+else
+   X0 Z0 Rnd=ds_radius2
+endif
+if (ds_margin2>0)
+   Z0 X=IC(-2*ds_Margin2)
+endif
+Z=ds_Face_Length2*tan(ds_Face_Angle2) X=-2*ds_Face_Length2 RND=ds_PodhodZ/2
+Z=-ds_PodhodZ
+M17

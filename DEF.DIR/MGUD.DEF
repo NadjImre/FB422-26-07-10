@@ -1,0 +1,216 @@
+;Parametri brusenja
+Def Chan String[32] Gr_Tool ; naziv tocila koje se koristi za brusenje
+Def Chan Int Gr_DNumber ; broj ivice tocila koje se koristi
+Def Chan Int Gr_Frame ; broj koordinatnog sistema 1-G53(G500), 2-G54,3-G55...
+Def Chan Real Gr_Diameter1, Gr_Diameter2 ; precnici prusenja
+Def Chan Real Gr_Position1, Gr_Position2 ; pozicije brusenja po Z osi
+Def Chan Int Gr_Coolant = 11 ; m funkcija za start vode 
+Def Chan Real Gr_Podhod = 5 ; velicina prilaza kod brusenja
+Def Chan Int Gr_RabHod = 60 ; brzina radnog hoda
+Def Chan Real Gr_DiamCorrection ; korekcija precnika
+Def Chan Real Gr_PosCorrection ; korekcija pozicije
+Def Chan Real Gr_Taper_Correction[4]; korekcija konusa u vise tacaka
+Def Chan Real Gr_CAngleCorrection;korekcija C
+Def Chan Real Gr_BAxis_angle ; ugao B ose
+Def Chan String[100] Gr_Comment ; komentar na operaciju brusenja
+Def Chan Axis Gr_Oscil_Axis = (Z)
+Def Chan Axis Gr_Feed_Axis = (X)
+Def Chan Axis Gr_Spindle = (C) 
+Def Chan Real Gr_Steps[6] = REP(0.1)
+Def Chan Int Gr_Strokes[6]
+Def Chan Int Gr_StrokesToDress[6]
+Def Chan Int Gr_Feeds[6]
+Def Chan Real Gr_PlungeCut_Feeds[6] ;brzina usecanja
+Def Chan Int Gr_HoldZ1[6] ; Zadrzavanje na kraju Z1 kod oscilacija
+Def Chan Int Gr_HoldZ2[6]  ; Zadrzavanje na kraju Z2 kod oscilacija
+Def Chan Int Gr_Position_Strokes[6] ;Primicanje kod oscilacija Z1,Z2;Z1+Z2
+Def Chan Real Gr_Speeds[6]
+Def Chan Int Gr_Wheel_Speeds[6]
+Def Chan Int  Gr_DirectionZ ; smer brusenja (levo,desno)SMERZ
+Def Chan Real Gr_Oscilacion_Feeds[6] ; Brzina oscilacija
+Def Chan Real Gr_Steps_Oscilation[6] ; špan kod oscilacija
+Def Chan Real Gr_PlungeCut_Oscilation[6] ; oscilacija prilikom brusenja usecanjem
+Def Chan Real Gr_DwellTime[6]; Izbrusavanje
+Def Chan Real Gr_ReturnDistance[6] ;precnik vracanja sa abrihtovanja
+Def Chan Int Gr_Direction
+Def Chan Real Gr_DirectionX ; -0.5 spolja, 0.5 unutra
+Def Chan Int Gr_Measure_NumX, Gr_Measure_NumZ
+def chan real Gr_Pause[6]
+Def chan Int Gr_approach ; nacin odlaska u tacku zaokreta 
+Def chan Real Gr_SwivelPointX, Gr_SwivelPointZ
+Def Chan Int Gr_Method ; Nacin brusenja
+Def chan Int Gr_Type ; Tip brusenja ( spolja ili unutra)
+Def Chan Int Gr_TypeOfRebound
+Def chan Real Gr_EndCycleDiameter ;precnik odskoka za zavrsetak ciklusa
+Def Chan Int Gr_Marposs; broj marpos ciklusa koji je aktivan za Brusenje moze biti od 80 do 89
+DEF CHAN INT Gr_interrupts[6]
+Def Chan Int Gr_Start = 0
+Def Chan Int Gr_All_Starts=1
+Def Chan Int Gr_SteadyRest ; da li se koristi lineta 0 - NE , 1 - DA
+Def Chan Real Gr_UAxis_Position ; pozicija U ose za linetu
+Def Chan Real Gr_Steady_InPos ; pozicija od pocetka hoda gde lineta kreće u komad
+Def Chan Real Gr_Steady_OutPos ; pozicija od kraja hoda gde lineta izlazi
+Def Chan Int Gr_ContureDef ;nacin definicije konture 0-ravno , 3-korisnicka
+Def Chan Real Gr_Taper_Correction1 ; korekcija konusa na kraju 
+Def Chan Real Gr_Taper_Correction2 ; Korekcija konusa u sredini
+Def Chan Real Gr_Contur_Diam
+Def Chan Real Gr_Contur_Pos1
+Def Chan Real Gr_Contur_Pos2
+Def Chan Int Gr_Contur_Start
+Def Chan Real Gr_Contur_StartDist
+Def Chan Real Gr_Contur_StartAngle
+Def Chan Int Gr_Contur_End
+Def Chan Real Gr_Contur_EndDist
+Def Chan Real Gr_Contur_EndAngle
+def chan int Gr_measuring_head
+def chan int Gr_measuring_head_in
+def chan int Gr_measuring_head_out
+;parametri porvanavanja
+Def Chan Int Ds_Strokes[6]
+Def Chan Int Ds_Feeds[6]
+Def Chan Real Ds_Steps[6]
+Def Chan Real Ds_Steps_Face[6]
+Def Chan Int Ds_Wheel_Speeds[6]
+Def Chan Real Ds_Roll_Speeds[6]
+Def Chan String[32] Ds_Tool
+Def Chan Int Ds_Tool_Num
+Def Chan Int Ds_Tool_DNum1, Ds_Tool_DNum2
+Def Chan Real Ds_Tool_Width
+Def Chan String[32] Ds_Dresser
+Def Chan Int Ds_Dresser_Num
+Def Chan Int Ds_Dresser_DNum1, Ds_Dresser_DNum2
+Def Chan Int Ds_Coolant
+Def chan real Ds_PodhodXL, Ds_PodhodZL ; podhod u smeru x i z ose za levu konturu abs koordinate
+Def chan real Ds_PodhodXR, Ds_PodhodZR ; podhod u smeru x i z ose za desnu konturu abs koordinate
+Def chan real Ds_PodhodX, Ds_PodhodZ ; podhod u smeru x i z ose za obe konturu inc koordinate
+Def chan String[32] Ds_Conture1,Ds_Conture2 ; naziv profila navoja
+Def chan int ds_workpieces; broj komada posle kojeg se abrihtuje
+Def Chan Int ds_workpieces_left ; broj komada preostalo do abrihtovanja
+Def Chan Int ds_type ; tip poravnavanja, 0 iz plusa u minus po precniku, <>0 iz minusa u plus po precniku
+Def Chan Int ds_direction ; smer poravnavanja po z osi, 0 u plus smer
+Def Chan Real ds_PosCorrection ; korekcija pozicije
+Def Chan String[100] Ds_Comment ; komentar na operaciju brusenja
+Def Chan Int Ds_Profile ; abrihtovanje sa jednosecnim (300) dvosecnim (310) ili profilnim alatom (320)
+Def Chan Int Ds_Marposs; broj marpos ciklusa koji je aktivan za poravnavanje moze biti od 80 do 89
+Def chan Int ds_approach ; nacin odlaska u tacku zaokreta 
+Def chan Real Ds_SwivelPointX, Ds_SwivelPointZ ;tacka zaokreta tu ce biti zakrenuta B osa
+Def chan Real Ds_BAxisAngle ; ugao B ose kod abrihtovanja
+Def chan Real Ds_Face_Length1,DS_Face_Length2 ; duzina bocne strane komada koji se poravnava
+Def chan Real Ds_Face_Angle1,Ds_Face_Angle2 ; ugao bocne strane koji se poravnava
+Def chan Real Ds_Face_Depth1,Ds_Face_Depth2 ; Dubina bocne strane koja se poravnava - samo kod tipa 2
+Def chan Real Ds_Radius1,Ds_Radius2 ; Radijus prelaza na vrhu kamena
+Def chan Real Ds_Margin1, Ds_Margin2 ; ravna fazeta na bocnoj strani kamena
+Def chan Real Ds_Taper_Length1,Ds_Taper_Length2 ; duzina konusa na precniku kamena
+Def chan Real Ds_Taper_Angle1,Ds_Taper_Angle2 ; ugao konusa na precniku kamena
+
+;Parametri navoja
+DEF CHAN INT Th_Type ; tip navoja 0-spoljni, 1-unutrašnji navoj
+Def Chan Real Th_D2 ; Srednji precnik navoja
+Def chan real Th_Pitch ; korak navoja
+Def chan int Th_Hand ; smer navoj 0- desni, 1-Levi 
+Def chan int Th_Starts ; broj početaka navoja
+Def chan String[32] Th_Conture ; naziv profila navoja
+Def chan real th_angle1,th_angle2
+Def chan real th_plunge_angle1 ; ugao ulaska kod usecanja navoja
+Def chan real th_plunge_angle2 ; ugao brusenja kod usecanja navoja
+Def chan real th_plunge_angle3 ; Ugao Izlsaka kod Usecanja navoja
+Def chan real th_plunge_feed ; Broj Obrtaja komada kod usecanja navoja
+Def chan real th_plunge_wheel_speed ; Brzina Kamena kod usecanja navoja
+
+;******************
+;parametri merenja
+;******************
+def chan real me_result[16,16] ; rezultati merenja maks. 16 ponavljanja sa 16 merenja po krugu
+def chan real me_max ; maksimum rezultata
+def chan real me_min ; minimum rezultata
+def chan real me_avg ; prosek rezultata
+def chan real me_span ; razlika izmedju maksimuma i minimuma
+def chan string[32] me_tool ; naziv alata za merenje
+def chan int me_tool_number ; broj alata za merenje
+def chan int me_tool_dnumber ; D broj alata za merenje
+def chan real me_distance ; duzina merenja 
+def chan real me_feed ; brzina pomaka pri merenju
+def chan real me_target ; ciljna kordinata pri kalibraciji
+def chan int me_probe_number ; broj sonde koji se koristi (1 ili 2)
+def chan real me_diameter ;precnik merenja
+def chan real  me_position ; pozicija merenja po Z osi
+def chan int me_probeUP ; M funkcija za podizanje sonde
+def chan int me_probeDown ; M funkcija za spuštanje sonde
+def chan int me_status ; Status - bit kodirano
+def chan int me_frame ; koord. system koji se koriguje sa rezultatima merenja
+def chan real me_tolerance ; tolerancija odstupanja od nominalne mere
+def chan real me_runout_tolerance ; tolerancija udara
+def chan real me_offset; korekcija merenja precnika
+def chan int me_with_Caxis ; <>0 treba okrenuti C osu po zadati ugao za merenje
+def chan real me_Caxis_Position ; ugao na koji treba okrenuti C osu za merenje
+def chan int me_RepetitionCount ; broj ponavljanja merenja u istoj tački
+def chan int me_MeasureCount ; broj merenja po krugu
+def chan int me_Correction ; 0 samo ispis rezultata, 1 - korekcija koors systema, 2 - rekalibracija
+def chan int me_Probe_AutoUp ; 0 - automatsko dizanje i spuštanje sonde 
+def chan int me_ReturnMode ; nacin povrtaka osa posle merenja
+def chan int me_w_type ; nacin merenja širinie ili pozicioniranja po sredini
+def chan real me_w_diameter ; precnik merenja širine, definisan kalibracijom
+def chan real me_w_position ; pozicija sredine žljeba, određuje se kalibracijom
+def chan real me_w_width ; nominalna širina žljeba, upisuje kalibracija
+def chan real me_w_results[10,10,2] ; rezultati merenja, tačke dodira sa sondom
+def chan real me_w_result ; rezultat merenja, izmerena pozicija sredine žljeba
+def chan int me_c_type ; tip merenja 
+def chan real me_c_diameter ; precnik merenja širine, definisan kalibracijom
+def chan real me_c_position ; pozicija sredine žljeba, određuje se kalibracijom
+def chan real me_c_calibration ; pozicija c sa calibracije
+def chan real me_c_result ; rezultat merenja, izmerena pozicija sredine žljeba
+def chan real me_c_span ; korak sa kojim se trazi zljeb
+def chan real me_c_feed ; brzina sa kojom se merei u c pravcu
+def chan int me_th_type ; tip merenja 
+def chan real me_th_diameter ; precnik merenja navoja, definisan kalibracijom
+def chan real me_th_position ; pocetna pozicija merenja, određuje se kalibracijom
+def chan real me_th_startdia ; startni precnik merenja navoja
+def chan real me_th_result ; rezultat merenja, izmerena pozicija sredine žljeba
+def chan real me_th_pitch ; korak navoja koji se meri
+def chan real me_th_step ; korak sa kojim se traži ulazak u navoj
+def chan real me_th_results[100] ; rezulatati merenja , tačke dodira levo ili desno
+def chan real me_th_Zerror ; greška odstupanja sredine žljeba navoja po Z osi
+def chan real me_th_Cerror ; vrednost za koju treba korigovati C osu da bi pogodili ulazak u nit
+def chan real me_th_Werror ; greska sirine zljeban navoja na visini merenja
+def chan real me_th_Xerror ; greska srednjeg prečnika navoja (racunska)
+def chan real me_th_width[10] ; izmerena širina žljeba navoja 
+def chan real me_runout[10] ; udar kod merenja
+def chan real me_diam[10] ; izmereni precnik
+def chan real me_th_nom_diameter=18.896 ;srednji precnik nominalni
+def chan real me_th_nom_position ;nominalna posicija gde je obavljena kalibracija
+def chan real me_th_CalDiam[2]=(19.2,19.25) ;precnici za kalibraciju
+def chan string[32] me_report_file
+;*******************************************************
+;Parametri profila navoja za fabricki definisane profile
+;*******************************************************
+Def Chan Real Th_D0 ; Nominalni precnik navoja
+Def Chan Real Th_D1 ; Mali precnik navoja
+Def Chan Real Th_D3 ; Precnik D3 za metricke navoje
+Def chan real Th_Cone ; konus navoja
+Def chan real Th_Alpha, Th_Beta ; uglovi navoja
+Def chan real Th_R,Th_R0, Th_R1, Th_R2, Th_R3, Th_R4, Th_R5 ; radijusi navoja
+Def chan real Th_H, Th_H0, Th_H1, Th_H2, Th_H3 ; visine navoja
+Def chan real Th_B1, Th_B2, Th_B3 ; širine navoja
+
+;Parametri tocila navoja
+Def chan Real Ds_X1 ; parametar X1 sa starog sistema – podizanje podnožja 
+Def chan Real Ds_X2 ; parametar X2 sa starog sistema – podizanje vrha kamena 
+def chan real Ds_X3 ; parametar x3 - položaj prvog zuba od leve ivice kamena
+Def chan real Ds_XB ; korekcija širine kamena
+Def chan real Ds_RibNum ; broj zuba na kamenu ako je višeprofilni kamen
+Def chan int Ds_RibDist ; skaliranje koraka na kamenu,razmak zuba je ovoliko puta veći od koraka navoja
+Def chan real Ds_RibDelta ; smanjenje veličine zuba na višeprofilnom kamenu
+
+;parametri leđne obrade
+Def chan String[32] retab ; naziv tabele za leđno brušenje
+Def chan Int retip ; tip, preko tabele, isključeno ili uključeno spirano
+Def chan Real redub ; dubina leđnog brušenja 
+Def chan Int rezub ; broj zuba alata
+Def chan Real repro ; procenat ugla koji se brusi leđnog
+Def chan Real rekor ; korak spirale kod leđnog brušenje – ne koristi se, za buduća proširenja 
+
+;ostali parametri
+def chan int test; test rezim
+
+
+M30

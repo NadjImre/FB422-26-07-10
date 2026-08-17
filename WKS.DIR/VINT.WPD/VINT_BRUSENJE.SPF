@@ -1,0 +1,21 @@
+
+;NCG#ProfilNavoja2#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#9#1#4#4#1#1#1#1#6#2#2#1#4#3#1#0###*NCG;*RO*;*HD*
+_THREAD_PROFIL(0,6,8.75,6.98,8,4,0,1,-0.026,30,30,0,1.56,0.3,0,"<no name>","",,)
+;#END#*NCG;*RO*;*HD*
+
+;NCG#rezimi2#crezimi_za_navoj.com#NCCODE1#*NCG;*RO*;*HD*
+;#""#""#""#""#1#4#4#4#2##4#4#4##2#2#2##1#1#1##1#1#1#0#*NCG;*RO*;*HD*
+_THREAD_SPEEDS_FEEDS(3,0.15,0.03,0.01,60,0.05,0.02,0.01,90,90,90,0,0,0,0,0,0,"")
+;#END#*NCG;*RO*;*HD*
+;NCG#RadniPredmet#cnavoj.com#NCCODE2#*NCG;*RO*;*HD*
+;#3#1#7#5##1##1#2#2##1#1#1#0#1#1#1##*NCG;*RO*;*HD*
+_THREAD_WORKPART(820,0,-109.18,-0.04,0,0,30,12,0,0,0,"",0,0,"-")
+;#END#*NCG;*RO*;*HD*
+;NCG#Navoj#cnavoj.com#NCCODE2#*NCG;*RO*;*HD*
+;#5#1#1#1#1#4#1#1#1#1#1#1#1#1#1#1#*NCG;*RO*;*HD*
+_THREAD_GRINDING("krug1",1,0,7.25,0,0,2,0,0,0,0,0,0,0,0,0)
+;#END#*NCG;*RO*;*HD*
+
+M17
+

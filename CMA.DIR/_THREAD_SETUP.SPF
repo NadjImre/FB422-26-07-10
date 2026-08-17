@@ -1,0 +1,19 @@
+PROC _THREAD_SETUP(Int RB ,Real DubProlaza ,Int ProlazaBrus ,Int Pauza ,Int ProlazaDOAbriht  ,Int ProlazaAbriht ,Real DubAbriht ,Int BrzAbriht, Real BrzKamAbriht ,Real BrzRolne ,Real BrojObrtaKomada ,Real BrzKamBrus)
+
+Def int ii
+ii=rb-1
+
+Gr_Steps[ii]=DubProlaza
+Gr_Strokes[ii]=ProlazaBrus
+Gr_StrokesToDress[ii]=ProlazaDoAbriht
+Ds_Strokes[ii]=ProlazaAbriht
+Ds_Steps[ii]=DubAbriht
+Ds_Feeds[ii]=BrzAbriht
+Ds_Wheel_Speeds[ii]=BrzKamAbriht
+Ds_Roll_Speeds[ii]=BrzRolne
+Gr_Speeds[ii]=BrojObrtaKomada
+Gr_Wheel_Speeds[ii]=BrzKamBrus
+Gr_Pause[ii]=Pauza
+Stopre
+
+M17

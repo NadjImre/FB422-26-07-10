@@ -1,0 +1,57 @@
+PROC AL151(INT BROJ)
+
+;Radijusni navoj za kuglicno zavojno vreteno
+;Alat sa jednom ostricom
+
+DEF REAL XA
+DEF REAL ZA
+DEF REAL XB
+DEF REAL ZB
+DEF REAL XC
+DEF REAL ZC
+DEF REAL XD
+DEF REAL ZD
+DEF REAL XE
+DEF REAL ZE
+DEF REAL XF
+DEF REAL ZF
+DEF REAL XO
+DEF REAL ZO
+DEF INT BRTOC
+DEF REAL SIRINA
+Def Real unut
+
+;preuzimanje sirine tocila
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+XO=0.5*(thd0-thd1)+thx1
+ZO=-thx3
+XC=0
+ZC=ZO-SQRT(2*thr1*abs(Xo)-xo*xo)
+XB=0 
+ZB=ZO+SQRT(2*thr1*abs(Xo)-xo*xo)
+
+XA=0 ZA=thph
+XF=0 ZF=-thph-SIRINA
+
+
+G1 G451 X=XA
+G1 X=XB Z=ZB RND=thr2 
+G3 X=XC Z=ZC CR=thr1 RND=thr2
+G1 X=XF Z=ZF 
+G0 X=THH+3
+G0 Z=ZA
+
+stopre
+M17
+

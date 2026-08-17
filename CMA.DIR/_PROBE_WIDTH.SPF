@@ -1,0 +1,67 @@
+PROC _PROBE_WIDTH(String[32] Sonda,int DBrojSonde ,real Xnom ,real Znom ,real DuzMer, real BrzMer ,int MSonde ,int BrojSonde ,int Status ,int kordsys ,real DOZRAZ ,int TrebaC ,real Cnom)
+
+def int mode
+
+me_w_type = Status b_and 15
+
+if (me_w_type == 0) gotof kraj
+
+me_tool=Sonda
+me_tool_number = gett(sonda)
+me_tool_Dnumber = DBrojSonde
+;me_w_diameter = Xnom
+;me_w_position = Znom
+me_w_width = DuzMer
+me_feed = BrzMer
+me_ProbeUp = MSonde
+me_ProbeDown = MSonde-1
+me_probe_number = BrojSonde
+me_status = status
+me_frame = kordsys
+me_tolerance =DozRaz
+me_with_Caxis = TrebaC
+me_Caxis_Position = Cnom
+me_RepetitionCount = ((Status div 128) b_and 15)+1
+me_MeasureCount = ((Status div 2048 ) b_and 15)+1
+me_ReturnMode = ( Status b_and 48)
+me_Probe_AutoUP = (Status b_and 64)
+
+ms150
+STOPRE
+
+;merenje  bez korekcije,samo provera rezultata i ispis greske ako ima
+if (me_w_type==1)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_w_result))) gotof greska
+   gotof kraj
+endif
+
+;merenje sa korecijom
+;na bazi ,merenja unosi se korekcija u koord sistem
+;ako je greska veće od dozvoljene ispisuje alarm
+if (me_w_type==2)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_w_result))) gotof greska
+   $P_UIFR[ me_frame-1,Z,FI]=-me_w_result
+   msg("$66023")
+   gotof kraj
+endif
+
+;merenje aksijalno i rekalibracija na bazi merenja 
+;menja se nominalna vrednost na izmerenu vrednost
+;ako je greska veće od dozvoljene ispisuje alarm
+if (me_w_type==3)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_w_result))) gotof greska
+   me_w_position=me_w_position-me_w_result
+gotof kraj
+endif
+
+kraj:
+
+M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17

@@ -1,0 +1,6 @@
+Z=gr_position1 X=gr_diameter1
+z=0.5*(gr_position1+gr_position2) X=gr_diameter1+gr_taper_correction[0]
+Z=gr_position2 X=gr_diameter1+gr_taper_correction[1]
+
+M17
+

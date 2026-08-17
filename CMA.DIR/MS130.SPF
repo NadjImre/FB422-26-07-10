@@ -1,0 +1,106 @@
+PROC  MS130
+;merenje orjentacije komada
+;za mašinu FB357
+;PROMENLJIVE
+;pocetna pozicija pre merenja
+Def Real start_x,start_z
+;brojac merenja
+Def Int Brojac=0
+;ravan , koordinatni sistem i alat
+g18g500 t=me_tool d=me_tool_dnumber
+;zapamti pocetnu poziciju
+start_x=$aa_iw[x] start_z=$aa_iw[z]
+stopre
+;da li je podesavanje ili kalibracija
+if (me_c_type==4) gotof Kalibracija
+;poruka
+msg("$66020")
+;podizanje sonde
+m=me_ProbeUp
+;pun okret komada ako ima kontakta to je greska
+G0 C=IC(360) MEAS=me_Probe_number
+IF(($AC_MEA[me_ProbeNumber]==1) And (Test>0)) GOTOF GRESKA
+;na poziciju gde je zadnji put kalibrisana
+G0 C=ACP(me_C_calibration)
+IF(($AC_MEA[me_Probe_Number]==1) And (Test>0)) GOTOF GRESKA
+;zauzimanje pozicije za merenje - ako ima kontakta to je greska
+G0 Z=me_C_position MEAS=me_probenumber
+IF(($AC_MEA[me_probenumber]==1) And (Test>0)) GOTOF GRESKA
+;zauzimanje pocetne tacke merenja po X u - ako ima kontakta to je greska
+G0 X=me_C_diameter+me_distance MEAS=me_probe_number
+IF(($AC_MEA[me_probe_number]==1) And (Test>0)) GOTOF GRESKA
+STOPRE
+;trazimo zljeb
+TRAZI_ZLJEB:
+;ulazimo do precnika merenja
+G57 G1 X=me_C_diameter F=me_feed MEAS=me_probe_number
+;ako smo uspeli nasli smo zljeb
+IF(($AC_MEA[me_probe_number]==0) And (Test>0)) GOTOF ZLJEB
+;ako nismo onda se vracamo nazad
+G57 G0 X=me_C_diameter+me_distance F=me_feed
+;i okrenemo osu za 15 stepeni
+g0 C=IC(me_C_span) MEAS=me_probe_number
+;ako imamo kontak to je greska
+IF(($AC_MEA[me_probe_number]==1) And (Test>0)) GOTOF GRESKA
+;uvecavamo brojac
+Brojac=Brojac+1
+;ako smo prosli maksimalni broj pokusaja onda je to greska
+IF (BROJAC>24) GOTOF GRESKA
+;ako nismo ide novi pokušaj 
+GOTOB TRAZI_ZLJEB
+
+ZLJEB:
+;pronasli smo žljeb - merimo po C osi
+g1 C=IC(360) F=me_C_feed MEAS=me_probe_number
+;ako nemamo kontak za pun krug - greska
+IF(($AC_MEA[me_probe_number]==0) And (Test>0)) GOTOF GRESKA
+;prepsujemo rezulztat u Mer_C
+me_C_result=$AA_MW[C] mod 360
+;proracun razlike
+me_C_result = me_C_result - me_C_calibration
+;svodimo ga na opseg 0-360
+IF (me_C_result<0)
+   me_C_result=me_C_result+360
+ENDIF
+;ispis poruke
+msg("$66021 "<<me_C_result)
+;vracanje na pocetnu tacku
+g1 x=me_C_diameter+me_distance F=me_feed
+g0 x=start_x
+g0 z=start_z
+;podizanje sonde
+m=me_probeDown
+
+
+m17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17
+
+;pocetak kalibracije
+KALIBRACIJA:
+;sonda mora biti rucno podignuta i dovedena u jedan žljeb na komadu
+;povlakač ne mora biti nategnut ali mora biti na komadu
+;trazimo kontakt po C osi - pravimo dva kruga za slucaj da povlakac nije nategnut
+g1 C=IC(720) F=me_c_feed MEAS=me_probe_number
+;ako nemamo kontak za pun krug - greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
+;u slucaju kontakta prepsujemo rezulztat u Me_Caxis_calibration
+Me_C_Calibration=$AA_MW[C] mod 360
+;svodimo ga na opseg 0-360
+IF (Me_C_Calibartion<0)
+   Me_C_Calibartion=Me_C_Calibartion+360
+ENDIF
+;podesavanje ostalih promenljivih
+me_C_diameter = start_X
+me_C_position = start_Z
+;ispis poruke
+msg("$66021 "<<Me_C_Calibration)
+
+M17
+

@@ -1,0 +1,17 @@
+
+TEST=1
+;ABRIHTOVANJE ZA NAVOJ KRACI VAL
+;NCG#DressingSetup#cdressing_setup.com#NCCODE3#*NCG;*RO*;*HD*
+;#14#1#1#9#1#1#1#1#1#1#4#8#40#9#1#1#1#2#1#1#13#0#1#1#0#2##*NCG;*RO*;*HD*
+_DRESSING_SETUP("VAL_400_10_CBN",1,"ROLIK_VAL",2,1,44,"VAL_LEVO","VAL_DESNO",3,0,0,0,0,0,0,12,0,1,0,3,3,"ABRIHT ZA VAL")
+;#END#*NCG;*RO*;*HD*
+
+;NCG#Dressing#cdressing.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#2#5#1#2#5#*NCG;*RO*;*HD*
+_DRESSING(15,5,0.003,0,30,-3000)
+;#END#*NCG;*RO*;*HD*
+
+
+M17
+
+

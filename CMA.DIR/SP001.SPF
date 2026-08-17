@@ -1,0 +1,67 @@
+PROC SP001(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB350
+DEF INT JJ
+DEF REAL DD,DD1,izbrus
+
+;podesavanje promenljivih
+JJ=2 ; faza brusenja
+DD=DODB[BROJ,2]; dodatak brusenja
+;glavna petlja
+FAZA:
+;petlja za fazu brusenja
+izbrus=0
+PROLAZ:
+STOPRE
+;ako je broj izbrusavanja pao na nulu kraj faze brusenja
+    if (izbrus< 0) gotof izlaz
+;spanovanje
+    IF (DD==DODB[BROJ,2])
+       DD1=DD
+    ELSE
+       DD1=DD+BROB_N[BROJ,JJ]
+    ENDIF
+    DD=DD-KOR_ABRIHT[2,JJ]
+;provera u kojoj smo fazi	
+	if (jj<=0)
+;ako je zavrsno
+	   if (dd<=0)
+;ako je dodatak ispod nule
+	       dd=0
+;izjednaci sa nulom i smanji broj izbrusavanja
+		   Izbrus = izbrus -1
+		endif
+	else
+;ako je faza nije zavrsno brusenje
+	   if (dd<=DODB[BROJ,jj-1])
+; i ako je dodatak manji o dodatka za sledecu fazu
+;stavi dodatak na dodatak za sledecu fazu 
+	      dd=DODB[BROJ,jj-1]
+;i smanji preostali broj izbrusavanja za jedan
+		  izbrus=izbrus-1
+		endif
+	endif
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;BRUSENJE
+    SP000(6,DD1,DD)
+;ABRIHTOVANJE
+    IF ((JJ==0) AND (IZBRUS<0))
+    
+    ELSE
+       CALL(NAZIV_ABRIHT[2,JJ])
+    ENDIF
+;sledeći prolaz
+gotob PROLAZ
+IZLAZ:
+STOPRE
+;smanji fazu za 1
+JJ=JJ-1
+;proveri da li ima još brusenja 
+if (jj>=0) gotob FAZA
+;ako nema kraj
+KRAJ:
+;brisemo poruku
+msg("")
+
+m17
+

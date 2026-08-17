@@ -1,0 +1,123 @@
+proc ms120
+;merenje po Z osu u više tačaka sa više ponavljanja
+;meri Z koordinatu i aksijalni udar
+;sa masine FB422
+;april 2026
+
+def real start_x,start_z;pocetne tacke sa koje ciklus krece, tu se vraćamo na kraju
+def int errno ;broj greske koja se vraca prilikom snimanja
+def string[32] fname ;naziv fajla za snimanje
+def string[128] poruka ; pomocna promenljiva za ispis poruke
+def int brojacmerenja ;brojac za broj merenja
+def int brojacpon ; brojac za broj ponavljanja
+def real ugaozaokreta ; ugao zaokreta izmedju dva merenja
+
+;naziv fajla za zspisivanje statusa
+fname=me_report_file
+
+;ravan , koordinatni sistem i alat
+g18g500 t= me_tool d= me_tool_Dnumber
+;pamtimo pocetnu tacku
+start_x=$aa_iw[x] start_z=$aa_iw[z]
+;racunamo ugao zaokreta
+ugaozaokreta=360/ me_MeasureCount
+stopre
+;poruka
+msg("$66020")
+;podizanje sonde
+m=me_ProbeUp
+;zauzimanje ugla ako se traži i dolazak u poziciju C
+if(me_with_Caxis<>0)
+  ;ako se traži ugao C za merenje onda menjac je osa
+  m70
+  ;pozicija merenja po Z i pun krug sa komadom
+  G0 z= me_position- me_distance meas=me_probe_number C=IC(360)
+else
+  ;ako se ne traži ugao C samo pozicija Z bez okretanja C
+  G0 z= me_position- me_distance meas=me_probe_number
+endif
+;ako je doslo do kontakta sa sondom u toku pozicioniranja - greska
+IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+;ako se traz ugao C
+if( me_with_Caxis<>0)
+  ;zakreni komad na ugao
+  G0 C=ACP( me_Caxis_Position) MEAS=me_probe_number
+  ;ako je doslo do kontakta sa sondom - greska
+  IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+endif
+;dolazak na precnik merenja
+g0 x= me_diameter meas=me_probe_number
+;ako je bilo kontakta greska
+IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+STOPRE
+;petlja za pomeranje po uglu 
+for brojacmerenja=1 to  me_MeasureCount
+  ;zauzimanje pocetne po C
+  If( me_with_Caxis<>0)
+    ;zakreni komad na ugao
+    G0 C=ACP( me_Caxis_Position+(brojacmerenja-1)*ugaozaokreta) MEAS=me_probe_number
+    ;ako je doslo do kontakta sa sondom - greska
+    IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+  endif 
+  ;petlja za ponavljanje merenje
+  for brojacpon=1 to  me_RepetitionCount
+    ;merenje
+    g1 z=me_position+ me_distance f=me_feed meas=me_probe_number
+    ;ako NIJE bilo kontakta - greska
+    IF($AC_MEA[ me_probe_number]==0) GOTOF GRESKA
+    ;razlika između nominalne i izmerene tačke
+    me_result[brojacmerenja-1,brojacpon-1]= me_position-$aa_mw[Z]
+    ;ispis poruke
+    msg("Meas. point " << brojacmerenja << " rep. " << brojacpon << " $66021 "<<$aa_mw[Z]<<" $66022 "<<me_result[brojacmerenja-1,brojacpon-1])   
+    ;zapis u fajl
+    poruka = SPRINT("Merenje %d ponavljanje %d mera %7.4F greska %7.4F",brojacmerenja,brojacpon,$aa_mw[Z],me_result[brojacmerenja-1,brojacpon-1])
+    Write(errno,fname,poruka) 
+    ;vracanje na pocetnu tacku
+    g1 z= me_position- me_distance F= me_feed
+  ;Kraj petlje za ponavljanje merenja
+  endfor
+ ;kraj petlje za merenje po uglu
+endfor
+;da li se vracamo po x 
+if (( me_ReturnMode==0) or ( me_ReturnMode==32))
+   g0 x=start_x
+endif
+;da li se vracamo p Z
+if(( me_ReturnMode==0) or ( me_ReturnMode==48))
+   g0 z=start_z
+endif
+
+;proracun
+me_min=me_result[0,0]
+me_max=me_result[0,0]
+me_avg=0
+;petlja za matematiku 
+for brojacmerenja=0 to  me_MeasureCount-1
+  for brojacpon=0 to  me_RepetitionCount-1
+      if(me_min>me_result[brojacmerenja,brojacpon])
+        me_min=me_result[brojacmerenja,brojacpon]
+      endif
+      if(me_max<me_result[brojacmerenja,brojacpon])
+        me_max=me_result[brojacmerenja,brojacpon]
+      endif
+      me_avg=me_avg+me_result[brojacmerenja,brojacpon]
+  endfor
+endfor
+me_avg=me_avg/( me_MeasureCount* me_RepetitionCount)
+me_span=abs(me_max-me_min)
+;kraj proracuna
+
+IF (me_Probe_AutoUp==0)
+   m= me_probeDown
+ENDIF
+
+m17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17
+

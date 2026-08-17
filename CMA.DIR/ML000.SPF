@@ -1,0 +1,281 @@
+PROC ML000(INT BROJ)
+;FB271 i FB272
+
+DEF STRING[100] NAZIVF
+DEF INT GRESKA
+DEF INT TACKA1
+DEF INT TACKA2
+DEF INT BROJAC
+DEF REAL MINGRES
+DEF INT MINC
+
+;tacke koje se koriste za merenje
+TACKA1=2*BROJ
+TACKA2=2*BROJ+1
+
+;zapisivanje rezulatata u fajl 
+NAZIVF="/_N_MPF_DIR/_N_LOGFAJL"
+WRITE(GRESKA ,NAZIVF,"merenje broj "<<broj+1)
+
+;poruka
+;msg("merenje broj "<<broj+1)
+msg("$66013"<<broj+1)
+
+;stop kamena ako se trazi
+if (mer_stop_kam[broj]==0)
+   m2=5 M3=5
+endif
+
+;zauzimanje pocetne pozicije
+G[8]=MER_KORD_SYS
+
+;IZMENA 19/Mar/2019 11:51
+DIAMON
+
+G53 G0 X0 MEAS=MER_SONDA[BROJ]+1
+IF($AC_MEA[MER_SONDA[BROJ]+1]==1) GOTOF KRAJ
+
+G53 G0 Z0 MEAS=MER_SONDA[BROJ]+1
+IF($AC_MEA[MER_SONDA[BROJ]+1]==1) GOTOF KRAJ
+
+G0 B0 MEAS=MER_SONDA[BROJ]+1
+IF($AC_MEA[MER_SONDA[BROJ]+1]==1) GOTOF KRAJ
+
+m70
+G01 c=mer_orij[broj] f=3600
+;pocetne vrednosti za merenje
+MER_GRES_X[BROJ] = 0
+MER_GRES_Z[BROJ] = 0
+MER_GRES_W[BROJ] = 0 
+
+;cekanje na stop kamena
+if (mer_stop_kam[broj]==0)
+   WAITS(2)
+endif
+M23
+G04 F2
+
+;POZICIONIRANJE Z
+;merenje u jednoj tacki
+;racuna se greska pozicije Z 
+IF (MER_NACIN[BROJ]==1)
+   ML100(TACKA1)
+   MER_GRES_Z[BROJ] = MER_Z[TACKA1]-NOM_Z[BROJ]
+   MSG(Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+ENDIF
+
+;MERENJE PRECNIKA
+;merenje u jednoj tacki
+;racuna se greska pozicije X
+IF (MER_NACIN[BROJ]==2)
+   ML100(TACKA1)
+   MER_GRES_X[BROJ] =MER_X[TACKA1]-NOM_X[BROJ]
+   MSG(Sprint("Greska precnika:%10.4f",MER_GRES_X[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska precnika:%10.4f",MER_GRES_X[BROJ]))
+ENDIF
+
+;KALIBRACIJa Z
+;merenje u jednoj tacki
+;koriguje se vrednost ofseta Z ose
+;tako da je greska merenja nula
+IF (MER_NACIN[BROJ]==3)
+   ML100(TACKA1)
+   MER_GRES_Z[BROJ]=-NOM_Z[BROJ]+MER_Z[TACKA1]
+   $P_UIFR[4,Z,TR] = $P_UIFR[4,Z,TR]+MER_GRES_Z[BROJ]
+   MSG(Sprint("Greska kalibracije:%10.4f",MER_GRES_Z[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska kalibracije:%10.4f",MER_GRES_Z[BROJ]))
+ENDIF
+
+;KALIBRACIJA PRECNIKA
+;merenje u jednoj tacki
+;koriguje se vrednost ofseta X ose
+;tako da je greska merenja nula
+IF (MER_NACIN[BROJ]==4)
+   ML100(TACKA1)
+   MER_GRES_X[BROJ]=-NOM_X[BROJ]+MER_X[TACKA1]
+   $P_UIFR[4,X,TR] = $P_UIFR[4,X,TR]+MER_GRES_X[BROJ]/2
+   WRITE(GRESKA ,NAZIVF,Sprint("ABSOLOTNA POZICIJA X KOD KALIBRACIJE:%10.4f",$AA_MM[X]))
+   MSG(Sprint("Greska kalibracije:%10.4f",MER_GRES_X[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("ABSOLOTNA POZICIJA X KOD MERENJE:%10.4f",$AA_MM[X]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska kalibracije:%10.4f",MER_GRES_X[BROJ]))
+ENDIF
+
+;MERENJE SIRINE
+;merenje u dve tacke
+;racuna se sirina izmerenog dela po Z osi
+IF (MER_NACIN[BROJ]==5)
+   ML100(TACKA1)
+   ML100(TACKA2)
+   MER_W[BROJ]=  -MER_Z[TACKA1]+MER_Z[TACKA2]
+   MER_GRES_W[BROJ] = MER_W[BROJ]-MER_SIRINA[BROJ]
+   MSG(Sprint("Greska sirine:%10.4f",MER_GRES_W[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska sirine:%10.4f",MER_GRES_W[BROJ]))
+ENDIF
+
+;POZICIONIRANJE I MERENJE SIRINE
+;merenje u dve tacke 
+;racuna se greska pozicije po Z
+;i sirina po Z izmedju dve tacke
+IF (MER_NACIN[BROJ]==6)
+   ML100(TACKA1)
+   ML100(TACKA2)
+   MER_GRES_Z[BROJ] = MER_Z[TACKA1]-NOM_Z[broj]
+   MER_W[BROJ]= -MER_Z[TACKA1]+MER_Z[TACKA2]
+   MER_GRES_W[BROJ] = MER_W[BROJ]-MER_SIRINA[BROJ]
+   MSG(Sprint("Greska pozicioniranja:%10.4f Greska sirine:%10.4f",MER_GRES_Z[BROJ],MER_GRES_W[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska pozicioniranja:%10.4f Greska sirine:%10.4f",MER_GRES_Z[BROJ],MER_GRES_W[BROJ]))
+ENDIF
+
+;POZICIONIRANJE podelom
+;merenje u dve tacke
+;racuna se sredina izmedju dve tacke
+;po Z osi
+IF (MER_NACIN[BROJ]==7)
+   ML100(TACKA1)
+   ML100(TACKA2)
+   MER_Z[TACKA1]= (MER_Z[TACKA1]+MER_Z[TACKA2])/2
+   MER_GRES_z[BROJ] = MER_Z[tacka1]-NOM_Z[BROJ]
+   MSG(Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+ENDIF
+
+;ORIJENTACIJA KOMADA
+IF (MER_NACIN[BROJ]==8)
+   ML900(TACKA1)
+   MER_GRES_Z[BROJ] = MER_Z[TACKA1]-NOM_Z[BROJ]
+   MSG(Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska pozicioniranja:%10.4f",MER_GRES_Z[BROJ]))
+ENDIF
+
+;MERENJE precnika u dve tacke
+;racuna se sirina izmerenog dela po x osi
+IF (MER_NACIN[BROJ]==9)
+   ML100(TACKA1)
+   ML100(TACKA2)
+   MER_W[BROJ]=  0.5*ABS(-MER_X[TACKA1]+MER_X[TACKA2])
+   MER_GRES_X[BROJ] = MER_W[BROJ]-NOM_X[BROJ]
+   MSG(Sprint("Greska precnika:%10.4f",MER_GRES_X[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska precnika:%10.4f",MER_GRES_X[BROJ]))
+ENDIF
+
+;KALIBRACIJA precnika u dve tacke
+;Za X=0 se postavlja sredina dva merenja po x osi
+IF (MER_NACIN[BROJ]==10)
+   ML100(TACKA1)
+   ML100(TACKA2)
+   $P_UIFR[4,X,TR] = $P_UIFR[4,X,TR] + 0.25*(MER_X[TACKA1]+MER_X[TACKA2])
+   MSG(Sprint("Greska kalibracije:%10.4f",0.5*(MER_X[TACKA1]+MER_X[TACKA2])))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska kalibrcije:%10.4f",0.5*(MER_X[TACKA1]+MER_X[TACKA2])))
+ENDIF
+
+;IZMENA 6.jun.2019 13:273
+;=================================
+
+;C u dve tacke
+;merenje C u dve tacke
+;racuna se sredina izmedju dve tacke
+IF (MER_NACIN[BROJ]==11)
+   ML910(TACKA1)
+   MSG(Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+ENDIF
+
+;C u + smeru
+;trazi zljeb pa pozicionira
+IF (MER_NACIN[BROJ]==12)
+   ML920(TACKA1)
+   MSG(Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+ENDIF
+
+;C u - smeru
+;trazi zljeb pa pozicionira
+IF (MER_NACIN[BROJ]==13)
+   ML930(TACKA1)
+   MSG(Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Izmerena orijentacija:%10.4f",MER_C[BROJ]))
+ENDIF
+
+;KALIBRACIJA 
+;merenje u dve tacke 
+;prva tacka za kalibraciju X
+;druga tacka za kalibraciju Z
+IF (MER_NACIN[BROJ]==14)
+   ;ML100(TACKA1)
+   ;ML100(TACKA2)
+   ;MER_KALIB_X[BROJ] = MER_X[TACKA1]-MER_PREC[TACKA1]
+   ;MER_KALIB_Z[BROJ] = MER_Z[TACKA2]-MER_POZ[TACKA2]
+   ;IZMENA 24.jun.2019 14:26 - FB274
+   ML100(TACKA1)
+   ML100(TACKA2)
+   
+   MER_GRES_X[BROJ]=-NOM_X[BROJ]+MER_X[TACKA1]
+   $P_UIFR[4,X,TR] = $P_UIFR[4,X,TR]+MER_GRES_X[BROJ]/2
+   MSG(Sprint("Greska kalibracije:%10.4f",MER_GRES_X[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska kalibracije:%10.4f",MER_GRES_X[BROJ]))
+   
+   MER_GRES_Z[BROJ]=-NOM_Z[BROJ]+MER_Z[TACKA2]
+   $P_UIFR[4,Z,TR] = $P_UIFR[4,Z,TR]+MER_GRES_Z[BROJ]
+   MSG(Sprint("Greska kalibracije:%10.4f",MER_GRES_Z[BROJ]))
+   WRITE(GRESKA ,NAZIVF,Sprint("Greska kalibracije:%10.4f",MER_GRES_Z[BROJ]))
+G[8]=MER_KORD_SYS   
+ENDIF
+
+;=================================
+
+KRAJ:
+;povratak nazad
+;IZMENA 14/Mar/2019 7:36
+;G0 X0
+;G0 Z0
+
+G53 G0 X0
+G53 G0 Z0
+
+;IZMENA 27.jun.2019 20:56
+;podigni sondu
+IF R077==0
+  M22
+  G04 F=3
+ELSE
+  M22
+  G04 F=3
+ENDIF
+
+STOPRE
+
+OPERACIJA_BROJ=OPERACIJA_BROJ+1
+;provera merenja
+IF (ABS(MER_GRES_KALIB_X[BROJ])>MER_DOZ_KALIB_X[BROJ]) 
+   SETAL(65014)
+   M00
+   M96
+ENDIF
+
+IF (ABS(MER_GRES_KALIB_Z[BROJ])>MER_DOZ_KALIB_Z[BROJ]) 
+   SETAL(65015)
+   M00
+   M96
+ENDIF
+
+IF (ABS(MER_GRES_X[BROJ])>MER_DOZ_GRES_X[BROJ]) 
+   SETAL(65011)
+   M00
+   M96
+ENDIF
+
+IF (ABS(MER_GRES_Z[BROJ])>MER_DOZ_GRES_Z[BROJ]) 
+   SETAL(65012)
+   M00
+   M96
+ENDIF
+
+IF (ABS(MER_GRES_W[BROJ])>MER_DOZ_GRES_W[BROJ]) 
+   SETAL(65013)
+   M00
+   M96
+ENDIF
+
+
+M17

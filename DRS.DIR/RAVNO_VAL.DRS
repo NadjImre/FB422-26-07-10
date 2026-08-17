@@ -1,0 +1,5 @@
+Z=gr_position1 X=gr_diameter1
+Z=gr_position2 X=gr_diameter1-0.01
+
+M17
+

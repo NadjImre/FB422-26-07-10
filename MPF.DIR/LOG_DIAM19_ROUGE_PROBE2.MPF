@@ -1,0 +1,344 @@
+Probe recalibration on diameter  119.970 and position Z= 830.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.961      119.970        0.002        0.009
+**Diameter**                   119.961      119.970        0.002       -0.009
+**Run-out**                      0.000        0.000        0.100        0.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.970      119.970        0.002       -0.000
+**Diameter**                   119.970      119.970        0.002        0.000
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.450       19.700        0.100        0.250
+Repetit.   1      105.000       19.449       19.700        0.100        0.251
+Repetit.   1      165.000       19.449       19.700        0.100        0.251
+Repetit.   1      225.000       19.447       19.700        0.100        0.253
+Repetit.   1      285.000       19.452       19.700        0.100        0.248
+Repetit.   1      345.000       19.454       19.700        0.100        0.246
+**Diameter**                    19.450       19.700        0.100       -0.250
+**Run-out**                      0.004        0.000        0.100        0.004
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.470       19.700        0.100        0.230
+Repetit.   1      105.000       19.467       19.700        0.100        0.233
+Repetit.   1      165.000       19.462       19.700        0.100        0.238
+Repetit.   1      225.000       19.458       19.700        0.100        0.242
+Repetit.   1      285.000       19.478       19.700        0.100        0.222
+Repetit.   1      345.000       19.482       19.700        0.100        0.218
+**Diameter**                    19.469       19.700        0.100       -0.231
+**Run-out**                      0.012        0.000        0.100        0.012
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.490       19.700        0.100        0.210
+Repetit.   1      105.000       19.483       19.700        0.100        0.217
+Repetit.   1      165.000       19.476       19.700        0.100        0.224
+Repetit.   1      225.000       19.470       19.700        0.100        0.230
+Repetit.   1      285.000       19.499       19.700        0.100        0.201
+Repetit.   1      345.000       19.507       19.700        0.100        0.193
+**Diameter**                    19.488       19.700        0.100       -0.212
+**Run-out**                      0.019        0.000        0.100        0.019
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.486       19.700        0.100        0.214
+Repetit.   1      105.000       19.479       19.700        0.100        0.221
+Repetit.   1      165.000       19.469       19.700        0.100        0.231
+Repetit.   1      225.000       19.463       19.700        0.100        0.237
+Repetit.   1      285.000       19.499       19.700        0.100        0.201
+Repetit.   1      345.000       19.508       19.700        0.100        0.192
+**Diameter**                    19.484       19.700        0.100       -0.216
+**Run-out**                      0.023        0.000        0.100        0.023
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.482       19.700        0.100        0.218
+Repetit.   1      105.000       19.471       19.700        0.100        0.229
+Repetit.   1      165.000       19.462       19.700        0.100        0.238
+Repetit.   1      225.000       19.458       19.700        0.100        0.242
+Repetit.   1      285.000       19.494       19.700        0.100        0.206
+Repetit.   1      345.000       19.502       19.700        0.100        0.198
+**Diameter**                    19.478       19.700        0.100       -0.222
+**Run-out**                      0.022        0.000        0.100        0.022
+Probe recalibration on diameter  119.970 and position Z= 833.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.970      119.970        0.002       -0.000
+**Diameter**                   119.970      119.970        0.002        0.000
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.448       19.700        0.100        0.252
+Repetit.   1      105.000       19.448       19.700        0.100        0.252
+Repetit.   1      165.000       19.447       19.700        0.100        0.253
+Repetit.   1      225.000       19.445       19.700        0.100        0.255
+Repetit.   1      285.000       19.450       19.700        0.100        0.250
+Repetit.   1      345.000       19.451       19.700        0.100        0.249
+**Diameter**                    19.448       19.700        0.100       -0.252
+**Run-out**                      0.003        0.000        0.100        0.003
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.470       19.700        0.100        0.230
+Repetit.   1      105.000       19.467       19.700        0.100        0.233
+Repetit.   1      165.000       19.460       19.700        0.100        0.240
+Repetit.   1      225.000       19.457       19.700        0.100        0.243
+Repetit.   1      285.000       19.475       19.700        0.100        0.225
+Repetit.   1      345.000       19.480       19.700        0.100        0.220
+**Diameter**                    19.468       19.700        0.100       -0.232
+**Run-out**                      0.012        0.000        0.100        0.012
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.489       19.700        0.100        0.211
+Repetit.   1      105.000       19.482       19.700        0.100        0.218
+Repetit.   1      165.000       19.475       19.700        0.100        0.225
+Repetit.   1      225.000       19.468       19.700        0.100        0.232
+Repetit.   1      285.000       19.498       19.700        0.100        0.202
+Repetit.   1      345.000       19.506       19.700        0.100        0.194
+**Diameter**                    19.486       19.700        0.100       -0.214
+**Run-out**                      0.019        0.000        0.100        0.019
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.485       19.700        0.100        0.215
+Repetit.   1      105.000       19.477       19.700        0.100        0.223
+Repetit.   1      165.000       19.467       19.700        0.100        0.233
+Repetit.   1      225.000       19.461       19.700        0.100        0.239
+Repetit.   1      285.000       19.498       19.700        0.100        0.202
+Repetit.   1      345.000       19.507       19.700        0.100        0.193
+**Diameter**                    19.482       19.700        0.100       -0.218
+**Run-out**                      0.023        0.000        0.100        0.023
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.479       19.700        0.100        0.221
+Repetit.   1      105.000       19.471       19.700        0.100        0.229
+Repetit.   1      165.000       19.461       19.700        0.100        0.239
+Repetit.   1      225.000       19.457       19.700        0.100        0.243
+Repetit.   1      285.000       19.492       19.700        0.100        0.208
+Repetit.   1      345.000       19.501       19.700        0.100        0.199
+Probe recalibration on diameter  119.970 and position Z= 833.000
+Probe recalibration on diameter  119.970 and position Z= 833.000
+Probe recalibration on diameter  119.970 and position Z= 833.000
+Probe recalibration on diameter  119.970 and position Z= 833.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      344.724      119.960      119.970        0.002        0.010
+**Diameter**                   119.960      119.970        0.002       -0.010
+**Run-out**                      0.000        0.000        0.100        0.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      344.724      119.970      119.970        0.002       -0.000
+**Diameter**                   119.970      119.970        0.002        0.000
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.457       19.700        0.100        0.243
+Repetit.   1      105.000       19.458       19.700        0.100        0.242
+Repetit.   1      165.000       19.456       19.700        0.100        0.244
+Repetit.   1      225.000       19.455       19.700        0.100        0.245
+Repetit.   1      285.000       19.459       19.700        0.100        0.241
+Repetit.   1      345.000       19.460       19.700        0.100        0.240
+**Diameter**                    19.457       19.700        0.100       -0.243
+**Run-out**                      0.003        0.000        0.100        0.003
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.479       19.700        0.100        0.221
+Repetit.   1      105.000       19.476       19.700        0.100        0.224
+Repetit.   1      165.000       19.470       19.700        0.100        0.230
+Repetit.   1      225.000       19.465       19.700        0.100        0.235
+Repetit.   1      285.000       19.484       19.700        0.100        0.216
+Repetit.   1      345.000       19.489       19.700        0.100        0.211
+**Diameter**                    19.477       19.700        0.100       -0.223
+**Run-out**                      0.012        0.000        0.100        0.012
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.498       19.700        0.100        0.202
+Repetit.   1      105.000       19.491       19.700        0.100        0.209
+Repetit.   1      165.000       19.483       19.700        0.100        0.217
+Repetit.   1      225.000       19.477       19.700        0.100        0.223
+Repetit.   1      285.000       19.506       19.700        0.100        0.194
+Repetit.   1      345.000       19.515       19.700        0.100        0.185
+**Diameter**                    19.495       19.700        0.100       -0.205
+**Run-out**                      0.019        0.000        0.100        0.019
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.494       19.700        0.100        0.206
+Repetit.   1      105.000       19.487       19.700        0.100        0.213
+Repetit.   1      165.000       19.474       19.700        0.100        0.226
+Repetit.   1      225.000       19.470       19.700        0.100        0.230
+Repetit.   1      285.000       19.506       19.700        0.100        0.194
+Repetit.   1      345.000       19.515       19.700        0.100        0.185
+**Diameter**                    19.491       19.700        0.100       -0.209
+**Run-out**                      0.022        0.000        0.100        0.022
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.487       19.700        0.100        0.213
+Repetit.   1      105.000       19.479       19.700        0.100        0.221
+Repetit.   1      165.000       19.469       19.700        0.100        0.231
+Repetit.   1      225.000       19.465       19.700        0.100        0.235
+Repetit.   1      285.000       19.499       19.700        0.100        0.201
+Repetit.   1      345.000       19.508       19.700        0.100        0.192
+**Diameter**                    19.484       19.700        0.100       -0.216
+**Run-out**                      0.022        0.000        0.100        0.022
+Probe recalibration on diameter  119.970 and position Z= 833.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.971      119.970        0.002       -0.000
+**Diameter**                   119.971      119.970        0.002        0.000
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.444       19.700        0.100        0.256
+Repetit.   1      105.000       19.444       19.700        0.100        0.256
+Repetit.   1      165.000       19.442       19.700        0.100        0.258
+Repetit.   1      225.000       19.441       19.700        0.100        0.259
+Repetit.   1      285.000       19.446       19.700        0.100        0.254
+Repetit.   1      345.000       19.446       19.700        0.100        0.254
+**Diameter**                    19.444       19.700        0.100       -0.256
+**Run-out**                      0.003        0.000        0.100        0.003
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.466       19.700        0.100        0.234
+Repetit.   1      105.000       19.463       19.700        0.100        0.237
+Repetit.   1      165.000       19.459       19.700        0.100        0.241
+Repetit.   1      225.000       19.452       19.700        0.100        0.248
+Repetit.   1      285.000       19.472       19.700        0.100        0.228
+Repetit.   1      345.000       19.476       19.700        0.100        0.224
+**Diameter**                    19.465       19.700        0.100       -0.235
+**Run-out**                      0.012        0.000        0.100        0.012
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.487       19.700        0.100        0.213
+Repetit.   1      105.000       19.479       19.700        0.100        0.221
+Repetit.   1      165.000       19.472       19.700        0.100        0.228
+Repetit.   1      225.000       19.466       19.700        0.100        0.234
+Repetit.   1      285.000       19.496       19.700        0.100        0.204
+Repetit.   1      345.000       19.505       19.700        0.100        0.195
+**Diameter**                    19.484       19.700        0.100       -0.216
+**Run-out**                      0.020        0.000        0.100        0.020
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.483       19.700        0.100        0.217
+Repetit.   1      105.000       19.474       19.700        0.100        0.226
+Repetit.   1      165.000       19.465       19.700        0.100        0.235
+Repetit.   1      225.000       19.460       19.700        0.100        0.240
+Repetit.   1      285.000       19.496       19.700        0.100        0.204
+Repetit.   1      345.000       19.505       19.700        0.100        0.195
+**Diameter**                    19.481       19.700        0.100       -0.219
+**Run-out**                      0.023        0.000        0.100        0.023
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.478       19.700        0.100        0.222
+Repetit.   1      105.000       19.468       19.700        0.100        0.232
+Repetit.   1      165.000       19.460       19.700        0.100        0.240
+Repetit.   1      225.000       19.456       19.700        0.100        0.244
+Repetit.   1      285.000       19.490       19.700        0.100        0.210
+Repetit.   1      345.000       19.499       19.700        0.100        0.201
+**Diameter**                    19.475       19.700        0.100       -0.225
+**Run-out**                      0.021        0.000        0.100        0.021
+Probe recalibration on diameter  119.970 and position Z= 833.000
+Probe recalibration on diameter  119.970 and position Z= 833.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.981      119.970        0.002       -0.011
+**Diameter**                   119.981      119.970        0.002        0.011
+**Run-out**                      0.000        0.000        0.100        0.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.969      119.970        0.002        0.000
+**Diameter**                   119.969      119.970        0.002       -0.000
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.644       19.700        0.100        0.056
+Repetit.   1      105.000       19.643       19.700        0.100        0.057
+Repetit.   1      165.000       19.643       19.700        0.100        0.057
+Repetit.   1      225.000       19.641       19.700        0.100        0.059
+Repetit.   1      285.000       19.646       19.700        0.100        0.054
+Repetit.   1      345.000       19.646       19.700        0.100        0.054
+**Diameter**                    19.644       19.700        0.100       -0.056
+**Run-out**                      0.002        0.000        0.100        0.002
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.657       19.700        0.100        0.043
+Repetit.   1      105.000       19.653       19.700        0.100        0.047
+Repetit.   1      165.000       19.647       19.700        0.100        0.053
+Repetit.   1      225.000       19.642       19.700        0.100        0.058
+Repetit.   1      285.000       19.663       19.700        0.100        0.037
+Repetit.   1      345.000       19.668       19.700        0.100        0.032
+**Diameter**                    19.655       19.700        0.100       -0.045
+**Run-out**                      0.013        0.000        0.100        0.013
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.667       19.700        0.100        0.033
+Repetit.   1      105.000       19.659       19.700        0.100        0.041
+Repetit.   1      165.000       19.652       19.700        0.100        0.048
+Repetit.   1      225.000       19.646       19.700        0.100        0.054
+Repetit.   1      285.000       19.675       19.700        0.100        0.025
+Repetit.   1      345.000       19.684       19.700        0.100        0.016
+**Diameter**                    19.663       19.700        0.100       -0.037
+**Run-out**                      0.019        0.000        0.100        0.019
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.683       19.700        0.100        0.017
+Repetit.   1      105.000       19.674       19.700        0.100        0.026
+Repetit.   1      165.000       19.665       19.700        0.100        0.035
+Repetit.   1      225.000       19.660       19.700        0.100        0.040
+Repetit.   1      285.000       19.694       19.700        0.100        0.006
+Repetit.   1      345.000       19.704       19.700        0.100       -0.004
+**Diameter**                    19.680       19.700        0.100       -0.020
+**Run-out**                      0.022        0.000        0.100        0.022
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.676       19.700        0.100        0.024
+Repetit.   1      105.000       19.668       19.700        0.100        0.032
+Repetit.   1      165.000       19.658       19.700        0.100        0.042
+Repetit.   1      225.000       19.655       19.700        0.100        0.045
+Repetit.   1      285.000       19.689       19.700        0.100        0.011
+Repetit.   1      345.000       19.699       19.700        0.100        0.000
+**Diameter**                    19.674       19.700        0.100       -0.026
+**Run-out**                      0.022        0.000        0.100        0.022
+Probe recalibration on diameter  119.970 and position Z= 833.000
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1      345.000      119.971      119.970        0.002       -0.001
+**Diameter**                   119.971      119.970        0.002        0.001
+**Run-out**                      0.000        0.000        0.100        0.000
+Measuring diameter   19.700 on position Z= 630.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.652       19.700        0.100        0.048
+Repetit.   1      105.000       19.652       19.700        0.100        0.048
+Repetit.   1      165.000       19.652       19.700        0.100        0.048
+Repetit.   1      225.000       19.649       19.700        0.100        0.051
+Repetit.   1      285.000       19.654       19.700        0.100        0.046
+Repetit.   1      345.000       19.655       19.700        0.100        0.045
+**Diameter**                    19.652       19.700        0.100       -0.048
+**Run-out**                      0.003        0.000        0.100        0.003
+Measuring diameter   19.700 on position Z= 485.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.664       19.700        0.100        0.036
+Repetit.   1      105.000       19.661       19.700        0.100        0.039
+Repetit.   1      165.000       19.655       19.700        0.100        0.045
+Repetit.   1      225.000       19.651       19.700        0.100        0.049
+Repetit.   1      285.000       19.671       19.700        0.100        0.029
+Repetit.   1      345.000       19.676       19.700        0.100        0.024
+**Diameter**                    19.663       19.700        0.100       -0.037
+**Run-out**                      0.013        0.000        0.100        0.013
+Measuring diameter   19.700 on position Z= 340.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.674       19.700        0.100        0.026
+Repetit.   1      105.000       19.667       19.700        0.100        0.033
+Repetit.   1      165.000       19.660       19.700        0.100        0.040
+Repetit.   1      225.000       19.654       19.700        0.100        0.046
+Repetit.   1      285.000       19.683       19.700        0.100        0.017
+Repetit.   1      345.000       19.693       19.700        0.100        0.007
+**Diameter**                    19.672       19.700        0.100       -0.028
+**Run-out**                      0.019        0.000        0.100        0.019
+Measuring diameter   19.700 on position Z= 200.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.682       19.700        0.100        0.018
+Repetit.   1      105.000       19.673       19.700        0.100        0.027
+Repetit.   1      165.000       19.664       19.700        0.100        0.036
+Repetit.   1      225.000       19.659       19.700        0.100        0.041
+Repetit.   1      285.000       19.694       19.700        0.100        0.006
+Repetit.   1      345.000       19.704       19.700        0.100       -0.004
+**Diameter**                    19.679       19.700        0.100       -0.021
+**Run-out**                      0.022        0.000        0.100        0.022
+Measuring diameter   19.700 on position Z=  95.000 in 6 points with 1 repetition
+     Measure      C angle       Actual      Nominal    Tolerance    Deviation        Error
+Repetit.   1       45.000       19.675       19.700        0.100        0.025
+Repetit.   1      105.000       19.666       19.700        0.100        0.034
+Repetit.   1      165.000       19.659       19.700        0.100        0.041
+Repetit.   1      225.000       19.654       19.700        0.100        0.046
+Repetit.   1      285.000       19.688       19.700        0.100        0.012
+Repetit.   1      345.000       19.699       19.700        0.100        0.001
+**Diameter**                    19.673       19.700        0.100       -0.027
+**Run-out**                      0.022        0.000        0.100        0.022

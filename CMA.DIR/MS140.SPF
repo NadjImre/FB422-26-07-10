@@ -1,0 +1,150 @@
+proc ms140
+;merenje po X osi u više tačaka sa više ponavljanja
+;meri precnik i radijalni udar
+;sa masine FB422
+;april 2026
+
+def real start_x,start_z;pocetne tacke sa koje ciklus krece, tu se vraćamo na kraju
+def int errno;broj greske koja se vraca prilikom snimanja
+def string[32] fname;naziv fajla za snimanje
+def string[128] poruka ; pomocna promenljiva za ispis poruke
+def int brojacmerenja ;brojac za broj merenja
+def int brojacpon ; brojac za broj ponavljanja
+def real ugaozaokreta ; ugao zaokreta izmedju dva merenja
+def real srednjiprecnik = 0 ;za racunanje srednjeg precnika
+
+;naziv fajla za zspisivanje statusa
+fname=me_report_file
+;ravan, koordinatni sistem i alat
+g18g500 t=me_tool d=me_tool_dnumber
+;pamtimo pocetnu tacku
+start_x=$aa_iw[x] start_z=$aa_iw[z]
+;racunamo ugao zaokreta
+ugaozaokreta=360/me_measurecount
+stopre
+;poruka
+msg(poruka)
+;zauzimanje ugla ako se traži i dolazak u poziciju C 
+if(me_with_caxis<>0)
+  ;ako se traži ugao C za merenje onda menjac je osa  
+  m70
+  ;pozicija merenja po Z i pun krug sa komadom
+  G0 z=me_position meas=me_probe_number C=IC(360)
+else
+  ;ako se ne traži ugao C samo pozicija Z bez okretanja C
+  G0 z=me_position meas=me_probe_number
+endif
+;podizanje sonde
+m=me_probeup
+;cekaj da se spusti
+g4 f5
+;ako se traz ugao C
+if(me_with_caxis<>0)
+  ;zakreni komad na ugao
+  G0 C=ACP(me_caxis_position) MEAS=me_probe_number
+  ;ako je doslo do kontakta sa sondom - greska
+  IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
+endif
+;dolazak na precnik merenja
+g0 x=me_diameter+me_distance meas=me_probe_number
+;ako je bilo kontakta greska
+IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
+STOPRE
+;zaglavlje
+poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","C angle", "Actual","Nominal","Tolerance","Deviation","Error")
+Write(errno,fname,poruka)
+;petlja za pomeranje po uglu 
+for brojacmerenja=1 to me_measurecount
+  ;ako se komad moze okretati po c
+  If(me_with_caxis<>0)
+    ;zakreni komad na ugao
+    G0 C=ACP((me_caxis_position+(brojacmerenja-1)*ugaozaokreta) MOD 360) MEAS=me_probe_number
+    ;ako je doslo do kontakta sa sondom - greska
+    IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
+  endif 
+  ;petlja za ponavljanje merenje
+  ;zaglavlje
+  msg(Poruka)
+  srednjiprecnik=0
+  for brojacpon=1 to me_repetitioncount
+     ;merenje
+     g1 x=me_diameter-me_distance f=me_feed meas=me_probe_number
+     ;u slucaju da nije bilo kontakta prijavi gresku
+     IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
+     ;zapisujemo rezultat
+     me_result[brojacmerenja-1,brojacpon-1]=me_diameter-$aa_mw[X]-me_offset
+     ;za racunanje srednjeg precnika
+     srednjiprecnik = srednjiprecnik + $aa_mw[x]+me_offset
+     ;ispis poruke
+     poruka = sprint("Repetit. %3d %12.3f %12.3f %12.3f %12.3f %12.3f", brojacpon, $AA_IW[C], $aa_mw[X]+me_offset, me_diameter, me_tolerance, me_result[brojacmerenja-1,brojacpon-1])
+     msg(poruka)   
+     ;zapis u fajl
+     Write(errno,fname,poruka)
+     ;idemo nazad
+     g1 x=me_diameter+me_distance F=me_feed
+  ;kraj petlje za ponavljanje
+  endfor
+  ;proracun srednjeg precnika
+  srednjiprecnik = srednjiprecnik / me_repetitioncount
+;  ispis poruke
+  poruka = sprint("Avg. diam.                %12.3f %12.3f %12.3f %12.3f", srednjiprecnik, me_diameter, me_tolerance, me_diameter-srednjiprecnik)
+  msg(poruka)   
+  ;zapis u fajl ako ima vise ponavljanja
+  if (me_repetitioncount>1)
+     Write(errno,fname,poruka)
+  endif
+;kraj petlje za merenje po uglu
+endfor
+
+;da li se vracamo po x 
+if (( me_ReturnMode==0) or ( me_ReturnMode==32))
+   g0 x=start_x
+endif
+;da li se vracamo p Z
+if(( me_ReturnMode==0) or ( me_ReturnMode==48))
+   g0 z=start_z
+endif
+
+;proracun
+me_min=me_result[0,0]
+me_max=me_result[0,0]
+me_avg=0
+;petlja za matematiku 
+for brojacmerenja=0 to me_measurecount-1
+  for brojacpon=0 to me_repetitioncount-1
+      if(me_min>me_result[brojacmerenja,brojacpon])
+        me_min=me_result[brojacmerenja,brojacpon]
+      endif
+      if(me_max<me_result[brojacmerenja,brojacpon])
+        me_max=me_result[brojacmerenja,brojacpon]
+      endif
+      me_avg=me_avg+me_result[brojacmerenja,brojacpon]
+  endfor
+endfor
+me_avg=me_avg/(me_measurecount*me_repetitioncount)
+me_span=abs(me_max-me_min)
+;kraj proracuna
+;  ispis poruke za precnik
+  poruka = sprint("**Diameter**              %12.3f %12.3f %12.3f %12.3f", me_diameter-me_avg, me_diameter, me_tolerance,-me_avg)
+  msg(poruka)   
+  ;zapis u fajl ako ima vise ponavljanja
+  Write(errno,fname,poruka);  ispis poruke za UDAR
+  poruka = sprint("**Run-out**               %12.3f %12.3f %12.3f %12.3f", me_span/2, 0, me_RUNOUT_tolerance, me_span/2)
+  msg(poruka)   
+  ;zapis u fajl ako ima vise ponavljanja
+  Write(errno,fname,poruka)
+
+IF (me_Probe_AutoUP<>64)
+   m=me_probeDown
+ENDIF
+
+M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17
+

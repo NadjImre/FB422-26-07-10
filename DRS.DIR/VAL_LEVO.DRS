@@ -1,0 +1,23 @@
+
+
+
+E_LAB_A_VAL_LEVO: ;#SM Z:2
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z3 X0 ;*GP*
+G1 Z-6.3993 ;*GP*
+G2 Z-6.7819 X.3562 K=AC(-6.3993) I=AC(1) ;*GP*
+G3 Z-7.288 X1.5496 K=AC(-83.2996) I=AC(-128.4171) ;*GP*
+Z-7.4343 X1.6845 K=AC(-7.4344) I=AC(1.2995) ;*GP*
+G1 Z-7.9343 ;*GP*
+;CON,V64,2,0.0000,5,5,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:3,EY:0,ASE:90;*GP*;*RO*;*HD*
+;LL,EX:-6.3993;*GP*;*RO*;*HD*
+;ACW,EX:-6.7819,EY:.3562,CY:1;*GP*;*RO*;*HD*
+;ACCW,EX:-7.288,EY:1.5496,CX:-83.2996;*GP*;*RO*;*HD*
+;ACCW,EX:-7.4343,EY:1.6845,CY:1.2995;*GP*;*RO*;*HD*
+;LL,EX:-7.9343;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_VAL_LEVO:
+M17
+

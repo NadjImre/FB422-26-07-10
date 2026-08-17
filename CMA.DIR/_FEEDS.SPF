@@ -1,0 +1,17 @@
+PROC _FEEDS(Int RB, Real BrzinaOscilacija, Real Span,Real ZadrzavanjeZ1,Real ZadrzavanjeZ2,Int PozicijaSpana,Real BrzinaUsecanja,Real OscilacijeUsec,Real Izbrusavanje,Real PrecnikPovratka)
+
+
+Def int ii
+ii=rb-1
+
+Gr_Position_Strokes[ii]=PozicijaSpana
+Gr_Steps_Oscilation[ii]=Span
+Gr_PlungeCut_Oscilation[ii]=OscilacijeUsec
+Gr_Oscilacion_Feeds[ii] = BrzinaOscilacija
+Gr_HoldZ1[ii]=ZadrzavanjeZ1 
+Gr_HoldZ2[ii]=ZadrzavanjeZ2 
+Gr_DwellTime[ii]=Izbrusavanje
+Gr_PlungeCut_Feeds[ii]=BrzinaUsecanja
+Gr_ReturnDistance[ii]=PrecnikPovratka
+
+m17

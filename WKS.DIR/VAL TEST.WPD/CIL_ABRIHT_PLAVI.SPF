@@ -1,0 +1,11 @@
+
+;NCG#DressingSetup#cdressing_setup.com#NCCODE3#*NCG;*RO*;*HD*
+;#12#1#14#1#1#3#1#1#1#3#14#0#1#1#1#1#2#1#1#23#0#1#1##*NCG;*RO*;*HD*
+_DRESSING_SETUP("PLAVI_400_40",1,"ROLIK_ZA_PLAVI",1,2,300,"PLANE_DRESSING","",4,0,0,0,180,0,0,13,0,0,0,5,5,"CILINDRICNO-PLAVI KAMEN")
+;#END#*NCG;*RO*;*HD*
+;NCG#Dressing#cdressing.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#3#4#1#2#5#*NCG;*RO*;*HD*
+_DRESSING(20,5,0.02,0,300,-3000)
+;#END#*NCG;*RO*;*HD*
+M17
+9

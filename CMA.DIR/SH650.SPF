@@ -1,0 +1,7 @@
+PROC SH650
+;FB274 - jul.2019
+;FB271 i FB272
+
+MSG("kres signal")
+
+M17

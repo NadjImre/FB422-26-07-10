@@ -1,0 +1,112 @@
+PROC SH500(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje sfere sa oscilacijama
+DEF INT MM,JJ
+DEF REAL DD,izbrus
+DEF INT CCW[2]
+DEF INT INTER=3
+;prilaz i start kamena
+ZV400(broj)
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+
+STOPRE
+;prekid
+SETINT(8) PRIO=1 SH602
+;podesavanje promenljivih
+MM=0 ; strana brusenja
+JJ=2 ; faza brusenja
+DD=DODB[broj,jj] ; dodatak brusenja
+;odabri kruzne interpolacije
+if (Radius[broj]<0)
+   ccw[0]=3 ccw[1]=4
+else
+   ccw[0]=4 ccw[1]=3
+endif
+;za pracenje
+G0 XV=DD
+;glavna petlja
+FAZA:
+;broj izbrusavanja za fazu
+    izbrus = izbr[broj,jj];
+;broj obrtaja radnog predmeta
+    S=BROB[BROJ,jj] 
+;poruka ako je faza grubo brušenje
+    if (JJ==2) 
+	   MSG("$66001"<<"-"<<komentar[broj]) ;grubo brusenje
+	endif
+;poruka ako je faza fino brusenje
+	if (JJ==1)
+	   MSG("$66002"<<"-"<<komentar[broj]) ;fino brusenje
+	endif
+;poruka ako je faza zavrsno brusenje
+	if (JJ==0)
+	   MSG("$66003"<<"-"<<komentar[broj]) ;zavrsno brusenje
+	endif 
+;petlja za fazu brusenja
+PROLAZ:
+;ako je broj izbrusavanja pao na nulu kraj faze brusenja
+    if (izbrus< 0) gotof izlaz
+;da li smo u prvoj ili drugoj tački brusenja 0 - prva , 1 - druga
+    if (mm==0) 
+;da li ima primicanja u prvoj 
+	   if (Prim[broj,jj]<=0) 
+;ako ima spanuj
+          DD = DD - KORAK[broj,jj]
+	    endif
+    else 
+;ako je druga tacak
+	   if (Prim[broj,jj]>=0)
+;ako ima primicanja u drugoj 
+          DD = DD - KORAK[broj,jj]
+	    endif	   
+	endif
+;provera u kojoj smo fazi	
+	if (jj<=0)
+;ako je zavrsno
+	   if (dd<=0)
+;ako je dodatak ispod nule
+	       dd=0
+;izjednaci sa nulom i smanji broj izbrusavanja
+		   Izbrus = izbrus -1
+		endif
+	else
+;ako je faza nije zavrsno brusenje
+	   if (dd<=DODB[broj,jj-1])
+; i ako je dodatak manji o dodatka za sledecu fazu
+;stavi dodatak na dodatak za sledecu fazu 
+	      dd=dodB[broj,jj-1]
+;i smanji preostali broj izbrusavanja za jedan
+		  izbrus=izbrus-1
+		endif
+	endif
+;spanovanje
+    G1 X=2*UNUT*PREC[broj,mm]+DD XV=2*UNUT*DD F=BRZU[BROJ,3]
+;promeni mm
+	MM=(MM+1) MOD 2	
+;preuzmi interpolaciju
+    inter=ccw[mm]
+;pređi na suprotnu stranu sa kamenom
+    G[1]=INTER X=2*UNUT*PREC[broj,mm]+DD Z=POZZ[broj,mm] F=BRZO[Broj,jj] CR=ABS(RADIUS[Broj])
+;proveri da li ima zadrzavanja na kraju
+    if (ZADR[broj,2*jj-mm+1]>0) 
+;ako ima zadrzi
+	    G4 F=ZADR[broj,2*jj-mm+1]
+	endif
+;sledeći prolaz
+gotob PROLAZ
+IZLAZ:
+STOPRE
+;smanji fazu za 1
+JJ=JJ-1
+;proveri da li ima još brusenja 
+if (jj>=0) gotob FAZA
+;ako nema kraj
+KRAJ:
+;brisemo poruku
+msg("")
+;vracamo se nazad
+G01 X=PREKIDX XV=DODB[BROJ,3] F=BRZU[BROJ,3]
+;i zavrsavamo
+
+M17
+

@@ -1,0 +1,20 @@
+
+E_LAB_A_M_LEVO: ;#SM Z:10
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z3 X0 ;*GP*
+G1 Z-12 RND=.5 ;*GP*
+Z-13.4434 X5 RND=.15 ;*GP*
+Z-14.4434 ;*GP*
+;CON,V64,2,0.0000,2,2,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:3,EY:0,ASE:90;*GP*;*RO*;*HD*
+;R,RROUND:0;*GP*;*RO*;*HD*
+;LL,EX:-12;*GP*;*RO*;*HD*
+;R,RROUND:.5;*GP*;*RO*;*HD*
+;LA,EY:5,ASE:120;*GP*;*RO*;*HD*
+;R,RROUND:.15;*GP*;*RO*;*HD*
+;LL,DEX:-1;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_M_LEVO:
+M17
+

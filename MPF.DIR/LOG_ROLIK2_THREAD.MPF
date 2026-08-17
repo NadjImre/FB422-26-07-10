@@ -1,0 +1,33 @@
+*** Starting thread measure on position Z=     9.000, nominal diameter     17.683 ***
+Looking for entry into the thread 
+     Measure   Position Z    Actuall D    Nominal D    Tolerance    Deviation        Error
+Attempt   1        9.000       18.089       18.000
+Attempt   2        9.600       18.666       18.000
+Attempt   3       10.200       18.664       18.000
+Attempt   4       10.800       18.665       18.000
+Attempt   5       11.400       18.107       18.000
+Attempt   6       12.000       18.107       18.000
+Width measuring
+     Measure    Actuall Z    Actuall D
+Measure    +       14.872       18.000
+Measure    -       11.459       18.000
+Measuring result
+     Measure     Position      Actuall      Nominal    Tolerance    Deviation        Error
+       Width                     3.413        3.405                    -0.007
+ Diameter d2                    17.676       17.683                    -0.007
+      C axis                  -359.914        0.000                   359.914
+Mid.position       13.165       14.287       14.710                    -0.423
+*** Starting thread measure on position Z=   -35.000, nominal diameter     17.683 ***
+Looking for entry into the thread 
+     Measure   Position Z    Actuall D    Nominal D    Tolerance    Deviation        Error
+Attempt   1      -35.000       14.287       18.000
+Width measuring
+     Measure    Actuall Z    Actuall D
+Measure    +      -34.182       18.000
+Measure    -      -37.586       18.000
+Measuring result
+     Measure     Position      Actuall      Nominal    Tolerance    Deviation        Error
+       Width                     3.405        3.405                    -0.020
+ Diameter d2                    17.662       17.683                    -0.021
+      C axis                   -62.867        0.000                    62.867
+Mid.position      -35.884       14.317       14.710                    -0.393

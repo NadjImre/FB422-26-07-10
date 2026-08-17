@@ -1,0 +1,85 @@
+PROC SP003(INT BROJ)
+
+IF (ABRIHT[2,0]==0 AND ABRIH[2,1]==0 AND ABRIHT[2,0]==0)
+;Brusnje bez abrihtovanja
+SP000(0)
+ENDIF
+
+IF (ABRIHT[2,2]==1 and abriht[2,1]==0 and abriht[2,0]==0)
+;Abrihtovanje samo pre grubog brusenja
+    CALL(NAZIV_ABRIHT[2,2])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;BRUSENJE
+    SP000(0)
+ENDIF
+
+IF (ABRIHT[2,2]==0 and abriht[2,1]==0 and abriht[2,0]==1)
+;Abrihtovanje samo pre finog brusenja
+;Grubo brusenje
+    SP000(1)
+;Abrihtovanje
+    CALL(NAZIV_ABRIHT[2,1])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Preostalo brusenje
+    SP000(5,BROB_N[2,1])
+ENDIF
+
+IF (ABRIHT[2,2]==0 and abriht[2,1]==1 and abriht[2,0]==0)
+;Abrihtovanje SAMO u toku grubog brusenja
+;Grubo brusenje u fazama, posle zadnje faze radi fino i zavrsno
+    SP011(1)
+ENDIF
+
+IF (ABRIHT[2,2]==1 and abriht[2,1]==1 and abriht[2,0]==0)
+;Abrihtovanje pre i u toku grubog brusenja
+;Abrihtovanje
+    CALL(NAZIV_ABRIHT[2,0])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Grubo u fazama, fino i zavrsno brusenje
+    SP011(1)
+ENDIF
+
+IF (ABRIHT[2,2]==1 and abriht[2,1]==0 and abriht[2,0]==1)
+;Abrihtovanje pre grubog i pre finog brusenja
+;abrihtovanje
+    CALL(NAZIV_ABRIHT[2,2])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Grubo brusenje
+    SP000(1)
+;Abrihtovanje
+    CALL(NAZIV_ABRIHT[2,0])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Fino i zavrsno brusenje
+    SP000(5,BROB_N[2,1])
+ENDIF
+
+IF (ABRIHT[2,2]==0 and abriht[2,1]==1 and abriht[2,0]==1)
+;Abrihtovanje u toku grubog brusenja I pre finog brusenja
+;Grubo brusenje u fazama, posle zadnja ima abriht i zavrsava pre finog
+    SP011(0)
+    ;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Fino i zavrsno brusenje
+    SP000(5,BROB_N[2,1])
+ENDIF
+
+IF (ABRIHT[2,2]==1 and abriht[2,1]==1 and abriht[2,0]==1)
+;Abrihtovanje pre i u toku grubog brusenja i pre finog brusenja
+;abrihtovanje
+    CALL(NAZIV_ABRIHT[2,2])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Grubo brusenje u fazama, posle zadnja ima abriht i zavrsava pre finog
+    SP011(0)
+    ;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Fino i zavrsno brusenje
+    SP000(5,BROB_N[2,1])
+ENDIF
+
+M17

@@ -1,0 +1,188 @@
+PROC  AL000 (INT BROJ)
+
+DEF INT BROJAC ;  
+DEF INT G_TOC=1   ; korinatni sistem u kojem se abrihtuje 
+DEF INT G_KOM   ; kordinatni sistem komada
+DEF INT PRAVAC  ; pravac abrihtovanja 1 sa leva u desno -1 s desna u levo
+DEF INT BRTOC,brdia   ; broj tocila
+DEF REAL ZKON,XKON
+DEF REAL UNUT   ; unutrasnje ili spoljno abrihtovanje
+DEF INT NACIN   ; nacin poravnavanja
+Def REAL SPANX  ; span po X  =0.5 osim za abrihtovanje cela 
+Def REAL SPANZ  ; span po Z =0 ako se sapnuje samo po precniku
+DEF REAL ZPOCETAK,ZKRAJ ; pocetna tacka po Z
+DEF REAL XPOCETAK,XKRAJ
+DEF REAL XSREDNJE,ZSREDNJE
+DEF STRING[100] NAZPROG
+def int rolik;
+def int DToc, Dabriht
+
+IF((BROJ<0) OR (BROJ>89))
+  SETAL(65017,<<(BROJ))
+  M17
+ENDIF
+M97
+;preuzimanje rednog broja tocila
+BRTOC = GETT(NazivToc_A[BROJ])
+BRDIA = GETT(NazivAbriht[BROJ])
+Dtoc = BrojIviceToc_A[Broj]
+DAbriht = BrojIviceAbriht[Broj]
+
+;preuzimanje nacina poravnavanja
+NACIN = NACIN_A[BROj]
+IF (NACIN<=00) 
+   SETAL(65016, <<(BROJ+1))
+   M17
+ENDIF
+
+;iskljucivanje rotacija i translacija
+TRANS
+
+;preuzimane spoljno/unutarnje
+UNUT=1  PREKIDU=FALSE
+IF (Oblikam_a[BRoj]<>0)
+   UNUT=-1 PREKIDU=TRUE ; UNUT TREBA DA JE -1 AKO SE RADI SA DESNE STRANE
+ENDIF
+
+;odredjivanje smera abrihtovanje
+PRAVAC=-1
+IF (SMER_A[Broj]<>0)
+   PRAVAC=1
+ENDIF
+
+ZV000(Broj,1)
+
+rolik=M_ROLIK_STOP
+IF (($TC_DP1[BRDIA,DAbriht]==494) OR ($TC_DP1[BRDIA,DAbriht]==496))
+;rolna
+   IF (TEST<>0)
+      rolik=M_ROLIK_START
+   ENDIF
+ENDIF
+
+Trans X=$TC_DP3[BRTOC,DToc]/2 Z=$TC_DP4[BRTOC,DToc]
+T=NazivAbriht[Broj] D=BrojIviceAbriht[Broj]
+;spanovanje po osama 
+SPANX=UNUT*KorakX[BROJ]
+
+;i pocetna tacka po Z
+IF (NACIN_A[broj]>100)
+   ZPOCETAK = -PRAVAC*PODHODZ[BROJ]
+   ZKRAJ = PRAVAC*(PODHODZ[BROJ]+$TC_TPG5[BRTOC])
+   XPOCETAK = 0
+   XKRAJ = kor_kam_x[broj]
+ELSE  
+   ZPOCETAK = PRAVAC*(PODHODZ[BROJ]+$TC_TPG5[BRTOC]) 
+   ZKRAJ = -PRAVAC*PODHODZ[BROJ]
+   XPOCETAK = kor_kam_x[broj]
+   XKRAJ = 0
+ENDIF
+
+PREKIDXA=UNUT*PODHODX[BROJ]
+SETINT(8) PRIO=1 AL600
+;provera koliko komada ima do abrihtovanja 
+PREOSTALO[BROJ]=PREOSTALO[BROJ]-1
+IF (PREOSTALO[BROJ]>0) GOTOF KRAJ
+
+;provera precnika i sirine tocila
+IF ((abs($TC_DP3[BRTOC,DToc]-BROJPROL[BROJ]*SPANX))<=$TC_TPG3[BRTOC]) GOTOF greska
+
+;abrihtovanje krece
+msg("$66005"<<"-"<<komentar_a[broj])
+PREOSTALO[BROJ]=KOMADA[BROJ]
+;podesavanje ravni i kordinata po precniku
+G500 G18 DIAMON
+STOPRE
+m01
+;prilaz abrihteru
+;G53T0D0X0G0
+;izbor alata levo
+T=NazivAbriht[Broj] D=DAbriht
+If (UNUT<0)
+   G0 X=PREKIDXA
+   Z=ZPOCETAK
+Else
+   G0 Z=ZPOCETAK
+   X=PREKIDXA
+ENDIF
+M=ROLIK
+;start vode
+ZV100(BROJ,1)
+STOPRE
+BROJAC=1
+PETLJA:
+    if (BROJAC>BROJPROL[BROJ]) GOTOF KRAJ_PETLJE
+    ;poruka
+    MSG(KOMENTAR_A[broj]<<":"<<"$66005:"<<BROJAC<<"\"<<BROJPROL[BROJ])
+    ;pocetna tacka
+    G0 G60 Z=ZPOCETAK
+    STOPRE    
+    ;spanovanje po X i korekcija precnika
+    $TC_DP3[BRTOC,DTOC]=$TC_DP3[BRTOC,DTOC]-SPANX
+    ;$TC_DP3[BRTOC,2]=-$TC_DP3[BRTOC,1];SAMO AKO SE ABRIHTUJE LEVO A BRUSI DESNO
+    STOPRE
+    ;span ide
+    Trans X=$TC_DP3[BRTOC,DTOC]/2 Z=$TC_DP4[BRTOC,DTOC]
+    ;aktiviranje kordinatnog sistema i izbor ciklusa
+    G01 G53 F=BRZA[BROJ]
+    ;na nulu
+    g01 X=XPOCETAK
+    ;poravnavanje
+    Z=ZKRAJ X=XKRAJ
+    ;povecanje brojaca
+    BROJAC=BROJAC+1
+    ;ako nije dvostrano vrati se na pocetak
+    IF (NACIN_A[broj]<>120) 
+        G01 F500  X=PREKIDXA G40
+       GOTOB PETLJA
+    ENDIF
+    STOPRE
+    if (BROJAC>BROJPROL[BROJ]) GOTOF KRAJ_PETLJE
+    ;pocetak povrtaka kod dvostranog - poruka
+    MSG(KOMENTAR_A[broj]<<":"<<"$66005:"<<BROJAC<<"\"<<BROJPROL[BROJ])
+    STOPRE    
+    ;spanovanje po X i korekcija precnika za povrtani hod
+    $TC_DP3[BRTOC,DTOC]=$TC_DP3[BRTOC,DTOC]-SPANX
+    STOPRE
+    ;span ide za povrtani hod
+    Trans X=$TC_DP3[BRTOC,DTOC]/2 Z=$TC_DP4[BRTOC,DTOC]
+    ;na nulu posle transa i pocetak povrtanog hoda
+    g01 x=XKRAJ
+    ;poravnavanje u povrtanom hodu
+    Z=ZPOCETAK X=XPOCETAK
+    ;uvecanje brojaca
+    BROJAC=BROJAC+1
+    ;povratak na pocetak
+    GOTOB PETLJA
+KRAJ_PETLJE:
+;izlaz napolje
+G0 X=PREKIDXA
+STOPRE
+;DIAMOF
+MSG("")
+M=M_ROLIK_STOP
+;odlazak
+IF (oblikam_a[broj]==0)
+   G75X0M11
+;   G75Z0
+ELSE
+   G75M11Z0
+   G75X0
+ENDIF
+
+IF (PADAJUCI[BROJ]<>0)
+   ABRIHT_GORE
+ENDIF
+KRAJ:
+OPERACIJA_BROJ=OPERACIJA_BROJ+1
+CLRINT(8)
+T0 D0
+TRANS
+M17
+
+GRESKA:
+SETAL(66000)
+T0 D0
+TRANS
+M17
+

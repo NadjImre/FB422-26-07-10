@@ -1,0 +1,553 @@
+PROC SH865
+
+;oscilirajuce brusenje duz Z (kao SH860)
+
+;Gr_Steps>0 faza ukljucena, Gr_Steps=0 iskljucena
+
+;Gr_Strokes ukupno pomeranje po X u fazi (mm)
+
+;Gr_Steps_Oscilation korak po X iz _FEEDS (Korak)
+
+;Gr_DwellTime iz _FEEDS (Izbrus) broj prolaza u prazno na kraju faze = TRUNC(vrednost)
+
+;Gr_ReturnDistance iz _FEEDS (PrecOdskok) povratak po X na kraju faze i posle abrihta
+
+;pocetne postavke
+
+Def Real XVKoord =0.5 ;dubina na kojoj se brusi
+
+Def Int ProlazaOdAbrihtovanja = 0
+
+Def Int Kord
+
+Def Real BrojObrtajaTocila[MaxFaza]
+
+Def Real UkupniDodatak=0
+
+Def Int UkupnoProlaza=0
+
+Def Int Brojac,Indeks
+
+Def Int IndeksFaze,IndeksProlaza
+
+Def Int IndeksUkupnogProlaza
+
+Def Int BrojProlazaFaze
+
+Def Int BrojPraznihProlaza
+
+Def Int IndeksPraznogProlaza
+
+Def Int StaraFaza
+
+Def Real PreostaloFaze
+
+Def Real KorakX
+
+Def int BrojTocila,BrojVretena
+
+Def String[100] Poruka
+
+Def Real UgaoAOse
+
+Def String [200] Rez
+
+Def Int Greska
+
+Def String[32] NazivFajla
+
+Def Int DaLiJeBioOdskok=0
+
+Def Int Strana=0
+
+
+
+;naziv fajla za ispivanje statusa
+
+NazivFajla="/_N_MPF_DIR/LOG_SH865"
+
+;obrisem stari ako ga ima
+
+DELETE(Greska,NazivFajla)
+
+;pocetna poruka
+
+WRITE(GReska,NazivFajla,"Start " << Gr_Comment)
+
+;prethodni proracun
+
+;broj tocila i vretena
+
+BrojTocila=GETT(Gr_Tool)
+
+BrojVretena=$TC_TPG1[BrojTocila]
+
+;dodela vrednosti za koord system jer se clan niza ne moze dodeliti g funkciji
+
+Kord=Gr_Frame
+
+;ugao A ose je nula
+
+UgaoAOse = 0
+
+;priprema
+
+For Brojac=1 to MaxFaza
+
+    Indeks = MaxFaza - Brojac
+
+    If (Gr_Steps[Indeks]>0) and (Gr_Strokes[Indeks]>0) and (Gr_Steps_Oscilation[Indeks]>0)
+
+       UkupniDodatak=UkupniDodatak+Gr_Strokes[Indeks]
+
+       BrojProlazaFaze=TRUNC(Gr_Strokes[Indeks]/Gr_Steps_Oscilation[Indeks])
+
+       If (Gr_Strokes[Indeks]-BrojProlazaFaze*Gr_Steps_Oscilation[Indeks]>0.00001)
+
+          BrojProlazaFaze=BrojProlazaFaze+1
+
+       Endif
+
+       UkupnoProlaza=UkupnoProlaza+BrojProlazaFaze
+
+       indeksfaze=indeks
+
+    Endif
+
+    BrojObrtajaTocila[Brojac-1]=19098*Gr_Wheel_Speeds[Brojac-1]/abs($TC_DP3[BrojTocila,Gr_DNumber ])
+
+EndFor
+
+XVKoord = UkupniDodatak IndeksProlaza=0 IndeksFaze=indeksfaze
+
+PreostaloFaze=Gr_Strokes[IndeksFaze]
+
+Write(Greska,NazivFajla,SPRINT("Grinding allowance %7.4f, est. passes %d",UkupniDodatak, UkupnoProlaza)) 
+
+STOPRE
+
+;if (Gr_StrokesToDress[IndeksFaze]>0) gotof TrebaAbriht
+
+Write(Greska,NazivFajla,SPRINT("***** Phase %d *****",IndeksFaze+1)) 
+
+VELIKI_DOSKOK:
+
+;reset marpos zvucne sonde
+
+M80
+
+;pocetak za brušenje
+
+G0X0G53T0D0U0
+
+T=Gr_Tool D=Gr_DNumber 
+
+G[8]=Kord Diamon
+
+;aktiviranje korekcija
+
+TRANS X=Gr_DiamCorrection/2 Z=Gr_PosCorrection
+
+;sinhrona akcija za spanovanje sa osom XV
+
+ID=1 DO $$SA_LEAD_OFFSET_OUT_POS[X]=$AA_IM[XV]
+
+;ucitavanje tabele
+
+TB200(0)
+
+;odskok - prekida sve i skace na labelu kraj 
+
+SETINT(8) PRIO=1 SH6201
+
+;zauzimanje pozicije
+
+G0 Z=Gr_Position1 A=UgaoAOse
+
+;pocetak prolaza
+
+DOSKOK:
+
+;start kamena
+
+IF (TEST<>0)
+
+    m[BrojVretena]=3 s[BrojVretena]=BrojObrtajaTocila[IndeksFaze]
+
+    M82 ; zvucna sonda ukljucena
+
+ENDIF
+
+
+
+STOPRE
+
+PRESKAKANJE_FAZE:
+
+if (IndeksFaze>=MaxFaza) gotof Kraj_Bez_Odskoka
+
+if (Gr_Steps[IndeksFaze]<=0) OR (Gr_Strokes[IndeksFaze]<=0) OR (Gr_Steps_Oscilation[IndeksFaze]<=0)
+
+   IndeksFaze=IndeksFaze+1
+
+   IndeksProlaza=0
+
+   PreostaloFaze=Gr_Strokes[IndeksFaze]
+
+   gotob PRESKAKANJE_FAZE
+
+endif
+
+if (PreostaloFaze<=0) gotof PRORACUN
+
+;selekcija alata i koordinatnog sistema 
+
+T=Gr_Tool D=Gr_DNumber G[8]=KORD
+
+;aktiviranje korekcija
+
+TRANS X=Gr_DiamCorrection/2 Z=Gr_PosCorrection;
+
+;i pozicioniranje na pocetnu tačku
+
+G0 Z=Gr_Position1 
+
+;start vode
+
+IF (TEST<>0)
+
+   waits(BrojVretena)
+
+   M=Gr_Coolant
+
+ENDIF
+
+;prilaz komadu
+
+If (Gr_SteadyRest==0)
+
+   G0 X=Gr_Diameter1+Gr_Podhod XV=Gr_Podhod U=0 M3 S=Gr_Speeds[IndeksFaze]
+
+else
+
+   G0 X=Gr_Diameter1+Gr_Podhod XV=Gr_Podhod U=Gr_UAxis_Position M3 S=Gr_Speeds[IndeksFaze]
+
+   G4F1
+
+   M37
+
+Endif
+
+;vezivanje tabele
+
+LEADON(X,Z,1)      ; vezivanje osa
+
+FFWON              ; feed fowrvard control
+
+;brusenje
+
+JEDAN_PROLAZ:
+
+;ako smo u prvoj tacki i spanujemo u njoj)
+
+if ( (strana==0) and (Gr_Position_Strokes[IndeksFaze]<=0) )
+
+   KorakX=Gr_Steps_Oscilation[IndeksFaze]
+
+   if (KorakX>PreostaloFaze)
+
+      KorakX=PreostaloFaze
+
+   endif
+
+   XVKoord = XVKoord - KorakX
+
+   PreostaloFaze = PreostaloFaze - KorakX
+
+   IndeksUkupnogProlaza=IndeksUkupnogProlaza+1
+
+   ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
+
+   IndeksProlaza=IndeksProlaza+1
+
+   poruka = SPRINT("%s:Ukupno prolaza %d/%d Faza %d (ukupno %7.4f korak %7.4f preostalo %7.4f) Prolaz %d Z1->Z2", Gr_Comment, IndeksUkupnogProlaza, UkupnoProlaza, IndeksFaze+1, Gr_Strokes[IndeksFaze], KorakX, PreostaloFaze, IndeksProlaza)
+
+   MSG(poruka)
+
+   Write(Greska, NazivFajla, poruka)
+
+endif
+
+;ako smo u drugoj tacki i spanujemo u njoj
+
+if ( (strana==1) and (Gr_Position_Strokes[IndeksFaze]>=0) )
+
+   KorakX=Gr_Steps_Oscilation[IndeksFaze]
+
+   if (KorakX>PreostaloFaze)
+
+      KorakX=PreostaloFaze
+
+   endif
+
+   XVKoord = XVKoord - KorakX
+
+   PreostaloFaze = PreostaloFaze - KorakX
+
+   IndeksUkupnogProlaza=IndeksUkupnogProlaza+1
+
+   ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
+
+   IndeksProlaza=IndeksProlaza+1
+
+   poruka = SPRINT("%s:Ukupno prolaza %d/%d Faza %d (ukupno %7.4f korak %7.4f preostalo %7.4f) Prolaz %d Z2->Z1", Gr_Comment, IndeksUkupnogProlaza, UkupnoProlaza, IndeksFaze+1, Gr_Strokes[IndeksFaze], KorakX, PreostaloFaze, IndeksProlaza)
+
+   MSG(poruka)
+
+   Write(Greska, NazivFajla, poruka)
+
+endif
+
+;span
+
+G1 G90 XV=XVKoord F=Gr_RabHod S=Gr_Speeds[IndeksFaze]
+
+;da li je hod tamo ili nazad
+
+if(strana==0)
+
+  ;idemo tamo
+
+  G1 G90 Z=Gr_Position2 F=Gr_Oscilacion_Feeds[IndeksFaze]
+
+  if (Gr_HoldZ2[IndeksFaze]>0) 
+
+     G4 F=Gr_HoldZ2[IndeksFaze]
+
+  endif
+
+else
+
+  ;idemo nazad
+
+  G1 G90 Z=Gr_Position1 F=Gr_Oscilacion_Feeds[IndeksFaze]
+
+  if (Gr_HoldZ1[IndeksFaze]>0) 
+
+     G4 F=Gr_HoldZ1[IndeksFaze]
+
+  endif
+
+endif
+
+;analiza stanja
+
+PRORACUN:
+
+;promenimo stranu
+
+strana = (strana+1) mod 2
+
+;provera da li je kraj faze
+
+if (PreostaloFaze<=0.00001)
+
+   if (IndeksProlaza>0)
+
+      BrojPraznihProlaza=TRUNC(Gr_DwellTime[IndeksFaze])
+
+      if (BrojPraznihProlaza>0)
+
+         poruka = SPRINT("%s: Izbrusavanje faze %d, %d prolaza u prazno", Gr_Comment, IndeksFaze+1, BrojPraznihProlaza)
+
+         MSG(poruka)
+
+         Write(Greska, NazivFajla, poruka)
+
+         FOR IndeksPraznogProlaza=1 TO BrojPraznihProlaza
+
+            poruka = SPRINT("%s: Izbrus faza %d prolaz %d/%d", Gr_Comment, IndeksFaze+1, IndeksPraznogProlaza, BrojPraznihProlaza)
+
+            MSG(poruka)
+
+            Write(Greska, NazivFajla, poruka)
+
+            G1 G90 XV=XVKoord F=Gr_RabHod S=Gr_Speeds[IndeksFaze]
+
+            G1 G90 Z=Gr_Position2 F=Gr_Oscilacion_Feeds[IndeksFaze]
+
+            if (Gr_HoldZ2[IndeksFaze]>0)
+
+               G4 F=Gr_HoldZ2[IndeksFaze]
+
+            endif
+
+            G1 G90 Z=Gr_Position1 F=Gr_Oscilacion_Feeds[IndeksFaze]
+
+            if (Gr_HoldZ1[IndeksFaze]>0)
+
+               G4 F=Gr_HoldZ1[IndeksFaze]
+
+            endif
+
+         ENDFOR
+
+         strana=0
+
+      endif
+
+   endif
+
+   StaraFaza=IndeksFaze
+
+;povratak posle faze (ne za prvu aktivnu fazu)
+
+   if (IndeksProlaza>0) and (StaraFaza>indeksfaze) and (Gr_ReturnDistance[StaraFaza]<>0)
+
+      XVKoord=XVKoord+Gr_ReturnDistance[StaraFaza]
+
+      poruka = SPRINT("%s: Povratak posle faze %d za %7.4f mm", Gr_Comment, StaraFaza+1, Gr_ReturnDistance[StaraFaza])
+
+      MSG(poruka)
+
+      Write(Greska, NazivFajla, poruka)
+
+      G1 G90 XV=XVKoord F=Gr_RabHod
+
+   endif
+
+;ako jeste prelazimo na sledeću
+
+   IndeksFaze=IndeksFaze+1
+
+;resetujemo broj prolaza
+
+   IndeksProlaza=0
+
+   PreostaloFaze=Gr_Strokes[IndeksFaze]
+
+endif
+
+;da li smo dosli do zadnje faze
+
+Provera: if (IndeksFaze>=MaxFaza) gotof Kraj_Bez_Odskoka
+
+;proveri da li je faza iskljucena ili prazna
+
+if (Gr_Steps[IndeksFaze]<=0) OR (Gr_Strokes[IndeksFaze]<=0) OR (Gr_Steps_Oscilation[IndeksFaze]<=0)
+
+;ako jeste prelazimo na sledeću
+
+   IndeksFaze=IndeksFaze+1
+
+   IndeksProlaza=0
+
+   PreostaloFaze=Gr_Strokes[IndeksFaze]
+
+;proverimo jesmo li dosli do zadnje
+
+   gotob provera
+
+ELSE
+
+  Write(Greska,NazivFajla,SPRINT("***** Phase %d *****",IndeksFaze+1)) 
+
+endif
+
+;da li treba abriht
+
+If (Gr_StrokesToDress[IndeksFaze]<>0)
+
+  ;if ((indeksprolaza mod Gr_StrokesToDress[IndeksFaze])==0) GOTOF TREBAABRIHT
+
+ENDIF
+
+stopre
+
+gotob Doskok
+
+
+
+KRAJ:
+
+DaLiJeBioOdskok=1
+
+Stopre
+
+KRAJ_BEZ_ODSKOKA:
+
+FFWOF
+
+LEADOF(X,Z)
+
+TRANS
+
+G90G53X0G0T0D0M11M5
+
+If (Gr_SteadyRest<>0)
+
+   M36 G4 F2
+
+Endif
+
+if (DaLiJeBioOdskok==0)
+
+   msg("Kraj")
+
+   write(Greska,NazivFajla,"Regular end of program")
+
+else
+
+   msg("Odskok")
+
+   write(Greska, NazivFajla, "End of program with rebound")
+
+endif
+
+STOPRE
+
+U0G0
+
+M17
+
+
+
+TREBAABRIHT:
+
+FFWOF
+
+LEADOF(X,Z)
+
+TRANS
+
+G53X0G0T0D0M11M5
+
+ProlazaOdAbrihtovanja=0
+
+Write(Greska, NazivFajla, SPrint("Dressing %dx%6.4fmm with %d mm/min",ds_strokes[IndeksFaze],ds_steps[IndeksFaze],ds_feeds[IndeksFaze])) 
+
+STOPRE
+
+msg("Abrihtovanje")
+
+_DRESSING(ds_wheel_speeds[IndeksFaze],ds_strokes[IndeksFaze],ds_steps[IndeksFaze],0,ds_feeds[IndeksFaze],ds_roll_speeds[IndeksFaze])
+
+STOPRE
+
+if (Gr_ReturnDistance[IndeksFaze]<>0)
+
+   XVKoord=XVKoord+Gr_ReturnDistance[IndeksFaze]
+
+endif
+
+GotoB Veliki_Doskok
+
+
+
+M17
+
+
+
+
+
+

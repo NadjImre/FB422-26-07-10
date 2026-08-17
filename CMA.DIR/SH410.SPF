@@ -1,0 +1,44 @@
+PROC SH410(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje usecnjem bez oscilacija
+ZV400(broj)
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+
+STOPRE
+
+SETINT(8) PRIO=1 SH602
+OS[Z]=0
+STOPRE
+
+GRUBO:
+MSG("$66001"<<"-"<<komentar[broj]) ;grubo brusenje
+S=BROB[BROJ,2] 
+G1 X=XGRUBO F=BRZU[BROJ,2]
+ClrInt(6)
+STOPRE
+G04 F=IZBR[BROJ,2] ;istrcavanje
+
+CISTO:
+MSG("$66002"<<"-"<<komentar[broj]) ;fino brusenje
+STOPRE
+S=BROB[BROJ,1]
+G01 X=XCISTO F=BRZU[BROJ,1]
+G04 F=IZBR[BROJ,1]
+STOPRE
+
+FINO:
+MSG("$66003"<<"-"<<komentar[broj]) ;zavrsno brusenje
+STOPRE
+S=BROB[BROJ,0]
+G01 X=XFINO F=BRZU[BROJ,0]
+G04 F=IZBR[BROJ,0]
+STOPRE
+
+KRAJ:
+msg("")
+G01 X=PREKIDX F=BRZU[BROJ,3]
+OS[Z]=0 
+WAITP(Z)
+
+M17
+

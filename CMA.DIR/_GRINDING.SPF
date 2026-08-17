@@ -1,0 +1,67 @@
+PROC  _GRINDING(STRING[32] alat ,INT dbroj,Int NacinBrusenja,int Prilaz,real Xsafe,real Zsafe,Real UgaoBose,int Smer,Real PrecnikD1,Real PrecnikD2,REAL Pozz1,REAL Pozz2,int BrojMer,int BrojMerZ, real korekcijaX,real korekcijaZ,Int Kordsis,int TipBrusenja,Int MarpossGC,Int Mvoda,Int NacinOdskoka,Real PrecnikZavrsetka,Real KorekcijaC, STRING[100] KOMENT)
+
+Gr_Frame=Kordsis
+Gr_Tool=ALAT
+Gr_DNumber=dbroj
+Gr_Method = NacinBrusenja
+Gr_Type = TipBrusenja
+If (smer==0)
+   Gr_Direction = 1
+else
+   Gr_Direction = -1
+endif
+Gr_DiamCorrection = korekcijaX
+Gr_PosCorrection = korekcijaZ
+Gr_CAngleCorrection=KorekcijaC
+Gr_Coolant = Mvoda
+Gr_Comment = koment
+Gr_BAxis_angle = UgaoBose
+Gr_approach = Prilaz
+Gr_SwivelPointX = Xsafe
+Gr_SwivelPointZ = Zsafe
+Gr_Measure_NumX = BrojMer
+Gr_Measure_NumZ = BrojMerZ
+Gr_TypeOfRebound = NacinOdskoka
+Gr_EndCycleDiameter = PrecnikZavrsetka
+Gr_Marposs = MarpossGC+80
+
+T0D0G53G0X0
+G0G53B=Gr_BAxis_angle
+STOPRE
+
+
+If (Gr_Method==840)
+SH840
+GOTOF KRAJ
+Endif
+
+Gr_Diameter1 = PrecnikD1
+Gr_Diameter2 = PrecnikD2
+Gr_Position1 = Pozz1
+Gr_Position2 = Pozz2
+
+
+If (Gr_Method==200)
+SH140
+GOTOF KRAJ
+Endif
+
+If (Gr_Method==150)
+SH150
+GOTOF KRAJ
+Endif
+
+If (Gr_Method==300)
+SH160
+GOTOF KRAJ
+Endif
+
+If (Gr_Method==304)
+SH170
+GOTOF KRAJ
+Endif
+
+KRAJ:
+M17
+
+

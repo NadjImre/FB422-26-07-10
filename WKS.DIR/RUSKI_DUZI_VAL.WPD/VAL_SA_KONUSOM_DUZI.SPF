@@ -1,0 +1,23 @@
+
+E_LAB_A_VAL: ;#SM Z:42
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z684 X18.2056 ;*GP*
+G1 Z672 X18.415 ;*GP*
+Z600 X18.42 ;*GP*
+Z200 ;*GP*
+Z20 X18.428 ;*GP*
+Z-1 X18.42 ;*GP*
+;CON,V64,2,0.0000,2,2,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:684,EY:18.2056,ASE:90;*GP*;*RO*;*HD*
+;R,RROUND:0;*GP*;*RO*;*HD*
+;LA,DEX:-12,ASE:179.5,ATT:APP(ALLPARA);*GP*;*RO*;*HD*
+;LA,EX:600,EY:18.42,ATT:APP(ALLPARA);*GP*;*RO*;*HD*
+;LA,EX:200,EY:18.42,ATT:APP(ALLPARA);*GP*;*RO*;*HD*
+;LA,EX:20,EY:18.428,ATT:APP(ALLPARA);*GP*;*RO*;*HD*
+;LA,EX:-1,EY:18.42,ATT:APP(ALLPARA);*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_VAL:
+
+M17
+

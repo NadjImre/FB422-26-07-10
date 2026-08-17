@@ -1,0 +1,22 @@
+
+
+E_LAB_A_LEVI: ;#SM Z:16
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z-1.75 X13.715 ;*GP*
+G1 Z-11.25 X14.71 ;*GP*
+Z-27.75 ;*GP*
+Z-34 X14.055 ;*GP*
+Z-35 X20.5 ;*GP*
+;CON,V64,2,0.0000,4,4,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:-1.75,EY:13.715,ASE:90;*GP*;*RO*;*HD*
+;LA,EX:-11.25,EY:14.71;*GP*;*RO*;*HD*
+;LL,EX:-27.75;*GP*;*RO*;*HD*
+;LA,EX:-34,EY:14.055;*GP*;*RO*;*HD*
+;LA,EX:-35,EY:20.5;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_LEVI:
+
+
+M17
+

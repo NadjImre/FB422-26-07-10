@@ -1,0 +1,27 @@
+PROC AL530(INT BROJ)
+;PROFILISANJE TOCILA SE PROFILNOM ROLNOM
+
+DEF INT BRTOC
+DEF REAL SIRINA
+Def Real unut
+
+;preuzimanje sirine tocila
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+X=unut*korakx[BROJ] FB=RABHOD
+X=0
+G4 F3
+
+M17
+
+

@@ -1,0 +1,60 @@
+PROC _PROBE_RECALIBRATION(String[32] Sonda,int DBrojSonde ,real Xnom ,real Znom ,real DuzMer, real BrzMer ,int MSonde ,int BrojSonde ,int Status ,int kordsys ,real DOZRAZ ,int TrebaC ,real Cnom)
+DEF INT BROJAC
+Def int me_CalibRepetition
+def int errno;broj greske koja se vraca prilikom snimanja
+def string[32] fname;naziv fajla za snimanje
+def string[128] poruka ; pomocna promenljiva za ispis poruke
+;naziv fajla za zspisivanje statusa
+fname=me_report_file
+;G500X0G0T0D0
+;G0B0A0
+ME_CalibRepetition=(STATUS B_AND 15)
+IF (me_calibrepetition<=0) gotof kraj
+me_tool=Sonda
+me_tool_number = gett(me_tool)
+me_tool_Dnumber = dbrojsonde
+me_diameter = xnom
+me_position = znom
+me_distance = duzmer
+me_feed = brzmer
+me_ProbeUp = msonde
+IF (me_probeup==22)
+   me_probedown=23
+else
+  me_probedown=32
+endif
+me_probe_number = brojsonde
+me_status = status
+me_frame = kordsys
+me_tolerance = dozraz
+me_with_Caxis = TREBAC
+me_Caxis_Position = CNOM
+me_RepetitionCount = 1
+me_MeasureCount = 1
+me_ReturnMode = 16 ; bez vracanja nazad, 32-vracanje po X, 48-vracanje po Z, 0 - vracanje X+Z
+me_Probe_AutoUP =  64; bez podizanja sonde na kraju, 0 - sa podizanjem 
+ME_CalibRepetition=(STATUS B_AND 15)
+poruka = SPRINT("Probe recalibration on diameter %8.3f and position Z=%8.3f",me_diameter,me_position)
+Write(errno,fname,poruka)
+STOPRE
+;merenje za rekalibraciju
+;Brojac pokusaja
+Brojac=0
+ponovo:
+;merenje
+MS140
+;rekalibracija
+$tc_dp4[me_tool_number,me_tool_dnumber]=$tc_dp4[me_tool_number,me_tool_dnumber]-0.5*me_avg
+;provera pokusaja
+if (brojac>me_CalibRepetition) gotof kraj
+;provera velicine ako je velika ponovo
+brojac=brojac+1
+if (ABS(me_avg)>0.002) gotob ponovo
+
+KRAJ:
+;G500X0G0T0D0
+;M23
+
+
+M17
+

@@ -1,0 +1,16 @@
+PROC TB200(INT BROJ)
+;promenljiva za naviv programa
+DEF STRING[100] PROGRAM1
+;dodajemo .spf na kraj
+PROGRAM1 = TH_CONTURE<<"_SPF"
+;brisemo staru tabelu ako je ima, ako nema ne prijavljuje gresku
+CTABDEL(1)
+;pocetak nove tabele
+CTABDEF(X,Z,1,0,"DRAM")
+;pozivamo konturu
+CALL PROGRAM1
+;karj tabele
+CTABEND
+;kraj programa
+M17
+ 

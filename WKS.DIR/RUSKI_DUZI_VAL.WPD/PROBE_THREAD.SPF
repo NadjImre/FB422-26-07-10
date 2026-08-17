@@ -1,0 +1,64 @@
+PROC PROBE_THREAD
+
+me_th_type = 0; 4 je kalibracija sve drugo merenje
+me_report_file="/_N_MPF_DIR/LOG_VAL_THREAD"
+IF (me_th_type==4) gotof kalibracija
+me_offset=0.0
+;NCG#probe_recalibration#cprobe_recalibration.com#NCCODE3#*NCG;*RO*;*HD*
+;#4#1#6#3#1#2#2#1#1#5#10#1#1#2#*NCG;*RO*;*HD*
+_PROBE_RECALIBRATION("zond",1,120.07,833,8,60,22,1,10,2,0.002 , 0 , 0)
+;#END#*NCG;*RO*;*HD*
+kalibracija:
+
+me_tool="zond"
+me_tool_number = gett(me_tool)
+me_tool_Dnumber = 1
+me_th_diameter = 19.2
+me_th_startdia = 22
+me_th_position = 625.4
+me_th_pitch = 1.2
+me_th_step = 1
+me_feed = 30
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 1
+me_frame = 3
+me_tolerance = 0.1
+me_with_Caxis = 1
+;me_Caxis_Position = Cnom
+me_RepetitionCount = 1
+me_MeasureCount = 1
+me_ReturnMode = 16
+me_Probe_AutoUP = 64
+me_th_nom_diametEr=18.886
+me_offset=-0.2
+STOPRE
+ms160
+
+me_th_position = 455
+me_offset=-0.05
+STOPRE
+ms160
+
+me_th_position = 305
+me_offset=0.0
+STOPRE
+ms160
+
+me_th_position = 135
+me_offset=-0.01
+STOPRE
+ms160
+
+me_th_position = 10
+me_offset=-0.1
+STOPRE
+ms160
+
+T0D0G0X0G500
+M23
+
+
+M17
+

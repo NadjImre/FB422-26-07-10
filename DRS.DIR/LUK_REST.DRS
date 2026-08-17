@@ -1,0 +1,14 @@
+
+E_LAB_A_LUKC: ;#SM Z:2
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z-58 X17.4 ;*GP*
+G3 Z-89.5 K=AC(-73.75) I=AC(-229.6625) ;*GP*
+;CON,V64,2,0.0000,1,1,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:-58,EY:17.4,ASE:90;*GP*;*RO*;*HD*
+;ACCW,EX:-89.5,EY:17.4,CY:-229.6625;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_LUKC:
+
+M17
+

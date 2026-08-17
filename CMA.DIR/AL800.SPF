@@ -1,0 +1,132 @@
+PROC AL800(INT BRTOC,INT PRAVAC)
+
+;viseprofilni navoj - standardni
+
+DEF REAL AA1
+DEF REAL AA2
+DEF REAL AASR
+DEF REAL PP,PPX,PPZ
+DEF REAL ZZ2
+DEF REAL KK2
+DEF REAL RR,rrol
+DEF REAL RR1
+DEF REAL DD
+DEF REAL DD2
+DEF REAL DD1
+DEF REAL HH0
+DEF REAL HH1
+DEF REAL HH2
+DEF REAL HH3
+DEF REAL BB,BB2
+DEF REAL DELTAX
+DEF INT NN,NZ
+def real xx1min,zzmin,zz0,zz1; ***** promenljive *****
+DEF INT BR
+
+DEF REAL XA,ZA
+DEF REAL XB,ZB
+DEF REAL XC,ZC
+DEF REAL XD,ZD
+DEF REAL XE,ZE
+DEF REAL XF,ZF
+DEF REAL XG,ZG
+DEF REAL XJ,ZJ
+DEF REAL XK,ZK
+DEF REAL XL,ZL
+DEF REAL XM,ZM
+DEF REAL XO,ZO
+DEF REAL UNUT
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRTOC]<>0)
+   UNUT=-1
+ENDIF
+
+AA1=tha1 ; ugao profila levo
+AA2=tha2 ; ugao profila desno
+AASR = SIN((AA1+AA2)/2)/(COS((AA1-AA2)/2)-SIN((AA1+AA2)/2))
+PP=thpi   ; korak
+KK2=0
+ZZ2=0
+RR=thr2; radijus prelaza - interni
+DD=thd0  ; spoljni precnik D
+DD2=thd2 ; precnik D2
+DD1=thd1 ; precnik D1
+HH1=0.5*(DD-DD2)+thx1 ;visina podnozja zuba 
+HH2=0.5*(DD2-DD1)+thx2 ; visina glave zuba 
+HH0= (0.5*PP*cos(AA2)*cos(AA1))/sin(AA1+AA2)
+
+BR = GETT(NazivToc_a[BRTOC])
+BB = $TC_TPG5[BR]
+BB2=0.5; SIRINA FAZETE ZA PRECNIK
+
+RR1=thr1
+
+DeltAX=thdl;
+
+NZ=thnz ; broj zuba 
+PPX=thpx ;multiplikator koraka
+PPZ=0.25
+ZO=-thx3
+
+
+XA=0
+ZA=thph
+XB=0
+ZB=-PP
+XO = unut*(HH1+HH2)
+XG = unut*(HH1+HH0)
+ZG = ZO+0.25*PP-HH0*tan(AA1)
+XC=0
+ZC=ZO+PPZ*PP+HH1*TAN(AA1)
+XD=XO
+ZD=ZC-XO*TAN(AA1)
+XF=0
+ZF=ZO-PPZ*PP-HH1*TAN(AA2)
+XE=XO
+ZE=ZF+XO*TAN(AA2)
+XM=0
+ZM=-BB-thph
+STOPRE
+
+;Viseprofilni trouglasti navoj 
+STOPRE
+G01 G90 G60 G42 X=0 FB=RABHOD
+DIAMOF
+
+X=XA Z=ZA
+
+   FOR NN=0 TO NZ-1
+       IF (RR1==0)
+          HH3=XO-DELTAX*(NZ-NN-1)
+          XD=HH3
+          XE=HH3
+          ZD=ZC-HH3*TAN(AA1)-PPX*PP*NN
+          ZE=ZF+HH3*TAN(AA2)-PPX*PP*NN
+          X=XC Z=ZC-PPX*PP*NN RND=RR
+          X=XD Z=ZD RND=RR1
+          X=XE Z=ZE RND=RR1
+          X=XF Z=ZF-PPX*PP*NN RND=RR
+       ELSE
+          X=XC Z=ZC-PPX*PP*NN RND=RR
+          X=XG Z=ZG-PPX*PP*NN RND=RR1+DELTAX*(NZ-NN-1)
+          X=XF Z=ZF-PPX*PP*NN RND=RR
+       ENDIF
+   ENDFOR
+
+
+X=XM Z=ZM
+
+DIAMON
+G60 G40 X=thph+2*unut FB=RABHOD
+stopre
+m17
+
+greska:
+m00
+m96
+STOPRE
+M17
+
+
+

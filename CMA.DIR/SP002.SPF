@@ -1,0 +1,80 @@
+PROC SP002(int broj)
+;Ver2Rev0
+;program za podelu hoda brusenja na odgovarajuci broj prolaza
+
+DEF INT II,JJ
+DEF REAL XA,KA,GRANICA
+
+JJ=2 II=0 ;brojac faza 2-grubo,1-fino, 0-zavrsno i brojac koraka 
+
+PETLJA2: ;spoljna petlja pocinje, odbrojava za svaku fazu
+XA=DODB[BROJ,JJ] ; trenutna pozicija - dodatak na pocetku faze
+
+IF(JJ>0) ;ako nije zavrsno bruseje
+  IF(DODB[BROJ,JJ]<=DODB[BROJ,JJ-1]) ;ako je dodatak manji ili jednak prethodnom
+    GOTOF PETLJA2_CONT               ;predi na sledecu fazu
+  ENDIF
+ELSE                                 ;ako je zavrsno
+  IF(DODB[BROJ,0]<=0)                ; a dodatak manji od nule
+    GOTOF PETLJA2_CONT               ; predji na sledecu fazu
+  ENDIF
+ENDIF
+
+KA=KOR_ABRIHT[BROJ,JJ]               ;korak abrihtovanja u KA
+IF (KA==0)                           ;ako je nula onda nema abrihtovanja
+    KA=DODB[BROJ,JJ]                 ;ceo dodatk se prelazi u jednom koraku
+ENDIF 
+ 
+IF(JJ>0)                             ;ako nije zavrsno
+  GRANICA=DODB[BROJ,JJ-1]            ;granica je dodatak za sledecu fazo
+ELSE                                 ;ako je zavrsno
+  GRANICA=0                          ;granica je nula
+ENDIF
+
+PETLJA:                              ;unutrasnja petlja
+  XA=XA-KA                           ;trenutnu pozciju smanjujemo za korak
+  BVREME[II]=IZBR[BROJ,JJ]           ;izbrusavnaje na kraju koraka
+  BBRZINA[II]=BRZO[BROJ,JJ]          ;brzina oscilovanja u toku koraka
+  BPOMAK[II]=BRZU[BROJ,JJ]           ;pomak u toku koraka
+  BDUZINA[II]=OSCA[BROJ,JJ]          ;duzina oscilovanja
+  BMENJAC[II]=BROB[BROJ,JJ]          ;broj obrtaja menjaca za koarak
+  BABRIHT[II]=ABRIHT[BROJ,JJ]        ;broj abrihtovanja za korak
+  BODSKOK[II]=BROB_N[BROJ,JJ]        ;povratak posle koraka
+  BKORAK[II]=KORAK[BROJ,JJ]          ;korak kod oscilovanja
+  BPRIMICANJE[II]=PRIM[BROJ,JJ]      ;primicanje kod oscilovanja
+  BZADRZAVANJE[II,0]=ZADR[BROJ,2*JJ+1] ;zadrzavanje levo
+  BZADRZAVANJE[II,1]=ZADR[BROJ,2*JJ]   ;zadrzavanje desno
+  BFAZA[II]=JJ                         ;faza brusenja
+
+  IF (KOR_ABRIHT[BROJ,JJ]==0)
+     BABRIHT[II]=0                     ;nema abrihtovanja 
+  Endif
+
+  IF(XA<=GRANICA)                      ;ako je granica dostignuta
+     BDODATAK[II]=GRANICA 
+     XA=GRANICA
+     II=II+1
+     GOTOF GOTOVO
+  ELSE
+     BDODATAK[II]=XA
+     BVREME[II]=0
+     II=II+1
+  ENDIF
+GOTOB PETLJA
+
+GOTOVO: ; izlaz iz petlje
+PETLJA2_CONT:
+BROJZAVRSETKA[jj]=II
+IF (II>290) GOTOF GRESKA
+JJ=JJ-1
+STOPRE
+IF (JJ>=0) GOTOB PETLJA2
+GOTOVO2: ;PETLJA2
+
+BBrojProlaza = II
+STOPRE
+M17
+
+GRESKA:
+M17
+

@@ -1,0 +1,6 @@
+Z0
+Z0 X=-2*ds_Margin1
+Z=-ds_Face_Depth1 X=-2*ds_Face_Depth1/tan(ds_angle1) 
+X=-ds_Face_Length RND=ds_PodhodX
+Z=ds_PodhodZ
+M17

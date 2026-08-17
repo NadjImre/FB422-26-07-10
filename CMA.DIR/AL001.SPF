@@ -1,0 +1,269 @@
+PROC  AL001 (INT BROJ)
+
+DEF INT BROJAC ;  
+DEF INT G_TOC=1   ; korinatni sistem u kojem se abrihtuje 
+DEF INT G_KOM   ; kordinatni sistem komada
+DEF INT PRAVAC  ; pravac abrihtovanja 1 sa leva u desno -1 s desna u levo
+DEF INT BRTOC,brdia   ; broj tocila
+DEF REAL ZKON,XKON
+DEF REAL UNUT   ; unutrasnje ili spoljno abrihtovanje
+DEF INT NACIN   ; nacin poravnavanja
+Def REAL SPANX  ; span po X  =0.5 osim za abrihtovanje cela 
+Def REAL SPANZ  ; span po Z =0 ako se sapnuje samo po precniku
+DEF REAL ZPOCETAK ; pocetna tacka po Z
+DEF STRING[100] NAZPROG
+def int rolik;
+def int DToc,DToc2, Dabriht, DAbriht2
+
+IF((BROJ<0) OR (BROJ>89))
+  SETAL(65017,<<(BROJ))
+  M17
+ENDIF
+
+;preuzimanje rednog broja tocila
+BRTOC = GETT(NazivToc_A[BROJ])
+BRDIA = GETT(NazivAbriht[BROJ])
+Dtoc = BrojIviceToc_A[Broj]
+Dtoc2 = BrojIviceToc_A[Broj+1]
+DAbriht = BrojIviceAbriht[Broj]
+DAbriht2 = BrojIviceAbriht[Broj+1]
+
+;preuzimanje nacina poravnavanja
+NACIN = NACIN_A[BROj]
+IF ( (NACIN<>300) AND (NACIN<>310) AND (NACIN<>320) )
+   SETAL(65016, <<(BROJ+1))
+   M17
+ENDIF
+
+;iskljucivanje rotacija i translacija
+TRANS
+
+;preuzimane spoljno/unutarnje
+UNUT=1 PREKIDU=FALSE
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1 PREKIDU=TRUE
+ENDIF
+
+ZV000(Broj,1)
+
+rolik=M_ROLIK_STOP
+IF (($TC_DP1[BRDIA,DAbriht]==494) OR ($TC_DP1[BRDIA,DAbriht]==496))
+;rolna
+   IF (TEST<>0)
+      rolik=M_ROLIK_START
+   ENDIF
+ENDIF
+
+;spanovanje po osama 
+SPANX=UNUT*KorakX[BROJ]
+SPANZ=KORAKZ[BROJ]
+
+;mesto za pocetak i odskok
+PREKIDXA=UNUT*PODHODX[BROJ]
+
+;program za odskok
+SETINT(8) PRIO=1 AL601
+;provera koliko komada ima do abrihtovanja 
+PREOSTALO[BROJ]=PREOSTALO[BROJ]-1
+IF (PREOSTALO[BROJ]>0) GOTOF KRAJ
+;provera precnika i sirine tocila
+IF ((abs($TC_DP3[BRTOC,DToc]-BROJPROL[BROJ]*SPANX))<=$TC_TPG3[BRTOC]) GOTOF greska
+IF (($TC_TPG5[BRTOC]-BROJPROL[BROJ]*ABS(SPANZ))<=$TC_TPG4[BRTOC]) GOTOF greska
+
+;abrihtovanje krece
+msg("$66005"<<"-"<<komentar_a[broj])
+PREOSTALO[BROJ]=KOMADA[BROJ]
+;podesavanje ravni i kordinata po precniku
+G18 G500 DIAMON
+STOPRE
+;izbor alata
+if ( (Nacin==300) OR (Nacin==320) ) 
+   ;Pocetna tacka
+   ZPOCETAK=-(PODHODZ[BROJ]+$TC_TPG5[BRTOC]) 
+   PREKIDZA=PODHODZ[BROJ]
+   ;kamen
+   Trans X=$TC_DP3[BRTOC,DToc]/2 Z=$TC_DP4[BRTOC,DToc]
+   ;izbor alata
+   T=NazivAbriht[Broj] D=DAbriht
+else
+   ;Pocetna tacka
+   ZPOCETAK=(PODHODZ[BROJ]+$TC_TPG5[BRTOC])
+   PREKIDZA=-PODHODZ[BROJ] 
+   ;kamen
+   Trans X=$TC_DP3[BRTOC,DToc2]/2 Z=$TC_DP4[BRTOC,DToc2]
+   ;izbor alata
+   T=NazivAbriht[Broj] D=DAbriht2
+endif
+;m01
+;prilaz abrihteru
+If (UNUT<0)
+   G0 X=PREKIDXA
+   Z=ZPOCETAK
+Else
+   G0 Z=ZPOCETAK
+   X=PREKIDXA
+ENDIF
+;start vode
+ZV100(BROJ,1)
+STOPRE
+
+FOR BROJAC=1 TO BROJPROL[BROJ]
+    ;poruka
+    MSG(KOMENTAR_A[broj]<<":"<<"$66005:"<<BROJAC<<"\"<<BROJPROL[BROJ])
+    ;ako se abrihtuje samo desno
+    if (nacin==310) gotof desno
+      ;izbor alata levo
+      ;T=NazivAbriht[Broj] D=DAbriht
+      ;pocetna tacka
+      ;G0 G60 G90 Z=-(PODHODZ[BROJ]+$TC_TPG5[BRTOC])
+    STOPRE    
+    ;spanovanje po X i korekcija precnika
+    $TC_DP3[BRTOC,DToc]=$TC_DP3[BRTOC,DToc]-SPANX
+    ;Postepeno povecanje ugla u pripremi
+    ;UGAOBOKA[BROJ]=UGAOBOKA[BROJ]-SPANZ
+    ;Spanovanje po z
+    $TC_DP4[BRTOC,DToc]=$TC_DP4[BRTOC,DToc]-SPANZ
+    ;smanjenje sirine
+    $TC_TPG5[BRTOC]=$TC_TPG5[BRTOC]-ABS(SPANZ)
+    ;TACKA ODSKOKA
+    PREKIDZA=PODHODZ[BRTOC]
+    STOPRE
+    ;span ide
+    Trans X=$TC_DP3[BRTOC,DToc]/2 Z=$TC_DP4[BRTOC,DToc]
+    ;aktiviranje kordinatnog sistema i izbor ciklusa
+
+    ;izmena 30.okt.2023
+    T=NazivAbriht[Broj] D=DAbriht
+    ;pocetna tacka
+    G0 G60 G90 Z=-(PODHODZ[BROJ]+$TC_TPG5[BRTOC])
+
+    G01 G53 F=BRZA[BROJ]
+    ;na nulu
+    g01 g41 x0
+    ;da li ima cela
+    if (dubboka[broj]<=0) ;nema cela
+       ;da li ima konusa
+       if ( (duzkon[broj]<=0) or (ugaokon[broj]<=0) )
+          ;nema konusa - cilindricno do kraja
+          Z=podhodz[broj] X0
+       else
+          ;ima konuse - cilindricni deo kamena do konusa
+         Z=-DUZKON[Broj] X0
+         ;konus do podhoda
+         Z=podhodz[broj] ANG=-unut*UGAOKON[BROJ]
+       endif
+     else ;ima cela
+       ;da li ima konusa
+       if ( (duzkon[broj]<=0) or (ugaokon[broj]<=0) )
+          ;nema konusa - cilindricno do kraja
+          Z=0 X0 rnd=RADIUS[Broj]
+       else 
+         ;ima konuse - cilindricni deo kamena do konusa
+         Z=-DUZKON[Broj] X0
+         ;konus i prelazni radijus
+         Z=0 ANG=-unut*UGAOKON[BROJ] rnd=RADIUS[Broj]
+       endif
+       ;fazeta i radijus
+       G91 X=-unut*(2*RADIUS[Broj]+FASETA[Broj])
+       ;bok kamena
+       G90 X=-unut*DUBBOKA[Broj] ANG=180+unut*(90-UGAOBOKA[Broj]) ;RND=3
+       ;izlaz sa radijusom
+       Z=PODHODZ[Broj] 
+    endif
+    ;gore
+    G0 X=unut*PODHODX[Broj] G40
+    STOPRE
+    ;ako se radi samo levo preskoci dalje
+    if (nacin==300) gotof petlja
+    ;pocetak desnog abrihtovanja
+    DESNO:
+    ;Postepeno povecanje ugla u pripremi
+    ;UGAOBOKA[BROJ]=UGAOBOKA[BROJ]-SPANZ
+
+    IF NACIN==310
+      ;spanovanje po X i korekcija precnika
+      $TC_DP3[BRTOC,DToc2]=$TC_DP3[BRTOC,DToc2]-SPANX
+    ENDIF
+
+    ;Spanovanje po z
+    $TC_DP4[BRTOC,Dtoc2]=$TC_DP4[BRTOC,DToc2]+SPANZ
+    ;smanjenje sirine
+    $TC_TPG5[BRTOC]=$TC_TPG5[BRTOC]-ABS(SPANZ)
+    ;TACKA ODSKOKA
+    PREKIDZA=-PODHODZ[BROJ]
+    STOPRE
+    ;span ide
+    Trans X=$TC_DP3[BRTOC,DToc2]/2 Z=$TC_DP4[BRTOC,DToc2]
+    ;izbor alata desno
+    T=NazivAbriht[Broj] D=DAbriht2
+    ;pocetna tacka
+    G0 G60 G90 Z=(PODHODZ[Broj]+$TC_TPG5[BRTOC])
+    ;aktiviranje kordinatnog sistema i izbor ciklusa
+    G01 G53 F=BRZA[BROJ]
+    ;na nulu
+    g01 g42 x0
+    ;da li ima celo
+    if (dubboka2[broj]<=0) 
+       ;da li ima konusa
+       if ( (ugaokon2[broj]<=0) OR (duzkon2[broj]<=0) )
+          ;nema ni cela ni konusa - cilindricno do kraja
+          Z=-PodhodZ[Broj] X0
+       else
+          ;ima konusa nema cela -cilindricni deo kamena do konusa
+          Z=DUZKON2[Broj] X0
+          ; konus do kraja
+          Z=-PodhodZ[Broj] ANG=180+unut*UGAOKON2[BROJ]
+       endif
+    else; ima cela
+        ;da li ma konusa
+        if ( (ugaokon2[broj]<=0) OR (duzkon2[broj]<=0) )
+           ;ima cela nema konusa - cilindricno do vrha
+           Z=0 X=0 rnd=RADIUS2[Broj]
+        else
+          ;ima konusa i cela - do konusa
+          Z=DUZKON2[Broj] X=0
+          ;konus i prelazni radijus
+          Z=0 ANG=180+unut*UGAOKON2[BROJ] rnd=RADIUS2[Broj]
+        endif
+        ;radijus i fazeta
+        G91 X=-unut*(2*RADIUS2[Broj]+FASETA2[Broj]) 
+        ;bok kamena
+        G90 X=-unut*DUBBOKA2[Broj] ANG=180+unut*90+unut*UGAOBOKA2[Broj] ;RND=3
+        ;izlaz sa boka
+        Z=-PODHODZ[Broj]
+    endif
+    ;povratak gore
+    G0 X=unut*PODHODX[Broj] G40
+    ;dovde se preskace ako je samo levo
+    petlja:
+ENDFOR
+STOPRE
+
+
+;DIAMOF
+MSG("")
+;odlazak
+IF (oblikam_a[broj]==0)
+   G75X0M11
+G75Z0
+ELSE
+   G75M11Z0
+   G75X0
+ENDIF
+
+IF (PADAJUCI[BROJ]<>0)
+   ABRIHT_GORE
+ENDIF
+KRAJ:
+OPERACIJA_BROJ=OPERACIJA_BROJ+1
+CLRINT(8)
+T0 D0
+TRANS
+M17
+
+GRESKA:
+SETAL(66000)
+T0 D0
+TRANS
+M17
+

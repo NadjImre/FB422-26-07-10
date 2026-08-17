@@ -1,0 +1,18 @@
+M80
+G54A0G0
+M3=3 S3=1500 
+WAITS(3)
+M82
+M00
+
+M17
+
+;NCG#rezimi22#crezimi_za_navoj.com#NCCODE1#*NCG;*RO*;*HD*
+;#"RB"#"Dubina"#"Prol.Brus."#"Zbir"#"Pausa"#"Prol.do"#"Prol.Abriht."#"Dub.Abrihr."#"Brz.Abriht."#"Brz.kam.abr."#"Brz.rolna"#"BrObrt.Kom."#"Brz.Kam.Brus."#1#3#1#0#1#1#1#4#3#2#4#2#2#1#3#1#0#1#1#1#1#3#2#4#2#2#1#3#1#0#1#1#1#1#3#2#4#2#2#1#1#1#0#1#1#1#1#3#2#4#2#2#1#3#1#0#1#1#1#1#3#2#4#2#2#1#3#1#0#1#1#1#1#3#2#4#2#2#*NCG;*RO*;*HD*
+_THREAD_SPEEDS_FEEDS2(1,0.8,3,0,2,2,0.02,200,25,-0.5,10,10)
+_THREAD_SPEEDS_FEEDS2(2,0.5,2,0,0,0,0,100,10,-0.5,10,10)
+_THREAD_SPEEDS_FEEDS2(3,0.2,2,0,0,0,0,100,10,-0.5,10,10)
+_THREAD_SPEEDS_FEEDS2(4,0,2,0,0,0,0,100,10,-0.5,10,10)
+_THREAD_SPEEDS_FEEDS2(5,0.5,0,0,0,0,0,100,10,-0.5,10,10)
+_THREAD_SPEEDS_FEEDS2(6,0.5,0,0,0,0,0,100,10,-0.5,10,10)
+;#END#*NCG;*RO*;*HD*

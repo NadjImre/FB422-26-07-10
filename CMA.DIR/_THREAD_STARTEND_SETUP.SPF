@@ -1,0 +1,15 @@
+PROC _THREAD_STARTEND_SETUP(Int Funkcija, Real UgaoPritupljenja, Real UgaoIzlaska, Real UgaoUlaskaUsec, Real UgaoBrusenjaUsec, Real UgaoIzlaskaUsec, Real BrojObrtaja, Real BrzinaKamena) 
+
+
+if (funkcija==0)
+   th_angle1 = UgaoPritupljenJa
+   th_angle2 = UgaoIzlaska
+else
+   th_plunge_angle1 = UgaoUlaskaUsec
+   th_plunge_angle2 = UgaoBrusenjaUsec
+   th_plunge_angle3 = UgaoIzlsakaUsec
+   th_plunge_feed = BrojObrtaja
+   th_plunge_wheel_speed = BrzinaKamena
+endif
+ 
+M17

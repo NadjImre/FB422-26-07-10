@@ -1,0 +1,81 @@
+PROC SP011(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB350
+DEF INT JJ
+DEF REAL DD,DD1,izbrus
+
+IF (ABRIHT[2,2]==1)
+;Abrihtovanje pre grubog brusenja ako ga ima
+    CALL(NAZIV_ABRIHT[2,2])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+ENDIF
+
+;abrihtovanje u toku grubog ako ga ima
+IF (ABRIHT[2,1]==1)
+;podesavanje promenljivih
+JJ=2 ; faza brusenja
+DD=DODB[BROJ,2]; dodatak brusenja GRUBO
+izbrus=0
+PROLAZ:
+STOPRE
+;spanovanje
+    IF (DD==DODB[BROJ,2])
+       DD1=DD
+    ELSE
+       DD1=DD+BROB_N[BROJ,JJ]
+    ENDIF
+    DD=DD-KOR_ABRIHT[2,JJ]
+	if (dd<=DODB[BROJ,jj-1])
+; i ako je dodatak manji o dodatka za sledecu fazu
+; znaci da smo dosli do zadnjeg prolaza
+;mstavi dodatak na dodatak za sledecu fazu 
+	   dd=DODB[BROJ,jj-1]
+       IF(ABRIHT[2,0]==1)
+         ;ako ima finog abrihtovanja
+         ;radimo jos jedan PRILAZ
+         CALL(PROG_PRILAZ[2])
+         ;pa zadnje grubo BRUSENJE
+         SP000(6,DD1,DD)
+         ;i jos jedno ABRIHTOVANJE
+         CALL(NAZIV_ABRIHT[2,JJ])
+         ;pridjemo jos jednom
+         CALL(PROG_PRILAZ[2])
+       ; i brusimo do kraja fino i zavrsno
+         SP000(5,BROB_N[2,2])
+         M17
+       ELSE ; AKO NEMA FINOG ABRIHTOVANJA
+         ;radimo jos jedan PRILAZ
+         CALL(PROG_PRILAZ[2])
+         ;pa DO KRAJA SA PREOSTALIM GRUBIM BRUSENJEM 
+         SP000(7,DD,BROB_N[2,2])
+         M17
+        ENDIF
+	endif
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;BRUSENJE
+    SP000(6,DD1,DD)
+;ABRIHTOVANJE
+    CALL(NAZIV_ABRIHT[2,JJ])
+;sledeći prolaz
+gotob PROLAZ
+STOPRE
+ENDIF
+
+IF(ABRIHT[2,0]==1)
+   ;Ako ima samo zavrsno abrihtovanje
+   ;Grubo brusenje
+    SP000(1)
+;Abrihtovanje
+    CALL(NAZIV_ABRIHT[2,2])
+;PRILAZ
+    CALL(PROG_PRILAZ[2])
+;Preostalo brusenje
+    SP000(5,BROB_N[2,2])
+    M17
+ENDIF
+SP000
+
+
+m17
+

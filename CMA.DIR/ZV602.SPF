@@ -1,0 +1,27 @@
+proc ZV602(INT BROJ,INT prolaz,int usec,int brusec)
+
+def int prol,vrol,prvi
+def string[80] poruka
+
+if (brusec<0)
+   prvi=brojkombprolaza-bbrojkoraka+brojpocetka[2]+1
+   if (bfazaosc[prolaz]==2)
+      prol=brojpocetka[bfazaosc[prolaz]]
+      vrol=0
+   else
+      prol=brojpocetka[bfazaosc[prolaz]]-brojpocetka[bfazaosc[prolaz]+1]
+      vrol=brojpocetka[bfazaosc[prolaz]+1]
+   endif
+   poruka=BPORUKA[BFAZAosc[prolaz]]<<"-"<<(broj+1)
+   poruka=poruka << " $66015-" << prolaz-vrol+1 << "/" << prol
+   poruka=poruka << " $66017 " << (brojkombprolaza-bbrojkoraka+prolaz+1)<<"/"<<BrojKombProlaza
+else
+   poruka=BPORUKA[BFAZA[prolaz]]<<"-"<<(broj+1)
+   poruka=poruka << " $66018 " << usec+1 << "/" << brusec+1
+   poruka=poruka << " $66015 " << prolaz+1 << "/" << brojzavrsetka[2]
+   poruka=poruka << " $66017 " << (usec*brojzavrsetka[2]+prolaz+1) << "/" << (brojkombprolaza)
+endif
+msg( poruka )
+
+M17
+

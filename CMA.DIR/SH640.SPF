@@ -1,0 +1,11 @@
+PROC SH640
+;FB274 - jul.2019
+;FB271 i FB272
+
+MSG("zvucna sonda")
+impuls_glave[4]=$aa_iw[x]-R070 ;umanjuje za TRANS korekciju
+greska_glave[4]=impuls_glave[4]-nominalno_glava[4]
+
+M17
+
+

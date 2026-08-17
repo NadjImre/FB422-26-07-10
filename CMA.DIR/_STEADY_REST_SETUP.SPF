@@ -1,0 +1,9 @@
+Proc _Steady_Rest_Setup( Int Lineta , Real PozUose , Real UlazLinete , Real IzlazLinete ,Int StatusLinete )
+
+Gr_SteadyRest = Lineta
+Gr_UAxis_Position = PozUOse
+Gr_Steady_InPos = UlazLinete
+Gr_Steady_OutPos = IzlazLinete
+
+M17
+

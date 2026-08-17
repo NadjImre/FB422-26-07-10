@@ -1,0 +1,21 @@
+TEST=1
+
+_APPROACH_WITH_A_AXIS("krug2",2,0,0,1,0,0,0,0,0,0,0)
+;NCG#ProfilNavoja2#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#9#1#5#3#4#1#1#1#1#2#2#1#4#4#1#0###*NCG;*RO*;*HD*
+_THREAD_PROFIL(1,6,13.02,9.5,12.5,4,0,1,0,30,30,0,1.53,0.25,0,"<no name>","",,)
+;#END#*NCG;*RO*;*HD*
+
+
+;NCG#ProfilKamena#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;##1#1#1#1#1#1#1#1#*NCG;*RO*;*HD*
+_THREAD_WHEEL(0,5,5,0,0,1,1,0)
+;#END#*NCG;*RO*;*HD*
+;NCG#AbrihtNavoja#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;#5#1#6#1#1#3#1#2#1#2#1#1#1#2#0##*NCG;*RO*;*HD*
+_THREAD_DRESSING("krug2",2,"rolik2",1,2,310,1,35,0,22,0,0,12,1,"")
+;#END#*NCG;*RO*;*HD*
+
+G53T0D0Z0G0
+
+M17

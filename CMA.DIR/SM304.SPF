@@ -1,0 +1,76 @@
+PROC SM304(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB290
+;brusenje cela i precnika usecanjem sa mernom glavom
+
+;nulovanje parametara glave
+impuls_glave[3]=0
+impuls_glave[2]=0
+impuls_glave[1]=0
+impuls_glave[0]=0   
+GLAVA_NAPRED
+G04 F3
+
+ZV400(BROJ)
+ZV500(BROJ,2*UNUT,SMERB,BROB[BROJ,3],SVE)
+
+SETINT(8) PRIO=1 SH601
+
+R075=XFINO ;pomocni parametar koristi se pri brusenju mernom glavom
+
+GRUBO:
+msg("$66001") ;grubo brusenje
+;treci impuls na zavrsnoj meri + fini dodatak
+SETINT(6) PRIO=1 SH660
+;broj obraja za grubo
+S=BROB[BROJ,2]
+;grubo brusenje
+G1 X=XGRUBO Z=ZGRUBO F=BRZU[BROJ,2]
+;ne pratimo vise impuls tri
+ClrInt(6)
+;izbrusavanje posle grubog
+G04 F=IZBR[BROJ,2] ;istrcavanje
+STOPRE
+
+CISTO:
+msg("$66002") ;fino brusenje
+;drugi impuls na zavrsnoj meri + zavrsni dodatak
+SETINT(3) PRIO=1 SH630
+;broj obrtaja fino
+S=BROB[BROJ,1]
+;brusenje fino
+G01 X=XCISTO Z=ZCISTO F=BRZU[BROJ,1]
+;ne pratimo vise impuls dva
+ClrInt(3)
+;izbrusevanje posle finog
+G04 F=IZBR[BROJ,1]
+STOPRE
+
+FINO:
+msg("$66003") ;zavrsno brusenje
+;prvi impuls na zavrsnoj meri
+SETINT(2) PRIO=1 SH620
+;broj obrtaja zavrsno
+S=BROB[BROJ,0]
+;brusenje zavrsno
+G01 X=XCISTO Z=ZCISTO F=BRZU[BROJ,0]
+;ne pratimo vise prvi impuls
+Clrint(2)
+STOPRE
+;nulti impuls na izbrusavanju
+SETINT(1) PRIO=1 SH610
+S=BROB[BROJ,0]
+G01 X=XFINO Z=ZFINO F=BRZU[BROJ,0]
+;izbrusavanje
+;G04 F=IZBR[BROJ,0]
+;ne partimo vise nulti impuls
+ClrInt(1)
+STOPRE
+
+KRAJ:
+
+G01 X=PREKIDX Z=PREKIDZ F=BRZU[BROJ,3] 
+msg("")
+;GLAVA_NAZAD
+
+M17
+

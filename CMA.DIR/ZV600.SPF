@@ -1,0 +1,20 @@
+proc ZV600(INT BROJ,INT JJ)
+
+def int prol,vrol
+def string[80] poruka
+
+if (bfaza[jj]==2)
+  prol=brojzavrsetka[bfaza[jj]]
+  vrol=0
+else
+  prol=brojzavrsetka[bfaza[jj]]-brojzavrsetka[bfaza[jj]+1]
+  vrol=brojzavrsetka[bfaza[jj]+1]
+endif
+poruka=BPORUKA[BFAZA[JJ]]<<"-"<<(broj+1)
+poruka=poruka << " $66015-" << jj-vrol+1 << "/" << prol
+poruka=poruka<<" $66017-"<<jj+1<< "/" << (BBROJPROLAZA)
+
+msg( poruka )
+
+M17
+

@@ -1,0 +1,87 @@
+PROC AL190(int broj)
+;gotski profil navoja
+;sa dvosecnim alatom
+;sa masine 412
+DEF INT BREG
+DEF REAL XA
+DEF REAL ZA
+DEF REAL XB
+DEF REAL ZB
+DEF REAL XC
+DEF REAL ZC
+DEF REAL XD
+DEF REAL ZD
+DEF REAL XE
+DEF REAL ZE
+DEF REAL XF
+DEF REAL ZF
+def real Xcprim
+def real Zcprim
+def real Xo
+def real Zo
+DEF INT BRTOC
+DEF REAL SIRINA
+DEF REAL UNUT
+
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+;tacke za navoj
+XA=0 ZA=thph
+Xo=unut*thh
+Zo=-thx3
+Xcprim = sqrt(thr1*thr1-0.25*thh1*thh1)
+XC=Xo+unut*(thr1-Xcprim)
+ZC=Zo-0.5*thh1 
+XD=Xo+unut*(thr1-Xcprim)
+ZD=Zo+0.5*thh1
+;Zcprim=sqrt(unut*(thr1*thr1-(thr1-Xc)*(thr1-Xc)))
+Zcprim=sqrt(thr1*thr1-(thr1-abs(Xc))*(thr1-abs(Xc)))
+XB=0 
+ZB=Zc+Zcprim
+XE=0
+ZE=ZD-Zcprim
+XF=0 ZF=-thph-SIRINA
+m00
+stopre
+;abrihtovanje
+
+IF(UNUT==1)
+    D2
+    G1 G451 X=XA G42
+    G1 X=XB Z=ZB rnd=thr2
+    G3 X=XC Z=ZC CR=thr1
+    G1 X=XC Z=ZC-3
+    D1 X=XD+unut
+    G0 Z=ZF
+    G41 G1 X=XF
+    G1 X=XE Z=ZE rnd=thr2
+    G2 X=XD Z=ZD CR=thr1
+    G1 Z=ZD+3
+    D2 G0 G40 Z=ZA
+ELSE
+    D2
+    G1 G451 X=XA G41
+    G1 X=XB Z=ZB rnd=thr2
+    G2 X=XC Z=ZC CR=thr1
+    G1 X=XC Z=ZC-3
+    D1 X=XD+unut
+    G0 Z=ZF
+    G42 G1 X=XF
+    G1 X=XE Z=ZE rnd=thr2
+    G3 X=XD Z=ZD CR=thr1
+    G1 Z=ZD+3
+    D2 G0 G40 Z=ZA
+ENDIF
+
+M17
+

@@ -1,0 +1,24 @@
+proc ms110
+;Kalibracija sonde po Z osi
+;sa masine FB422 
+;april 2026
+
+def real zpos
+g18
+stopre
+
+g500
+zpos=$aa_iw[z]
+G1 z=zpos+me_distance MEAS=me_probe_number F=me_feed
+IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
+$tc_dp5[me_tool_number,me_tool_Dnumber]=$AA_MM[z]-me_target
+MSG("$66019")
+g1 z=zpos
+m17
+
+greska:
+  SETAL(66028)
+  M00
+  M96
+m17
+

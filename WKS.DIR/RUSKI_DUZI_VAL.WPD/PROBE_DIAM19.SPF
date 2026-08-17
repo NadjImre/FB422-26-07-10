@@ -1,0 +1,94 @@
+PROC PROBE_DIAM19
+def int errno;broj greske koja se vraca prilikom snimanja
+DEF INT BROJAC
+def string[128] poruka ; pomocna promenljiva za ispis poruke
+FOR BROJAC=0 TO 9
+  ME_RUNOUT[BROJAC]=0
+  ME_DIAM[BROJAC]=0
+ENDFOR
+G500X0G0T0D0
+G0B180A0
+;naziv fajla za zspisivanje statusa
+ME_REPORT_FILE="/_N_MPF_DIR/LOG_DIAM19_FINE_P2"
+ME_OFFSET=0.0
+;NCG#probe_recalibration#cprobe_recalibration.com#NCCODE3#*NCG;*RO*;*HD*
+;#4#1#6#3#1#2#2#1#1#5#10#1#1#2#*NCG;*RO*;*HD*
+_PROBE_RECALIBRATION("zond",1,119.97,833,8,60,22,1,10,2,0.002 , 0 , 0)
+;#END#*NCG;*RO*;*HD*
+;naziv fajla za zspisivanje statusa
+me_tool="zond"
+me_tool_number = gett("zond")
+me_tool_Dnumber = 1
+me_diameter = 19.7
+me_position = 630
+me_distance = 5
+me_feed = 60
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 15317
+me_frame = 2
+me_tolerance = 0.1
+me_RUNOUT_tolerance=0.1
+me_with_Caxis = 1
+me_Caxis_Position = 45
+me_RepetitionCount = 1
+me_MeasureCount = 6
+me_ReturnMode = 16
+me_Probe_AutoUP =  64
+ME_OFFSET=0.22
+
+STOPRE
+
+;pocetak merenja
+T=me_tool D=me_tool_Dnumber 
+G0 Z=me_position
+;poruka za pocetak 
+poruka = SPRINT("Measuring diameter %8.3f on position Z=%8.3f in %d points with %d repetition",me_diameter,me_position,me_measurecount,me_repetitioncount)
+Write(errno,me_report_file,poruka)
+MS140
+STOPRE
+me_position = 485
+ME_OFFSET=0.21
+ME_RUNOUT[0]=ME_SPAN/2
+ME_DIAM[0]=ME_AVG
+;poruka za pocetak 
+poruka = SPRINT("Measuring diameter %8.3f on position Z=%8.3f in %d points with %d repetition",me_diameter,me_position,me_measurecount,me_repetitioncount)
+Write(errno,me_report_file,poruka)
+MS140
+STOPRE
+ME_RUNOUT[1]=ME_SPAN/2
+ME_DIAM[1]=ME_AVG
+me_position = 340
+ME_OFFSET=0.2
+;poruka za pocetak 
+poruka = SPRINT("Measuring diameter %8.3f on position Z=%8.3f in %d points with %d repetition",me_diameter,me_position,me_measurecount,me_repetitioncount)
+Write(errno,me_report_file,poruka)
+MS140
+STOPRE
+ME_RUNOUT[2]=ME_SPAN/2
+ME_DIAM[2]=ME_AVG
+me_position = 200
+ME_OFFSET=0.20
+;poruka za pocetak 
+poruka = SPRINT("Measuring diameter %8.3f on position Z=%8.3f in %d points with %d repetition",me_diameter,me_position,me_measurecount,me_repetitioncount)
+Write(errno,me_report_file,poruka)
+MS140
+STOPRE
+ME_RUNOUT[3]=ME_SPAN/2
+ME_DIAM[3]=ME_AVG
+me_position = 95
+ME_OFFSET=0.20
+;poruka za pocetak 
+poruka = SPRINT("Measuring diameter %8.3f on position Z=%8.3f in %d points with %d repetition",me_diameter,me_position,me_measurecount,me_repetitioncount)
+Write(errno,me_report_file,poruka)
+MS140
+STOPRE
+ME_RUNOUT[4]=ME_SPAN/2
+ME_DIAM[4]=ME_AVG
+KRAJ:
+G500X0G0T0D0
+M23
+
+M17
+

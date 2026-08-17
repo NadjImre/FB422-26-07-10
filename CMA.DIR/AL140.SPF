@@ -1,0 +1,59 @@
+PROC AL140(INT BROJ)
+
+;Obli navoj, trouglast zaobljen gore i dole
+
+DEF REAL XA
+DEF REAL ZA
+DEF REAL XB
+DEF REAL ZB
+DEF REAL XC
+DEF REAL ZC
+DEF REAL XD
+DEF REAL ZD
+DEF REAL XE
+DEF REAL ZE
+DEF REAL XF
+DEF REAL ZF
+DEF REAL XO
+DEF REAL ZO
+DEF INT BRTOC
+DEF REAL SIRINA
+Def Real unut
+
+;preuzimanje sirine tocila
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+;tacke za navoja
+XA=0 ZA=thph
+XB=0 ZB=-thx3+thh*TAN(tha1)
+XC=thh ZC=-thx3
+XD=thh ZD=ZC-thb2
+XE=0   ZE=ZD-thh*TAN(tha2)
+XF=0 ZF=-thph-SIRINA
+
+;abrihtovanje
+D2
+G1 G451 X=XA G42
+X=XB Z=ZB rnd=thr1
+X=XC Z=ZC RND=thr2
+X=XD Z=ZD
+D1 X=XC+unut
+G0 Z=ZF
+G41 G1 X=XF
+X=XE Z=ZE rnd=thr1
+X=XD Z=ZD RND=thr2
+Z=ZC
+D2 G0 G40 Z=ZA
+
+M17
+

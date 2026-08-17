@@ -1,0 +1,12 @@
+LABB:
+
+;NCG#merenje140#csonda.com#NCCODE3#*NCG;*RO*;*HD*
+;#4#1#5#2#1#2#2#1#1#2#1#1#1#*NCG;*RO*;*HD*
+MS140("zond",1,32.96,10,5,60,23,1,0,16,1 , 1 , 0)
+;#END#*NCG;*RO*;*HD*
+;G4F4
+;GOTOB LABB
+
+M17
+
+

@@ -1,0 +1,32 @@
+PROC PROBE_THREAD
+
+
+me_th_type = 0; 4 je kalibracija sve drugo merenje
+me_tool="zond"
+me_tool_number = gett(me_tool)
+me_tool_Dnumber = 1
+me_th_diameter = 19.2
+me_th_startdia = 22
+me_th_position = 210
+me_th_pitch = 1.2
+me_th_step = 1
+me_feed = 30
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 1
+me_frame = 3
+me_tolerance = 0.1
+me_with_Caxis = 1
+;me_Caxis_Position = Cnom
+me_RepetitionCount = 1
+me_MeasureCount = 1
+me_ReturnMode = 48
+me_Probe_AutoUP = 0
+
+ms160
+
+
+
+M17
+

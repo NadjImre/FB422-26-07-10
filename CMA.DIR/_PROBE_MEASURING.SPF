@@ -1,0 +1,112 @@
+PROC _PROBE_MEASURING(String[32] Sonda,int DBrojSonde ,real Xnom ,real Znom ,real DuzMer, real BrzMer ,int MSonde ,int BrojSonde ,int Status ,int kordsys ,real DOZRAZ ,int TrebaC ,real Cnom)
+
+def int mode
+
+mode = Status b_and 15
+
+if (mode == 0) gotof kraj
+
+me_tool=Sonda
+me_tool_number = gett(sonda)
+me_tool_Dnumber = DBrojSonde
+me_diameter = Xnom
+me_position = Znom
+me_distance = DuzMer
+me_feed = BrzMer
+me_ProbeUp = MSonde
+me_ProbeDown = MSonde-1
+me_probe_number = BrojSonde
+me_status = status
+me_frame = kordsys
+me_tolerance =DozRaz
+me_with_Caxis = TrebaC
+me_Caxis_Position = Cnom
+me_RepetitionCount = ((Status div 128) b_and 15)+1
+me_MeasureCount = ((Status div 2048 ) b_and 15)+1
+me_ReturnMode = ( Status b_and 48)
+me_Probe_AutoUP = (Status b_and 64)
+
+if ( (mode>0) and (mode<5) )
+   ms120
+else
+  ms140
+endif
+
+;merenje aksijalno bez korekcije, koristi srednju gresku
+;samo provera rezultata i ispis greske ako ima
+if (mode==1)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+   gotof kraj
+endif
+
+;merenje aksijalno sa korecijom
+;na bazi srednje vrednosti unosi se korekcija u koord sistem
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==2)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+   $P_UIFR[ me_frame-1,Z,FI]=-me_avg
+   msg("$66023")
+   gotof kraj
+endif
+
+;merenje aksijalno i rekalibracija na bazi srednje 
+;vrednosti unosi se korekcija u duzinu alata za merenje
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==3)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+   $tc_dp5[ me_tool_number, me_tool_Dnumber]=$tc_dp5[ me_tool_number, me_tool_Dnumber]-me_avg
+gotof kraj
+endif
+
+;merenje aksijalno u vise tacaka
+;na bazi raspona vrednosti racuna se udar
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==4)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_span))) gotof greska
+gotof kraj
+endif
+
+;merenje precnika bez korekcije, koristi srednju gresku
+;samo provera rezultata i ispis greske ako ima
+if (mode==5)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+gotof kraj
+endif
+
+;merenje precnika sa korecijom
+;na bazi srednje vrednosti unosi se korekcija u koord sistem
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==6)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+   $P_UIFR[me_frame-1,X,FI]=-0.5*me_avg
+   msg("$66023")
+gotof kraj
+endif
+
+;merenje precnika i rekalibracija na bazi srednje 
+;vrednosti unosi se korekcija u duzinu alata za merenje
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==7)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+   $tc_dp4[me_tool_number,me_tool_dnumber]=$tc_dp4[me_tool_number,me_tool_dnumber]-0.5*me_avg
+gotof kraj
+endif
+
+;merenje precnika u vise tacaka
+;na bazi raspona vrednosti racuna se udar
+;ako je greska veće od dozvoljene ispisuje alarm
+if (mode==8)
+   If( ( me_tolerance>0) AND ( me_tolerance<ABS(me_avg))) gotof greska
+endif
+
+kraj:
+
+M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17

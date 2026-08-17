@@ -1,0 +1,15 @@
+PROC ZV800(INT BROJ,INT JEL_A)
+;STOP kamena
+
+DEF INT SPINU
+Def Int BRTOC
+
+IF (JEL_A<>0)
+   brtoc = gett(NazivToc_A[Broj])
+ELSE
+   brtoc = gett(NazivToc[Broj])
+ENDIF
+SPINU=$TC_TPG1[BRTOC]
+m[SPINU]=5
+
+M17

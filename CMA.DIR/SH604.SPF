@@ -1,0 +1,7 @@
+PROC SH600
+
+MSG("ZVUCNA SONDA")
+
+M17
+
+

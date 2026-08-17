@@ -1,0 +1,26 @@
+
+E_LAB_A_ROLIKA1: ;#SM Z:2
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z3 X0 ;*GP*
+G1 Z-5.9804 ;*GP*
+G2 Z-6.3276 X.2469 K=AC(-5.9804) I=AC(1.1) ;*GP*
+Z-6.9159 X1.5635 K=AC(-4.56) I=AC(4.5902) ;*GP*
+G3 Z-7.0841 K=AC(-7) I=AC(1.4554) ;*GP*
+G2 Z-7.6726 X.2469 K=AC(-9.4428) I=AC(4.5963) ;*GP*
+Z-8.0198 X0 K=AC(-8.0198) I=AC(1.1) ;*GP*
+G1 Z-13 ;*GP*
+;CON,V64,2,0.0000,0,0,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:3,EY:0,ASE:90;*GP*;*RO*;*HD*
+;LL,EX:-5.9804;*GP*;*RO*;*HD*
+;ACW,EX:-6.3276,EY:.2469,CY:1.1;*GP*;*RO*;*HD*
+;ACW,EX:-6.9159,EY:1.5635,CX:-4.56;*GP*;*RO*;*HD*
+;ACCW,EX:-7.0841,EY:1.5635,CY:1.4554;*GP*;*RO*;*HD*
+;ACW,EX:-7.6726,EY:.2469,CX:-9.4428;*GP*;*RO*;*HD*
+;ACW,EX:-8.0198,EY:0,CY:1.1;*GP*;*RO*;*HD*
+;LL,EX:-13;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_ROLIKA1:
+
+M17
+

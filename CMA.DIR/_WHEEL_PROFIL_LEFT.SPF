@@ -1,0 +1,18 @@
+Proc _WHEEL_PROFIL_LEFT(Real BOK1 ,Real UGAO1 ,Real FAZETA1,Real RADIUS1var ,Real DUZKON1,Real UGAOKON1,Real PODHODXvar,Real PODHODZvar , Real Dub21, Real KonusX, Real KonusZ)
+
+dubboka[0]=bok1
+ugaoboka[0]=ugao1
+faseta[0]=fazeta1
+radius[0]=radius1var
+duzkon[0]=duzkon1
+ugaokon[0]=ugaokon1
+
+podhodx[0]=podhodxvar
+podhodz[0]=podhodzvar
+
+kor_kam_x[0]=KonusX
+kor_kam_z[0]=KonusZ
+sirboka[0]=Dub21
+
+M17
+

@@ -1,0 +1,10 @@
+PROC SH6201
+;BioJeOdskok=1
+MSG("$66007")
+R50=$AA_IW[X] R51=$AA_IW[Z] R52=$AA_IW[U] R53=$AA_IW[XV]
+R44=$AA_IM[X] R45=$AA_IM[Z] R46=$AA_IM[U]
+RET("Kraj")
+
+M17
+
+

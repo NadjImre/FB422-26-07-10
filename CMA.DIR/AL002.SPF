@@ -1,0 +1,171 @@
+PROC  AL002 (INT BROJ)
+;profilisanje konkavne ili konveksne sfere
+;na spoljnom ili unutrasnjem kamenu
+
+DEF INT BROJAC ;  brojac prolaza
+DEF INT G_TOC=1   ; korinatni sistem u kojem se abrihtuje 
+DEF INT G_KOM   ; kordinatni sistem komada
+DEF INT PRAVAC  ; pravac abrihtovanja 1 sa leva u desno -1 s desna u levo - ne koristi se , ovde je za buducu upotrebu
+DEF INT BRTOC,brdia   ; broj tocila
+DEF REAL ZKON,XKON ; korekcija konusa, ne koristi se - za buduca prosirenja
+DEF REAL UNUT   ; unutrasnje ili spoljno abrihtovanje
+DEF INT NACIN   ; nacin poravnavanja ,oze biti 0 ili 500
+Def REAL SPANX  ; span po X  =0.5 osim za abrihtovanje cela 
+DEF REAL ZPOCETAK,ZKRAJ ; pocetna tacka po Z
+def int rolik;
+def int DToc, Dabriht
+def real duz_z,duz_z_2
+
+IF((BROJ<0) OR (BROJ>89))
+  SETAL(65017,<<(BROJ))
+  M17
+ENDIF
+M97
+;preuzimanje rednog broja tocila
+BRTOC = GETT(NazivToc_A[BROJ])
+BRDIA = GETT(NazivAbriht[BROJ])
+Dtoc = BrojIviceToc_A[Broj]
+DAbriht = BrojIviceAbriht[Broj]
+
+;preuzimanje nacina poravnavanja
+NACIN = NACIN_A[BROj]
+IF (NACIN<=00) 
+   SETAL(65016, <<(BROJ+1))
+   M17
+ENDIF
+
+;proracuni
+duz_z_2 = ABS(2*RADUDUB[Broj]*CEN_X[Broj])-Cen_X[Broj]*Cen_X[Broj]
+duz_z = sqrt(duz_z_2)
+
+;iskljucivanje rotacija i translacija
+TRANS
+
+;preuzimane spoljno/unutarnje
+UNUT=1  PREKIDU=FALSE
+IF (Oblikam_a[BRoj]<>0)
+   UNUT=-1 PREKIDU=TRUE;TREBA DA JE -1 AKO SE BRUSI SA DESNE STRANE
+ENDIF
+
+;odredjivanje smera abrihtovanje - za buduca prosirenja
+PRAVAC=-1
+
+ZV000(Broj,1)
+
+rolik=M_ROLIK_STOP
+IF (($TC_DP1[BRDIA,DAbriht]==494) OR ($TC_DP1[BRDIA,DAbriht]==496))
+;rolna
+   IF (TEST<>0)
+      rolik=M_ROLIK_START
+   ENDIF
+ENDIF
+
+Trans X=$TC_DP3[BRTOC,DToc]/2 Z=$TC_DP4[BRTOC,DToc]
+T=NazivAbriht[Broj] D=BrojIviceAbriht[Broj]
+;spanovanje po osama 
+SPANX=UNUT*KorakX[BROJ]
+
+ZPOCETAK = -PRAVAC*PODHODZ[BROJ]
+ZKRAJ = PRAVAC*(PODHODZ[BROJ]+$TC_TPG5[BRTOC])
+
+if (radudub[broj]<=0)
+   PREKIDXA=UNUT*PODHODX[BROJ]
+else
+   PrekidXa = UNUT*(PODHODX[BROJ]+2*CEN_X[BROJ])
+endif
+
+SETINT(8) PRIO=1 AL600
+
+;provera koliko komada ima do abrihtovanja 
+PREOSTALO[BROJ]=PREOSTALO[BROJ]-1
+IF (PREOSTALO[BROJ]>0) GOTOF KRAJ
+
+;provera precnika i sirine tocila
+IF ((abs($TC_DP3[BRTOC,DToc]-BROJPROL[BROJ]*SPANX))<=$TC_TPG3[BRTOC]) GOTOF greska
+
+;abrihtovanje krece
+msg("$66005"<<"-"<<komentar_a[broj])
+PREOSTALO[BROJ]=KOMADA[BROJ]
+;podesavanje ravni i kordinata po precniku
+G500 G18 DIAMON
+STOPRE
+m01
+;prilaz abrihteru
+;G53T0D0X0G0
+;izbor alata levo
+T=NazivAbriht[Broj] D=DAbriht
+If (UNUT<0)
+   G0 X=PREKIDXA
+   Z=ZPOCETAK
+Else
+   G0 Z=ZPOCETAK
+   X=PREKIDXA
+ENDIF
+
+;start vode
+ZV100(BROJ,1)
+STOPRE
+BROJAC=1
+PETLJA:
+    if (BROJAC>BROJPROL[BROJ]) GOTOF KRAJ_PETLJE
+    ;poruka
+    MSG(KOMENTAR_A[broj]<<":"<<"$66005:"<<BROJAC<<"\"<<BROJPROL[BROJ])
+    ;pocetna tacka
+;    G0 G60 Z=ZPOCETAK
+    G1 F1000 G60 Z=ZPOCETAK
+    STOPRE    
+    ;spanovanje po X i korekcija precnika
+    $TC_DP3[BRTOC,DTOC]=$TC_DP3[BRTOC,DTOC]-SPANX
+    STOPRE
+    ;span ide
+    Trans X=$TC_DP3[BRTOC,DTOC]/2 Z=$TC_DP4[BRTOC,DTOC]
+    ;aktiviranje kordinatnog sistema i izbor ciklusa
+    G01 G53 F=BRZA[BROJ]
+    ;na nulu
+    g01 x0
+    ;poravnavanje - do radijusa
+    g01 Z=PRAVAC*(CEN_Z[BROJ]-duz_z)
+    if ((unut*radudub[broj])<0)
+       g02 Z=PRAVAC*(CEN_Z[BROJ]+duz_z) CR=abs(Radudub[BROJ])
+    else
+       g03 Z=PRAVAC*(CEN_Z[BROJ]+duz_z) CR=abs(Radudub[BROJ])
+    endif
+    g1 Z=ZKRAJ
+    ;povecanje brojaca
+    BROJAC=BROJAC+1
+    ;vrati se na pocetak
+    G01 F500  X=PREKIDXA G40
+GOTOB PETLJA
+Kraj_PETLJE:
+STOPRE
+;izlaz napolje
+G0 X=PREKIDXA
+STOPRE
+
+;DIAMOF
+MSG("")
+;odlazak
+IF (oblikam_a[broj]==0)
+   G75X0M11
+G75Z0
+ELSE
+   G75M11Z0
+   G75X0
+ENDIF
+
+IF (PADAJUCI[BROJ]<>0)
+   ABRIHT_GORE
+ENDIF
+KRAJ:
+OPERACIJA_BROJ=OPERACIJA_BROJ+1
+CLRINT(8)
+T0 D0
+TRANS
+M17
+
+GRESKA:
+SETAL(66000)
+T0 D0
+TRANS
+M17
+

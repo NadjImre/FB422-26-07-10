@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE SlAeAlarmAttributes>
+<SlAeAlarmAttributes Version="01.00.00.00">
+    <Types>
+    </Types>
+    <Sources>
+        <Source CatLink="1" SourceID="0" SourceURL="/NCK">
+            <Alarms>
+            </Alarms>
+        </Source>
+    </Sources>
+</SlAeAlarmAttributes>

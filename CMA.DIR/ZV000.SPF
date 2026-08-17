@@ -1,0 +1,32 @@
+PROC ZV000(INT BROJ,INT JEL_A)
+;start kamena
+
+DEF INT SPINU
+DEF REAL SPINB
+Def Int BRTOC
+Def int DBroj
+DEF INT NOVIKAMEN
+
+IF (JEL_A<>0)
+   brtoc = gett(NazivToc_A[Broj])
+   SPINU=$TC_TPG1[BRTOC]
+   DBroj = BrojIviceToc_A[Broj]
+   SPINB=19098*brzkam_A[BROJ]/abs($TC_DP3[BRTOC,DBROJ])
+   NOVIKAMEN=TOCILO_A[BROJ]
+ELSE
+   brtoc = gett(NazivToc[Broj])
+   SPINU=$TC_TPG1[BRTOC]
+   DBroj = BrojIviceToc[Broj]
+   SPINB=19098*brzkam[BROJ]/abs($TC_DP3[BRTOC,DBROJ])
+   NOVIKAMEN=TOCILO[BROJ]
+ENDIF
+
+;g26 s[SPINU]=MAKSBROB[BROJ]
+
+s[SPINU]=SPINB
+
+IF (TEST<>0)
+    m[SPINU]=3
+ENDIF
+
+M17

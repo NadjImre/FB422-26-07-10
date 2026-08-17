@@ -1,0 +1,81 @@
+PROC PROBE_DIAM19
+def int errno;broj greske koja se vraca prilikom snimanja
+def string[32] fname;naziv fajla za snimanje
+DEF INT BROJAC
+
+FOR BROJAC=0 TO 9
+  ME_RUNOUT[BROJAC]=0
+  ME_DIAM[BROJAC]=0
+ENDFOR
+G500X0G0T0D0
+G0B0A0
+
+;naziv fajla za zspisivanje statusa
+fname="/_N_MPF_DIR/LOG_PROBE_DIAM"
+me_tool="zond"
+me_tool_number = gett("zond")
+me_tool_Dnumber = 1
+me_diameter = 19.67
+me_position = 450
+me_distance = 5
+me_feed = 60
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 15317
+me_frame = 2
+me_tolerance = 0.1
+me_with_Caxis = 1
+me_Caxis_Position = 45
+me_RepetitionCount = 1
+me_MeasureCount = 3
+me_ReturnMode = 16
+me_Probe_AutoUP =  64
+me_offset=0.0
+Write(errno,fname,"")
+Write(errno,fname,SPRINT("**** Merenje precnika 19.67 *****"))
+Write(errno,fname,"")
+STOPRE
+
+;pocetak merenja
+T=me_tool D=me_tool_Dnumber 
+G0 Z=me_position
+MS140
+STOPRE
+me_position = 355
+me_offset=-0.011
+ME_RUNOUT[0]=ME_SPAN/2
+ME_DIAM[0]=ME_AVG
+Write(errno,fname,SPRINT("Merenje 1 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[0],ME_RUNOUT[0]))
+MS140
+STOPRE
+ME_RUNOUT[1]=ME_SPAN/2
+ME_DIAM[1]=ME_AVG
+me_position = 260
+me_offset=-0.024
+Write(errno,fname,SPRINT("Merenje 2 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[1],ME_RUNOUT[1]))
+MS140
+STOPRE
+ME_RUNOUT[2]=ME_SPAN/2
+ME_DIAM[2]=ME_AVG
+me_position = 165
+me_offset=-0.034
+Write(errno,fname,SPRINT("Merenje 3 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[2],ME_RUNOUT[2]))
+MS140
+STOPRE
+ME_RUNOUT[3]=ME_SPAN/2
+ME_DIAM[3]=ME_AVG
+me_position = 70
+me_offset=-0.041
+Write(errno,fname,SPRINT("Merenje 4 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[3],ME_RUNOUT[3]))
+MS140
+STOPRE
+ME_RUNOUT[4]=ME_SPAN/2
+ME_DIAM[4]=ME_AVG
+Write(errno,fname,SPRINT("Merenje 5 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[4],ME_RUNOUT[4]))
+KRAJ:
+G500X0G0T0D0
+M23
+
+M17
+

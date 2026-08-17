@@ -1,0 +1,13 @@
+PROC SH610
+;FB271 i FB272
+
+;MSG("nulti impuls merne glave")
+;impuls_glave[0]=$aa_iw[x]-R070 ;umanjuje za TRANS korekciju
+;greska_glave[0]=impuls_glave[0]-nominalno_glava[0]
+;IZMENA 23.avg.2019 11:36
+;da definise novu nulu
+;$P_UIFR[$P_GG[8]-1,X,TR]=$AA_IM[X]-R075/2-R074/2
+   ;R074 - pomoæni parametar preènik tocila
+   ;R075 - pomoæni parametar završna mera brušenja
+
+M17

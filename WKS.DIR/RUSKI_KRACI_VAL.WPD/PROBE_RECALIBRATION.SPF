@@ -1,0 +1,47 @@
+PROC PROBE_RECALIBRATION
+DEF INT BROJAC
+Def int me_CalibRepetition=10
+G500X0G0T0D0
+G0B0A0
+
+me_tool="zond"
+me_tool_number = gett("zond")
+me_tool_Dnumber = 1
+me_diameter = 18.58
+me_position = 495
+me_distance = 15
+me_feed = 60
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 15317
+me_frame = 2
+me_tolerance = 0.002
+me_with_Caxis = 0
+me_Caxis_Position = 45
+me_RepetitionCount = 1
+me_MeasureCount = 1
+me_ReturnMode = 16 ; bez vracanja nazad, 32-vracanje po X, 48-vracanje po Z, 0 - vracanje X+Z
+me_Probe_AutoUP =  64; bez podizanja sonde na kraju, 0 - sa podizanjem 
+STOPRE
+;merenje za rekalibraciju
+;Brojac pokusaja
+Brojac=0
+ponovo:
+;merenje
+MS140
+;rekalibracija
+$tc_dp4[me_tool_number,me_tool_dnumber]=$tc_dp4[me_tool_number,me_tool_dnumber]-0.5*me_avg
+;provera pokusaja
+if (brojac>me_CalibRepetition) gotof kraj
+;provera velicine ako je velika ponovo
+brojac=brojac+1
+if (ABS(me_avg)>0.002) gotob ponovo
+
+KRAJ:
+;G500X0G0T0D0
+;M23
+
+
+M17
+

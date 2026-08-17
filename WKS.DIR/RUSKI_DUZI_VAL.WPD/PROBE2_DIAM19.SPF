@@ -1,0 +1,80 @@
+PROC PROBE_DIAM19
+def int errno;broj greske koja se vraca prilikom snimanja
+DEF INT BROJAC
+
+FOR BROJAC=0 TO 9
+  ME_RUNOUT[BROJAC]=0
+  ME_DIAM[BROJAC]=0
+ENDFOR
+G500X0G0T0D0
+G0B0A0
+;naziv fajla za zspisivanje statusa
+ME_REPORT_FILE="REPORT1"
+me_tool="zond2"
+me_tool_number = gett("zond2")
+me_tool_Dnumber = 1
+me_diameter = 19.679
+me_position = 200.0
+me_distance = 5
+me_feed = 60
+me_ProbeUp = 22
+me_ProbeDown = 23
+me_probe_number = 1
+me_status = 15317
+me_frame = 2
+me_tolerance = 0.1
+me_with_Caxis = 1
+me_Caxis_Position = 45
+me_RepetitionCount = 1
+me_MeasureCount = 3
+me_ReturnMode = 16
+me_Probe_AutoUP =  64
+me_offset=0
+Write(errno,me_report_file,"")
+Write(errno,me_report_file,SPRINT("**** Merenje precnika 19.67 *****"))
+Write(errno,me_report_file,"")
+STOPRE
+
+;pocetak merenja
+T=me_tool D=me_tool_Dnumber 
+G0 Z=me_position
+MS140
+STOPRE
+me_position = 200
+ME_RUNOUT[0]=ME_SPAN/2
+ME_DIAM[0]=ME_AVG
+Write(errno,me_report_file,SPRINT("Merenje 1 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[0],ME_RUNOUT[0]))
+MS140
+STOPRE
+ME_RUNOUT[1]=ME_SPAN/2
+ME_DIAM[1]=ME_AVG
+me_position = 50
+Write(errno,me_report_file,SPRINT("Merenje 2 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[1],ME_RUNOUT[1]))
+
+MS140
+STOPRE
+ME_RUNOUT[2]=ME_SPAN/2
+ME_DIAM[2]=ME_AVG
+me_position = -100
+Write(errno,me_report_file,SPRINT("Merenje 3 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[2],ME_RUNOUT[2]))
+MS140
+STOPRE
+ME_RUNOUT[3]=ME_SPAN/2
+ME_DIAM[3]=ME_AVG
+me_position = -250
+Write(errno,me_report_file,SPRINT("Merenje 4 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[3],ME_RUNOUT[3]))
+MS140
+STOPRE
+ME_RUNOUT[4]=ME_SPAN/2
+ME_DIAM[4]=ME_AVG
+Write(errno,me_report_file,SPRINT("Merenje 5 razlika precnika  %7.4F radijalno bacanje %7.4F",ME_DIAM[4],ME_RUNOUT[4]))
+KRAJ:
+G500X0G0T0D0
+M=ME_PROBE_DOWN
+
+M17
+
+;NCG#probe_recalibration#cprobe_recalibration.com#NCCODE3#*NCG;*RO*;*HD*
+;#5#1#5#3#1#2#2#1#1#5#10#1#1#2#*NCG;*RO*;*HD*
+_PROBE_RECALIBRATION("zond2",1,44.68,718,8,60,33,2,10,2,0.002 , 0 , 0)
+;#END#*NCG;*RO*;*HD*

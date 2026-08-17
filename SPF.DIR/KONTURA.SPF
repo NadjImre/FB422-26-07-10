@@ -1,0 +1,13 @@
+TEST=0
+
+_APPROACH_WITH_A_AXIS("krug1",1,0,0,1,0,0,0,0,0,0,0)
+;NCG#ProfilNavoja2#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;#1#9#1#5#4#2#1#1#1#1#2#2#1#4#4#3#7#1#1#*NCG;*RO*;*HD*
+_THREAD_PROFIL(0,7,14.41,12.5,13,4,0,1,0,30,30,0,0.35,1.25,2.5,"<no name>","KONTURA",5,3)
+;#END#*NCG;*RO*;*HD*
+;NCG#AbrihtNavoja#cnavoj.com#NCCODE3#*NCG;*RO*;*HD*
+;#5#1#6#1#1#3#1#3#1#2#1#1#1#2#0##*NCG;*RO*;*HD*
+_THREAD_DRESSING("krug1",1,"almaz2",1,2,300,3,100,0,15,0,0,15,0,"")
+;#END#*NCG;*RO*;*HD*
+
+M17

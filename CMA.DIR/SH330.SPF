@@ -1,0 +1,7 @@
+PROC SH330(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;sa masine FB343
+;brusenje cela sa zakrenutim kamenom
+SH300(Broj,Sve,SmerB,Unut)
+
+M17
+

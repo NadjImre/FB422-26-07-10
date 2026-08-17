@@ -1,0 +1,218 @@
+PROC _DRESSING(Int BrzKam, Int BrojProlaza, Real KorakX, Real KorakZ, Int BrzAbriht,Int BrObRolne)
+;poravnavanje korisnickog profila
+;prvi put na masini 422, februar 2026
+;M broj za vodu
+DEF INT shp=11
+;M broj za rolnu
+DEF INT mROLNA=M_ROLIK_STOP
+;T broj za tocilo
+DEF INT BRTOC
+;D brojevi za tocilo
+DEF INT DBRTOC1,DBRTOC2
+;brojac za broj prolaza
+DEF INT BROJAC
+;naziv ciklusa za poravnavanje levo 
+DEF STRING[100] PROGRAM1
+;naziv ciklusa za poravnavanje desno
+DEF STRING[100] PROGRAM2
+;broj obrtaja kamena
+DEF INT BROBKAM
+;T broj dijamnanta - abrihtera
+DEF INT BRDIA
+;D brojevi za abrihter - dijamant
+DEF INT DBRDIA1, DBRDIA2
+;Z pozicija za pocetak poravnavanja
+DEF REAL POCETAKZ
+;precnik za pocetak poravnavanja
+def real prekidxa
+;broj vretena na kojem je kamen
+DEF INT SPINU
+;unutrasnje ili spoljno abrihtovanje
+DEF REAL UNUT   
+;smer poravnavanja
+def int smer_por
+;brzina primicanja odmicanja
+def int ds_rabhod = 300
+;preuzimanje T broja tocila - nedostaje provera
+BRTOC = DS_TOOL_NUM
+;preuzimanje D brojeva za tocilo
+DBRTOC1=DS_Tool_DNum1 DBRTOC2=Ds_Tool_DNum2
+;preuzimanje T broja dijamanta - nedostaje provera
+BRDIA = DS_DRESSER_NUM
+;preuzimanje D brojeva za abrihter
+DBRDIA1=Ds_Dresser_DNum1 DBRDIA2=DS_Dresser_DNum2
+;proračun broja obrtaja kamena
+BROBKAM = ABS(19099*BrzKam/$TC_DP3[BRTOC,DBRTOC1])
+;start Z za korisnicki profil ako se radi samo desni onda
+;u tacki 2 ako se radi i levi onda oocinjemo od tacke 1
+if (ds_profile==2)
+   POCETAKZ=Ds_PodhodZR
+else
+   PocetakZ=Ds_PodhodZL
+Endif
+;preuzimanje broja vretena kamena
+SPINU = $TC_TPG1[BRTOC]
+;reset marposa
+MarpossRESET
+;ukidanje transformacija
+TRANS
+stopre
+;provera da li je testiranje
+if (TEST<>0)
+;ako nije testiranje preuzeti m funkciju i GUDa
+   shp=ds_coolant
+;provera da li je abrihter rolna 
+   IF (($TC_DP1[BRDIA,DBRDIA1]==494) OR ($TC_DP1[BRDIA,DBRDIA1]==496))
+;ako jeste m za start rolne
+      R69=BrObRolne
+      M_SMER_ROLNE
+      mRolna=M_ROLIK_START
+   ENDIF
+;start kamena
+   M[SPINU]=3 S[SPINU]=BroBKam
+ENDIF
+;preuzimane spoljno/unutarnje
+UNUT=1
+if (ds_type<>0)
+   UNUT=-1
+ENDIF
+;preuzimanje levo/desno
+smer_por=1
+if(ds_direction<>0)
+  smer_por=-1
+endif
+
+;bezbedna udaljenos od tocila i start X za korisnicki profil
+prekidxa=DS_PODHODXL
+;programi za poravnavanje
+PROGRAM1 = "/_N_DRS_DIR/_N_"<<DS_CONTURE1<<"_DRS"
+PROGRAM2 = "/_N_DRS_DIR/_N_"<<DS_CONTURE2<<"_DRS"
+;prilaz abrihteru 
+; alat out, U na nulu
+T0D0 G500U0G0
+STOPRE
+;Xu poziciju za zaokret
+If (ds_approach==0)
+   G53G0X=ds_swivelpointX
+Endif
+;Z u poziciju za zaokret
+If (ds_approach==1)
+   G53G0Z=ds_swivelpointZ
+Endif
+;prvo X pa onda Z u poziciju za zaokret
+If (ds_approach==2)
+   G53G0X=ds_swivelpointX
+   G53G0Z=ds_swivelpointZ
+Endif
+;prvo Z pa onda X u poziciju za zaokret
+If (ds_approach==3)
+   G53G0Z=ds_swivelpointZ
+   G53G0X=ds_swivelpointX
+Endif
+;OPREZ ako ds_approach ima vredonst manju od nule ili vecunod tri
+;zaokret se obavlja u tacki u kojoj se masina nalazi na pocetku programa
+;provera ugla B se radi da se izbegne greska kod kompenzacije
+IF (ds_BAxisAngle<90)
+   G0G53B=ds_BAxisAngle A=0
+Else
+   G0G53B=ds_BAxisAngle A=-0.151
+Endif
+
+;Start Marposs ciklusa
+M=ds_marposs
+;pocetne postavke
+DIAMOF
+G18
+STOPRE
+;abrihtuje leve strane
+T=DS_DRESSER D=DS_DRESSER_DNUM1 
+;Translacija za precnik kamena
+Trans X=$TC_DP3[BRTOC,1]/2 Z=$TC_DP4[BRTOC,1]+DS_POSCORRECTION
+;prekid
+SETINT(8) PRIO=1 AL600
+;prilaz zavisno da li je spoljni ili unutrasnji
+IF(unut>0)
+;ako je spoljni pocetak po Z
+   G0 Z=POCETAKZ 
+;pa pocetak po X
+   G0 X=prekidxa M=shp M=mROLNA
+ELSE
+;ako je unutrasnji pocetak po X
+   G0 X=prekidxa 
+;pa po Z
+   G0 Z=POCETAKZ M=shp M=mROLNA
+ENDIF
+;petlja za prolaz
+FOR BROJAC=1 TO BrojProlaza
+;poruka
+   MSG(DS_COMMENT<<": PROLAZ "<<BROJAC<<"/"<<BrojProlaza)
+;da li se radi levi profil
+   if ((ds_profile==1) or (ds_profile==3))
+;aktiviraj oštricu
+      T=DS_DRESSER D=DS_DRESSER_DNUM1
+;pocetak jos jednom
+      G0 Z=ds_podhodZL
+;spanovanje
+      $TC_DP3[BRTOC,DBRTOC1]=$TC_DP3[BRTOC,DBRTOC1]-unut*korakx
+      $TC_DP4[BRTOC,DBRTOC1]=$TC_DP4[BRTOC,DBRTOC1]-korakz
+      ;smanjenje sirine
+      $TC_TPG5[BRTOC]=$TC_TPG5[BRTOC]-ABS(korakZ)
+      STOPRE
+;spanovanje stupa na snagu
+      Trans X=$TC_DP3[BRTOC,DBRTOC1]/2 Z=$TC_DP4[BRTOC,DBRTOC1]+ds_poscorrection
+;Pocetna tacka i kompenzacija radijusa
+      G1 X0 Z=ds_podhodZL G42 F=DS_RABHOD 
+;postavka brzine brusenja
+      F=BrzAbriht
+;poziv programa za abriht
+      CALL PROGRAM1
+;povalcenje na visinu kamena
+      DIAMOF
+      G0 G40 X=ds_podhodXL
+   endif
+   If (ds_profile>1)
+;ako se radi desni profil prebaci nma drugi D
+      T=ds_dresser D=ds_dresser_dnum2
+;predji na pocetak za drugi profil
+      G0 Z=ds_podhodZR
+;ako se radi samo desni spanovanje po precniku 
+;ako se levi radi spanovanje po X je nepotrebno jer se precnici izjednacavaju
+      if (ds_profile==2)
+         $TC_DP3[BRTOC,DBRTOC2]=$TC_DP3[BRTOC,DBRTOC2]-unut*korakx
+         STOPRE
+      endif
+;spanovanje po Z 
+      $TC_DP4[BRTOC,DBRTOC1]=$TC_DP4[BRTOC,DBRTOC1]+korakz
+      ;smanjenje sirine
+      $TC_TPG5[BRTOC]=$TC_TPG5[BRTOC]-ABS(korakZ)
+;spanovanje stupa na snagu
+      Trans X=$TC_DP3[BRTOC,DBRTOC1]/2 Z=$TC_DP4[BRTOC,DBRTOC1]+ds_poscorrection
+;Pocetna tacka i kompenzacija radijusa
+      G1 X0 Z=ds_podhodZR G41 F=DS_RABHOD 
+;postavka brzine brusenja za svaki slucaj
+     F=BrzAbriht 
+;poziv programa za abriht
+      CALL PROGRAM2
+;povalcenje na visinu kamena
+      DIAMOF
+      G0 G40 X=ds_podhodXR
+   Endif
+ENDFOR
+;kraj abrihtovanja
+T0 D0 G0 G53 G90 M11 M20
+;provera da li je spoljno
+IF (ds_type==0)
+;ako jeste nazad po X
+   G75X0
+ELSE
+;ako nije prvo nazad po z
+  G75Z0
+;pa po X
+   G75X0
+ENDIF
+
+CLRINT(8)
+STOPRE
+kraj:
+
+M17

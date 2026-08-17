@@ -1,0 +1,22 @@
+
+E_LAB_A_ROLIK1K: ;#SM Z:4
+;#7__DlgK contour definition begin - Don't change!;*GP*;*RO*;*HD*
+G18 G90 DIAM90;*GP*
+G0 Z0 X3.872 ;*GP*
+G1 Z-8.6 ;*GP*
+Z-9 X4.072 ;*GP*
+Z-38.56 ;*GP*
+Z-38.96 X3.872 ;*GP*
+Z-48.56 ;*GP*
+;CON,V64,2,0.0000,0,0,MST:3,2,AX:Z,X,K,I,TRANS:0;*GP*;*RO*;*HD*
+;S,EX:0,EY:3.872,ASE:90;*GP*;*RO*;*HD*
+;LL,EX:-8.6;*GP*;*RO*;*HD*
+;LA,EX:-9,EY:4.072;*GP*;*RO*;*HD*
+;LL,EX:-38.56;*GP*;*RO*;*HD*
+;LA,EX:-38.96,EY:3.872;*GP*;*RO*;*HD*
+;LL,EX:-48.56;*GP*;*RO*;*HD*
+;#End contour definition end - Don't change!;*GP*;*RO*;*HD*
+E_LAB_E_ROLIK1K:
+
+M17
+

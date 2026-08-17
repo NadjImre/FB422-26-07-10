@@ -1,0 +1,29 @@
+proc _Probe_Calibration(string[32] alat,int ivica,real duz_mer,real brz_mer,real nom_poz, int status)
+
+if ( (status b_and 3)==0) gotof kraj
+me_tool = alat
+me_tool_dnumber = ivica
+me_tool_number = gett(me_tool)
+me_feed = brz_mer
+me_distance = duz_mer
+me_probe_number = ((status b_and 4) /4)+1
+me_target = nom_poz
+if (me_tool_number <= 0)
+   gotof nema_sonde
+endif
+
+if ((status b_and 3) == 1) 
+   ms100
+else
+   ms110
+endif
+
+
+kraj:
+
+M17
+
+NEMA_SONDE:
+   SETAL(65110,me_tool)
+   GOTOF KRAJ
+M17

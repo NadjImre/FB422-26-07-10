@@ -1,0 +1,278 @@
+PROC  MS160
+;merenje srednjeg precnika navoja
+;za mašinu FB422, maj 2026
+;PROMENLJIVE
+;pocetna pozicija pre merenja
+Def Real start_x,start_z
+;mesto gde je pronađen ulaz u navoj
+Def Real ulaz_Z
+;brojac merenja - lokalna promenljiva
+Def Int Brojac=0
+;interno za pracenje greske prilikmo zapisivanja
+Def Int FajlGreska
+;interno za ispis poruke 
+def string[120] poruka
+;izmerene sirine kod kalibracije
+def real sirk1=0, sirk2=0
+;broj pokusaja ulaska u nit navoja - pretvoriti u GUD
+def int makspokusaja=10
+;Brzina povratka na pocetnu tacku
+def int me_rabhod = 300
+;sredina zljeba
+def real zsredina,xsredina
+;NOMINALNA VREDNOST ZA srednji precnik
+def real nomsredina=14.71
+;ravan , koordinatni sistem i alat
+g18g500 t=me_tool d=me_tool_dnumber
+;zapamti pocetnu poziciju
+start_x=$aa_iw[x] start_z=$aa_iw[z]
+stopre
+;da li je podesavanje ili kalibracija
+if (me_th_type==4) gotof Kalibracija
+;poruka i zapis u fajl
+poruka = SPRINT("*** Starting thread measure on position Z=%10.3f, nominal diameter %10.3f ***",me_th_position,me_th_nom_diameter )
+Write(FAJLGreska,me_report_file,poruka)
+msg(poruka)
+;podizanje sonde
+m=me_ProbeUp
+;pocetna tacka merenja po C
+C=ACP(me_Caxis_Position) G0
+;zaokret komada da bi se prislonio na povlakac
+C=IC(360) G0
+;zauzimanje pozicije za merenje - ako ima kontakta to je greska
+G0 Z=me_th_position MEAS=me_probe_number
+IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA_PRILAZ_Z
+;zauzimanje pocetne tacke merenja po X u - ako ima kontakta to je greska
+G0 X=me_th_startdia MEAS=me_probe_number
+IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA_PRILAZ_X
+STOPRE
+;trazenje ulaza u navoj
+BROJAC=0
+STOPRE
+poruka = sprint("Looking for entry into the thread ")
+Write(FAJLGreska,me_report_file,poruka)
+msg(poruka)
+;zaglavlje
+poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","Position Z", "Actuall D","Nominal D","Tolerance","Deviation","Error")
+Write(Fajlgreska,me_report_file,poruka)
+TRAZI_ZLJEB:
+;pokusamo odlazak na precnik za merenje
+G1 X=me_th_diameter F=me_feed MEAS=me_probe_number
+;ako ako ima kontakta pokusaj ponovo
+IF($AC_MEA[me_probe_number]==1) 
+  ;ispis poruke zapis poruke u fajl
+  poruka = sprint("Attempt   %d %12.3f %12.3f %12.3f",brojac+1,$aa_iw[Z],$aa_mw[x], me_th_diameter)
+  Write(FAJLGreska,me_report_file,poruka)
+  msg(poruka)
+  ;povrataka na pocetni precnik 
+  X=me_th_startdia F=me_rabhod
+  ;uvecavamo brojac
+  brojac = brojac + 1
+  ;ako smo presli maks pokusaja greska
+  if(brojac>makspokusaja) gotof greska
+  ;pomeri malo Z osu - na jednom koraku moamo naci
+  Z=IC(me_th_pitch/MAKSPOKUSAJA)
+  ;vrati se na pocetak
+  GOTOB TRAZI_ZLJEB
+ENDIF
+
+;ako dodjemo dovde nasli smo ulaz, pamtimo polozaj po Z
+ulaz_Z = $AA_IW[Z]
+;ispis poruke zapis poruke u fajl
+poruka = sprint("Attempt   %d %12.3f %12.3f %12.3f",brojac+1,$aa_iw[Z],$aa_mw[x], me_th_diameter)
+Write(FAJLGreska,me_report_file,poruka)
+poruka = sprint("Width measuring")
+Write(FAJLGreska,me_report_file,poruka)
+msg(poruka)
+;zaglavlje
+poruka = SPRINT("%12s %12s %12s","Measure","Actuall Z", "Actuall D")
+Write(Fajlgreska,me_report_file,poruka)
+;trazimo kontakt po Z osi u plus smeru
+g1 Z=IC(me_th_pitch) F=me_feed MEAS=me_probe_number
+;na jednm koraku mora biti - ako nemamo kontakt greska
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_PLUS_SMER
+;ako ima onda belezimo rezultat
+me_th_resultS[0]=$AA_MW[Z]
+;ispis poruke zapis poruke u fajl
+poruka = sprint("Measure    + %12.3f %12.3f",$aa_mw[Z],$aa_mw[X])
+Write(FAJLGreska,me_report_file,poruka)
+;i vracamo se nazad dok ne izgubimo kontakt sonde
+G1 Z=IC(-me_th_pitch) F=me_feed MEAS=-me_probe_number 
+;i merimo u suprotnom smeru
+G1 Z=IC(-me_th_pitch) F=me_feed MEAS=me_probe_number
+;ako nemamo kontakt to je greska
+IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA_MINUS_SMER
+;ako ima onda belezimo rezultat
+me_th_resultS[1]=$AA_MW[Z]
+;ispis poruke zapis poruke u fajl
+poruka = sprint("Measure    - %12.3f %12.3f",$aa_mw[Z],$aa_mw[x])
+Write(FAJLGreska,me_report_file,poruka)
+;i vracamo se nazad do gubitka kontakta sonde
+G0 Z=IC(me_th_pitch) F=me_feed MEAS=-me_probe_number
+;sredina zljeba
+zsredina=0.5*(me_th_resultS[0] + me_th_resultS[1])
+;idemo u sredinu zljeba
+g0 z=zsredina
+;i merimo precnik
+G1 x=IC(-me_th_pitch) F=me_feed MEAS=me_probe_number
+;ako nemamo kontakt to je greska
+IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA_SREDINA
+;ako ima onda belezimo rezultat
+XSREDINA=$AA_MW[X]
+;proracun sredine
+me_th_Zerror = (me_th_nom_position - 0.5*(me_th_resultS[0] + me_th_resultS[1])) mod me_th_pitch
+;proracun ugla korekcije
+me_th_Cerror = (me_th_Zerror*360/me_th_pitch) mod 360
+if (me_th_Cerror<0)
+   me_th_Cerror = me_th_Cerror+360
+endif
+;greska sirine zljeba
+me_th_Werror = abs(me_th_resultS[0] - me_th_resultS[1])-me_th_width[0]+me_offset
+;proracun greske precnika
+me_th_Xerror = ( me_th_CalDiam[1]- me_th_CalDiam[0])*me_th_Werror/(me_th_width[1]-me_th_width[0])
+;Precnik navoja
+me_th_result = me_th_nom_diameter+me_th_xerror
+;ispis poruke
+msg("$66021 "<<me_th_result << " greska " << me_th_xerror << " ; korekcija za ulazak u nit " << me_th_Cerror)
+;zapis u fajl
+poruka = sprint("Measuring result")
+Write(FAJLGreska,me_report_file,poruka)
+msg(poruka)
+;zaglavlje
+poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","Position", "Actuall","Nominal","Tolerance","Deviation","Error")
+Write(Fajlgreska,me_report_file,poruka)
+poruka = SPRINT("%12s %12s %12.3f %12.3f %12s %12.3f","Width","", me_th_resultS[0] - me_th_resultS[1], me_th_width[0] ,"",me_th_Werror)
+Write(fajlgreska,me_report_file,poruka)
+poruka = SPRINT("%12s %12s %12.3f %12.3f %12s %12.3f","Diameter d2","", me_th_result, me_th_nom_diameter ,"",me_th_xerror)
+Write(fajlgreska,me_report_file,poruka)
+poruka = SPRINT("%12s %12s %12.3f %12.3f %12s %12.3f","C axis","", -me_th_cerror, 0 ,"",me_th_cerror)
+Write(fajlgreska,me_report_file,poruka)
+poruka = SPRINT("%12s %12.3f %12.3f %12.3f %12s %12.3f","Mid.position", zsredina, XSREDINA ,nomsredina,"",xsredina-nomsredina)
+Write(fajlgreska,me_report_file,poruka)
+;vracanje na pocetnu tacku
+g0 x=start_x
+;g0 z=start_z
+;podizanje sonde
+;m=me_probeDown
+
+m17
+
+greska:
+SETAL(65002)
+M00
+M96
+
+m17
+
+greska_PRILAZ_X:
+SETAL(65002)
+M00
+M96
+
+m17
+
+greska_PRILAZ_Z:
+SETAL(65002)
+M00
+M96
+
+greska_PLUS_SMER:
+SETAL(65002)
+M00
+M96
+
+m17
+
+greska_MINUS_SMER:
+SETAL(65002)
+M00
+M96
+
+;pocetak kalibracije
+KALIBRACIJA:
+;sonda mora biti rucno podignuta i dovedena u  žljeb navoja
+;prva petlja
+Brojac=0
+PETLJA_KALIBRACIJE:
+STOPRE
+;zauzimamo novi z
+G0 Z=Start_Z+BROJAC* me_th_pitch/MAKSPOKUSAJA
+;trazimo kontakt po X osi u plus smeru
+g1 X= me_th_CalDiam[0] F=me_feed MEAS=me_probe_number
+;ako nemamo kontak  - usli smo u zljeb
+IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF NASLI_ZLJEB
+;u slucaju kontakta vracamo se nazad
+G0 X=START_X
+;uvecavamo brojac
+Brojac=Brojac+1
+;ako je manji od broha pojusaja nastavljamo
+if (brojac<MAKSPOKUSAJA) GOTOB PETLJA_KALIBRACIJE
+;inace prijavljujemo gresku
+gotof greska_kalibracije
+NASLI_ZLJEB:
+;ako dodjemo dovde nasli smo ulaz, pamtimo polozaj po Z
+ulaz_Z = $AA_IW[Z]
+FOR BROJAC=1 TO ME_REPETITIONCOUNT
+  ;trazimo kontakt po Z osi u plus smeru
+  g1 Z=IC( me_th_pitch) F=me_feed MEAS=me_probe_number
+  ;ako nemamo kontak  - greska
+  IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
+  ;ako ima onda belezimo rezultat
+   me_th_results[11]=$AA_MW[Z]
+  ;i vracamo se nazad
+  G1 Z=IC(- me_th_pitch) F=me_feed MEAS=-me_probe_number ;Z=ulaz_Z
+  ;i merimo u suprotnom smeru
+  G1 Z=IC(- me_th_pitch) F=me_feed MEAS=me_probe_number
+  ;ako nemamo kontakt to je greska
+  IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA_KALIBRACIJE
+  ;ako ima onda belezimo rezultat
+   me_th_results[12]=$AA_MW[Z]
+  ;i vracamo se u sredinu
+  z=ulaz_z
+  ;racunamo sirinu i dodajemo u zbir
+  sirk1=sirk1+abs( me_th_results[11]- me_th_results[12])
+ENDFOR
+;racunamo prosecnu sirinu
+me_th_width[0]=sirk1/me_repetitioncount
+;zauzimamo poziciju po X osi 
+g1 X= me_th_CalDiam[1]
+for brojac=1 to me_repetitioncount
+  ;merimo ponovo trazimo kontakt po Z osi u plus smeru
+  g1 Z=IC( me_th_pitch) F=me_feed MEAS=me_probe_number
+  ;ako nemamo kontak  - greska
+  IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
+  ;ako ima onda belezimo rezultat
+   me_th_results[21]=$AA_MW[Z]
+  ;i vracamo se nazad
+  G1 Z=IC(- me_th_pitch) F=me_feed MEAS=-me_probe_number
+  ;i merimo u suprotnom smeru
+  G1 Z=IC(- me_th_pitch) F=me_feed MEAS=me_probe_number
+  ;ako nemamo kontakt to je greska
+  IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
+  ;ako ima onda belezimo rezultat
+   me_th_results[22]=$AA_MW[Z]
+  ;i vracamo se u sredinu
+  Z=ULAZ_Z
+  ;racunamo sirinu i dodajemo u zbir
+  sirk2=sirk2+abs( me_th_results[21]- me_th_results[22])
+endfor
+;racunamo prosecnu sirinu
+me_th_width[1]=sirk2/me_repetitioncount
+;racunamo poziciju zljeba
+me_th_nom_position = 0.25*(me_th_results[11]+me_th_results[12]+me_th_results[21]+me_th_results[22])
+;pamtimo poziciju C ose
+me_Caxis_position=$AA_IW[C]
+;vracamo se nazad
+G0 X=START_X
+STOPRE
+stopre
+m00
+stopre
+
+M17
+
+GRESKA_KALIBRACIJE:
+  SETAL(66028)
+   M00
+   M96
+M17

@@ -1,0 +1,69 @@
+PROC TB100(INT BROJ)
+DEF REAL SMERX
+DEF REAL SMERN
+DEF REAL UGAO1
+DEF REAL UGAO2
+DEF INT BROJAC
+
+IF (rezub>2)
+   UGAO1=360/rezub
+ELSE
+   UGAO1=180
+Endif
+
+UGAO2=UGAO1*repro/100
+if (retip>0)
+   SMERX=redub
+else
+   SMERX=0
+endif
+
+IF (SMER_N[BROJ]==0)
+   SMERN=1
+ELSE
+   SMERN=1
+ENDIF
+
+CTABDEL(1)
+If (retip<0) GOTOF TABLICNO
+if (ObliKam[broj]==0)
+   g55
+   diamon
+   CTABDEF(X,C,1,1,"DRAM")
+   C0 X=PREC[BROJ,0]
+   C=UGAO2 X=PREC[BROJ,0]-SMERX
+   C=UGAO1 X=PREC[BROJ,0]
+   CTABEND
+else
+   g54
+   diamon
+   CTABDEF(X,C,1,1,"DRAM")
+   C0 X=SMERN*PREC[BROJ,0]
+   C=UGAO2 X=SMERN*(PREC[BROJ,0]+SMERX)
+   C=UGAO1 X=SMERN*PREC[BROJ,0]
+   CTABEND
+endif
+
+GOTOF KRAJ
+TABLICNO:
+
+if (ObliKam[broj]==0)
+   g55
+   diamon
+   CTABDEF(X,C,1,1,"DRAM")
+   call retab
+   CTABEND
+else
+   g54
+   diamon
+   CTABDEF(X,C,1,1,"DRAM")
+   BROJAC=0
+   call retab
+   CTABEND
+endif
+
+
+KRAJ:
+
+M17
+

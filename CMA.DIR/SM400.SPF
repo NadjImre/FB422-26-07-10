@@ -1,0 +1,141 @@
+PROC SM400(INT BROJ,INT SVE,INT SMERB,REAL UNUT)
+;oscilacije cilindricno i konusno
+;sa mernom glavom
+;mart 2024 sa masine FB381
+
+DEF INT MM,JJ,KK
+DEF REAL DD,izbrus
+;prilaz i start kamena
+ZV400(broj)
+ZV500(BROJ,2*UNUT,0,BROB[BROJ,3],SVE)
+
+;nulovanje parametara glave
+impuls_glave[3]=0
+impuls_glave[2]=0
+impuls_glave[1]=0
+impuls_glave[0]=0   
+;makro u UMAC.DEF, salje mernu glavu napred
+GLAVA_NAPRED
+;R8 je impuls merne glave, 3-nije bilo impulsa, 2 treci impuls, 1 drugi , 0 prvi, -1 nulti
+R8=3
+;ukidanje programa za odskok koji je vazio prilikom aproca
+CLRINT(8)
+;nulti impuls glave se javlja na interapt 1, kad se desi postavlja R8 na nulu
+ID=1 WHEN $A_IN[1]==1 DO $R8=-1
+;prvi impuls glave na interapt dva postavlja R8 na jedan
+ID=2 WHEN $A_IN[2]==1 DO $R8=0
+;drugi impul spotavlja R8 na dva
+ID=3 WHEN $A_IN[3]==1 DO $R8=1
+;treci impuls postavlja R8 na 3, PROVERITI jel to cetvrti interapt
+ID=4 WHEN $A_IN[4]==1 DO $R8=2
+
+STOPRE
+;prekid-odskok za oscilacije
+SETINT(8) PRIO=1 SH602
+;podesavanje promenljivih
+MM=0 ; strana brusenja
+JJ=2 ; faza brusenja - 2 grubo, 1 fino, 0 zavrsno
+KK=1 ; brojac izbrusavanja 1 nije pocelo, 0 u toku, 1 zavrseno
+DD=DODB[broj,jj] ; dodatak brusenja grubo 
+;za pracenje osa XV se postvalja na dodatak za brušenje
+G0 XV=DD
+;glavna petlja
+FAZA:
+;broj izbrusavanja za fazu
+    izbrus = izbr[broj,jj];
+;broj obrtaja radnog predmeta
+    S=BROB[BROJ,jj] 
+;poruka ako je faza grubo brušenje
+    if (JJ==2) 
+	   MSG("$66001"<<"-"<<komentar[broj]) ;grubo brusenje
+	endif
+;poruka ako je faza fino brusenje
+	if (JJ==1)
+	   MSG("$66002"<<"-"<<komentar[broj]) ;fino brusenje
+	endif
+;poruka ako je faza zavrsno brusenje
+	if ((JJ==0) AND (KK>0))
+	   MSG("$66003"<<"-"<<komentar[broj]) ;zavrsno brusenje
+	endif 
+;poruka za izbrusavanje
+     if (KK==0)
+	   MSG("$66004"<<"-"<<komentar[broj]) ;izbrusavanje
+     endif
+;petlja za fazu brusenja
+PROLAZ:
+STOPRE
+;ako je broj izbrusavanja pao na nulu kraj faze brusenja
+    if (izbrus< 0) gotof izlaz
+;ako je brusenje i ako je merna glava okinula
+    if ((KK==1) AND (R8<=jj)) gotof izlaz
+;ako je izbrusavanje i okinula glava
+    if((KK==0) AND (R8<0)) gotof izlaz
+;da li smo u prvoj ili drugoj tački brusenja 0 - prva , 1 - druga
+    if (mm==0) 
+;da li ima primicanja u prvoj 
+	   if (Prim[broj,jj]<=0) 
+;ako ima spanuj
+          DD = DD - kk*KORAK[broj,jj]
+	    endif
+    else 
+;ako je druga tacak
+	   if (Prim[broj,jj]>=0)
+;ako ima primicanja u drugoj 
+          DD = DD - kk*KORAK[broj,jj]
+	    endif	   
+	endif
+;provera u kojoj smo fazi	
+	if (jj<=0)
+;ako je zavrsno
+	   if (dd<=0)
+;ako je dodatak ispod nule
+	       dd=0
+;izjednaci sa nulom i smanji broj izbrusavanja
+		   Izbrus = izbrus -1
+		endif
+	else
+;ako je faza nije zavrsno brusenje
+	   if (dd<=DODB[broj,jj-1])
+; i ako je dodatak manji o dodatka za sledecu fazu
+;stavi dodatak na dodatak za sledecu fazu 
+	      dd=dodB[broj,jj-1]
+;i smanji preostali broj izbrusavanja za jedan
+		  izbrus=izbrus-1
+		endif
+	endif
+    if (kk==0)
+       izbrus=izbrus-1
+    endif
+;spanovanje
+    G1 X=2*UNUT*PREC[broj,mm]+DD XV=2*UNUT*DD F=BRZU[BROJ,3]
+;promeni mm
+	MM=(MM+1) MOD 2	
+;pređi na suprotnu stranu sa kamenom
+    G1 X=2*UNUT*PREC[broj,mm]+DD Z=POZZ[broj,mm] F=BRZO[Broj,jj]
+;proveri da li ima zadrzavanja na kraju
+    if (ZADR[broj,2*jj-mm+1]>0) 
+;ako ima zadrzi
+	    G4 F=ZADR[broj,2*jj-mm+1]
+	endif
+;sledeći prolaz
+gotob PROLAZ
+IZLAZ:
+STOPRE
+;smanji fazu za 1
+JJ=JJ-1
+;proveri da li ima još brusenja 
+if (jj>=0) gotob FAZA
+;ako nema kraj prelazimo na izbrusavanje
+;marker za izbrusavanje se uvećava faza se vraca na nulu izbrusavanje se radi sa rezimima zavrsnog
+KK=KK-1 JJ=0
+;ako je marker 1 vracamo se na brusenja
+if (KK==0) gotob FAZA
+;inace idemo na kraj 
+KRAJ:
+;brisemo poruku
+msg("")
+;vracamo se nazad
+G01 X=PREKIDX XV=DODB[BROJ,3] F=BRZU[BROJ,3]
+;i zavrsavamo
+m17
+

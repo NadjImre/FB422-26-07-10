@@ -1,0 +1,4 @@
+G90 G18 DIAM90
+X0 Z=ds_podhodZ+ds_tool_width
+X0 Z=-ds_podhodZ
+M17

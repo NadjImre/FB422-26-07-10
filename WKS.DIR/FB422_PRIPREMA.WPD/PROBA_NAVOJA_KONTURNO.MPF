@@ -1,0 +1,166 @@
+PROC SH850
+;pocetne postavke
+Def Real XVKoord =0.5 ;dubina na kojoj se brusi
+Def Real CKoord = 0 ; pocetna tacka C ose
+Def Real DuzinaNavoja
+Def Real BrojOkretaja
+Def Int ProlazaOdAbrihtovanja = 0
+Def Int Kord
+Def Real Dubina[MaxFaza]=(0.5,0.3,0.1,0)
+Def Int BrojProlaza[MaxFaza]=(3,2,2,2,0)
+Def Int BrojProlazaDoAbriht[MaxFaza]=(0,0,0,0,0,0)
+Def Real BrzinaOscilocanja[MaxFaza]=(20,20,20,20,20,10)
+Def Real BrzinaKamena[MaxFaza]=(30,30,30,30,30,24)
+Def Real BrojObrtajaTocila[MaxFaza]
+Def Real UkupniDodatak=0
+Def Int UkupnoProlaza=0
+Def Int Brojac,Indeks
+Def Int IndeksFaze,IndeksProlaza
+Def Int IndeksUkupnogProlaza
+Def Int IndeksHoda
+Def int BrojTocila,BrojVretena
+Def String[100] Poruka
+Def Real UgaoAOse
+Def Int SmerNavoja=-1 ; za desni smer
+;prethodni proracun
+;promeni smer ako je levi navoj
+if (ThHa<>0)
+   SmerNavoja=1
+endif
+;broj tocila i vretena
+BrojTocila=GETT(NazivToc[0])
+BrojVretena=$TC_TPG1[BrojTocila]
+;dodela vrednosti za koord system jer se clan niza ne moze dodeliti g funkciji
+Kord=KordSys[0]
+;isto za ugao A ose
+UgaoAOse = ATAN2(THPI*THST,3.141*THD2)
+;**************** ovo proveriti možda treba obrnuto  **************************
+DuzinaNavoja = POZZ[0,1]-POZZ[0,0]
+BrojOkretaja = (SmerNavoja*DuzinaNavoja)/(ThSt*ThPi)
+Ckoord = 360.0/ThSt 
+For Brojac=1 to MaxFaza
+    Indeks = MaxFaza - Brojac
+    UkupniDodatak=UkupniDodatak+Dubina[Indeks]*BrojProlaza[Indeks]
+    UkupnoProlaza=UkupnoProlaza+BrojProlaza[Indeks]
+    BrojObrtajaTocila[Brojac-1]=19098*BrzinaKamena[Brojac-1]/abs($TC_DP3[BrojTocila,BrojIviceToc[0] ])
+EndFor
+XVKoord = UkupniDodatak IndeksFaze=0 IndeksProlaza=0
+STOPRE
+VELIKI_DOSKOK:
+;reset marpos zvucne sonde
+M80
+;pocetak za brušenje
+G0X0G53T0D0
+T=NazivToc[0] D=BrojIviceToc[0] 
+G[8]=Kord
+;sinhrona akcija za spanovanje sa osom XV
+ID=1 DO $$SA_LEAD_OFFSET_OUT_POS[X]=$AA_IM[XV]
+;ucitavanje tabele
+TB200(0)
+;odskok - prekida sve i skace na labelu kraj 
+SETINT(8) PRIO=1 SH6201
+;zauzimanje pozicije
+if (BrojOkretaja<0)
+   G0 Z=POZZ[0,0] C=IC(-360) A=SmerNavoja*UgaoAOse
+else
+  G0 Z=POZZ[0,0] C=IC(+30) A=SmerNavoja*UgaoAOse
+endif
+;pocetak prolaza
+DOSKOK:
+;start kamena
+IF (TEST<>0)
+    m[BrojVretena]=3 s[BrojVretena]=BrojObrtajaTocila[IndeksFaze]
+    M81 ; zvucna sonda ukljucena
+ENDIF
+;da li treba abriht
+if (BrojProlazaDoAbriht[IndeksFaze]>0)
+   if (ProlazaOdAbrihtovanja>=BrojProlazaDoAbriht[IndeksFaze]) gotof TrebaAbriht
+endif
+STOPRE
+;ako je broj prolaza nula treba preći na sledeću fazu
+if (BrojProlaza[IndeksFaze]==0) gotoF Proracun
+;dubina brusenja
+if (IndeksHoda==0)
+   XVKoord = XVKoord - Dubina[IndeksFaze]
+endif
+;broj prolaza
+IndeksUkupnogProlaza=IndeksUkupnogProlaza+1
+ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
+;poruka
+poruka = "Prolaz "<<IndeksUkupnogProlaza<<"/"<<(UkupnoProlaza*ThSt)<<", Faza " << (IndeksFaze+1)
+poruka = poruka<<" (prolaz "<<(IndeksProlaza+1)<<"/"<<BrojProlaza[IndeksFaze]
+poruka = poruka << ",pocetak "<<(IndeksHoda+1)<<"/"<<ThSt<<")"
+msg(Poruka)
+;selekcija alata i koordinatnog sistema 
+T=NazivToc[0] D=BrojIviceToc[0] G[8]=KORD M70
+;aktiviranje korekcija
+TRANS X=KORX[0]/2 Z=KORZ[0] C=KORC[0]
+;i pozicioniranje na pocetnu tačku
+if (BrojOkretaja<0)
+   G0 Z=POZZ[0,0] C=ACN(CKoord*IndeksHoda) A=SmerNavoja*UgaoAOse
+else
+  G0 Z=POZZ[0,0] C=ACP(CKoord*IndeksHoda) A=SmerNavoja*UgaoAOse
+endif
+;start vode
+IF (TEST<>0)
+   waits(BrojVretena)
+   M=HLADJENJE[0]
+ENDIF
+;prilaz komadu
+G0 X=PREC[0,0]+DODB[0,3] XV=DODB[0,3] 
+;vezivanje tabele
+LEADON(X,Z,1)      ; vezivanje osa
+FFWON              ; feed fowrvard control
+;brusenje
+JEDAN_PROLAZ:
+G1 G90 XV=XVKoord F=BRZU[0,3]
+G1 G91 Z=DuzinaNavoja C=360*BrojOkretaja F=BrzinaOscilocanja[IndeksFaze]
+G1 G90 XV=DODB[0,3] F=BRZU[0,3]
+FFWOF
+LEADOF(X,Z)
+G1 X=PREC[0,0]+DODB[0,3]
+PRORACUN:
+;broj hodova uvećaj za jedan
+IndeksHoda=IndeksHoda+1
+;ako je veci od broja hodova 
+if (IndeksHoda>=ThSt)
+;povecaj proj prolaza
+   IndeksProlaza=IndeksProlaza+1
+;i vrati hodove na nulu
+   IndeksHoda=0
+endif
+;provera da li je kraj faze
+if (IndeksProlaza>=BrojProlaza[IndeksFaze])
+;ako jeste prelazimo na sledeću
+   IndeksFaze=IndeksFaze+1
+;resetujemo broj prolaza
+   IndeksProlaza=0
+endif
+;da li smo dosli do zadnje faze
+if (IndeksFaze<MaxFaza) gotoB Doskok
+
+KRAJ:
+FFWOF
+LEADOF(X,Z)
+TRANS
+G90G53X0G0T0D0M11
+msg("Kraj")
+STOPRE
+M00
+M17
+
+TREBAABRIHT:
+FFWOF
+LEADOF(X,Z)
+TRANS
+G53X0G0T0D0
+ProlazaOdAbrihtovanja=0
+STOPRE
+msg("Abrihtovanje")
+M00
+GotoB Veliki_Doskok
+
+M17
+
+
+

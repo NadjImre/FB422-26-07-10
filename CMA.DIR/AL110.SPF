@@ -1,0 +1,57 @@
+Proc AL110(int broj)
+
+;Trouglasti navoj sa zaobljenjem
+
+DEF REAL XA
+DEF REAL ZA
+DEF REAL XB
+DEF REAL ZB
+DEF REAL XC
+DEF REAL ZC
+DEF REAL XD
+DEF REAL ZD
+DEF REAL XE
+DEF REAL ZE
+DEF REAL XF
+DEF REAL ZF
+
+DEF INT BRTOC
+DEF REAL SIRINA
+Def Real unut
+
+;preuzimanje sirine tocila
+BRTOC = GETT(NazivToc_a[BROJ])
+SIRINA = $TC_TPG5[BRTOC]
+
+;preuzimane spoljno/unutarnje
+UNUT=1
+IF (OBLIKAM_A[BRoj]<>0)
+   UNUT=-1
+ENDIF
+
+DIAMOF
+G18
+
+XA=0 ZA=thph
+XB=0 ZB=-thx3+thh*TAN(tha1)
+XC=unut*thh ZC=-thx3
+XD=unut*thh ZD=ZC-thb2
+XE=0   ZE=ZD-thh*TAN(tha2)
+XF=0 ZF=-thph-SIRINA
+
+
+D2
+G1 G451 X=XA G42
+G1 X=XB Z=ZB RND=thr4
+G1 X=XC Z=ZC RND=thr3
+G1 X=XD Z=ZD-1 
+D1 X=XD+unut 
+G0 Z=ZF 
+G1 G41 X=XF
+G1 X=XE Z=ZE RND=thr5
+G1 X=XD Z=ZD RND=thr3
+G1 X=XC Z=ZC+1
+D2 G0 G40 Z=ZA
+
+M17
+

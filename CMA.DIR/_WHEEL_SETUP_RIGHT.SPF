@@ -1,0 +1,17 @@
+Proc _WHEEL_SETUP_RIGHT(Real BOK1 ,Real UGAO1 ,Real FAZETA1,Real RADIUS1var ,Real DUZKON1,Real UGAOKON1,Real PODHODXvar,Real PODHODZvar, Real Dub21, Real KonusX, Real KonusZ, Real UgaoToc, Int BrojAlata)
+
+
+ds_face_length2=bok1
+ds_face_angle2=ugao1
+ds_margin2=fazeta1
+ds_radius2=radius1var
+ds_taper_length2=duzkon1
+ds_taper_angle2=ugaokon1
+
+ds_podhodx=podhodxvar
+ds_podhodz=podhodzvar
+
+ds_face_depth2=Dub21
+
+M17
+

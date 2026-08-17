@@ -1,0 +1,42 @@
+;ovo je program za podešavanje kompenzacija B ose kakav je korišćen na mnogim mašinama
+;parametre unosoimo iz programa ne može direktno da se ukucavaju 
+;podesiš vrednosti i startuješ program
+;pre nego što bilo šta kreneš podesi MD38000 za B osu 
+;tu se upisuje maksimalni broj tačaka za kompenzaciju - tebi je dosta tri ali ne smeta ako upišeš više
+;onda proveriš da li je MD32700[0] na nuli ako nije ne možeš da unosiš 
+
+; minimalna koordinata ose za kompenzaciju
+;mislim da imaš tri položaja B ose pod 0, 90 i 180 ako je tako ovo ispod odgovara
+;ako nije stavi najmanju i najveću vrednost za min i max 
+$AA_ENC_COMP_MIN[0,B1] =0 ; 0 je za merni sistem
+$AA_ENC_COMP_MAX[0,B1] =270
+
+;ovo određuje koliko ćeš tačaka kompenzacije imati - ovo što piše zanči da ćeš imati na svakih 90 stepni
+;između minimuma i maksimuma odnosno tačka nula je na B=0, tačka 1 na B=90 i tačka 2 na B=180
+$AA_ENC_COMP_STEP[0,B1] =90
+;B osa je moduo osa
+$AA_ENC_COMP_IS_MODULO[0,B1] = 1
+;ovako unosiš vrednost kompenzacije za tri tačke 
+;ako osa ne stoji tačno na tački kompenzacija je međuvrednost 
+;recimo ako osa stoji na 45 stepeni odnosno na pola između 1 i 2 tačke onda je
+; i vrednost kompenzacije pola između 1 i 2 tačka 
+
+$AA_ENC_COMP[0,0,B1] = 0 ; kompenzacija za B1=0 stepeni
+$AA_ENC_COMP[0,1,B1] =-0.005
+$AA_ENC_COMP[0,2,B1] =-0.005
+$AA_ENC_COMP[0,3,B1] =-0.005; kompenzacija za B1=90 stepeni
+$AA_ENC_COMP[0,4,B1] = 0
+$AA_ENC_COMP[0,5,B1] = 0
+;$AA_ENC_COMP[0,6,B1] = 0.00 ; komplenzacija za B1 = 180 stepeni
+;$AA_ENC_COMP[0,7,B1] = 0.00 
+;$AA_ENC_COMP[0,8,B1] = 0.00 
+;kompenzaciju aktiviraš sa MD32700 = 1
+;stupa na snagu odmah i ako je kompenzacija malo veća osa može i da trgne
+;inače da je kompezacija ose aktivna možeš da vidiš samo na SERVICE AXIS
+;par redova ispod gde prikazuje merenje enkodera stoji i absolutna vrednost kompenzacije
+
+;ovo je tu da program stane na kraju da vidiš da je prošao
+M00
+M17
+
+

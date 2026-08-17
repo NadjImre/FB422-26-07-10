@@ -1,0 +1,6 @@
+G90 G18 DIAM90
+G1 Z0
+G1 Z0 X=-2*ds_Margin1
+G1 Z=-ds_Face_Length1*tan(ds_Face_Angle1) X=-2*ds_Face_Length1 RND=ds_PodhodZ/2
+G1 Z=ds_PodhodZ
+M17

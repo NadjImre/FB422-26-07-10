@@ -1,0 +1,7 @@
+E_LAB_A_PLANE_LEFT:
+G90 G18 DIAM90
+X0 Z=-ds_tool_width-ds_podhodZ
+X0 Z=ds_podhodZ
+E_LAB_E_PLANE_LEFT:
+
+M17

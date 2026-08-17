@@ -1,0 +1,144 @@
+; directional LEC
+; 3rd axis AX3
+; table 2 - positive traversing direction
+; table 3 - negative traversing direction
+;--- Deaktivierung der Kompensation und der Tabellen
+CHANDATA(1)
+;$MA_CEC_ENABLE[AX3]=0 ; compensation OFF
+$SN_CEC_TABLE_ENABLE[2]=0 ; lock Table 1
+$SN_CEC_TABLE_ENABLE[3]=0 ; lock Table 2
+NEWCONF
+
+$AN_CEC[2,0]=0 
+$AN_CEC[2,1]=-0.0001 ; correction value interpolation point 1
+$AN_CEC[2,2]=-0.0005 ; correction value interpolation point 2
+$AN_CEC[2,3]=-0.0010 ; correction value interpolation point 3
+$AN_CEC[2,4]=-0.0026 ; correction value interpolation point 4
+$AN_CEC[2,5]=-0.0037 ; correction value interpolation point 5
+$AN_CEC[2,6]=-0.0050 ; correction value interpolation point 6
+$AN_CEC[2,7]=-0.0052 ; correction value interpolation point 7
+$AN_CEC[2,8]=-0.0060 ; correction value interpolation point 8
+$AN_CEC[2,9]=-0.0069
+$AN_CEC[2,10]=-0.0076 ; correction value interpolation point 9
+$AN_CEC[2,11]=-0.0090; correction value interpolation point 10
+$AN_CEC[2,12]=-0.0103
+$AN_CEC[2,13]=-0.0117
+$AN_CEC[2,14]=-0.0119
+$AN_CEC[2,15]=-0.0130
+$AN_CEC[2,16]=-0.0145
+$AN_CEC[2,17]=-0.0148
+$AN_CEC[2,18]=-0.0167
+$AN_CEC[2,19]=-0.0166
+$AN_CEC[2,20]=-0.0183
+$AN_CEC[2,21]=-0.0181
+$AN_CEC[2,22]=-0.0186
+$AN_CEC[2,23]=-0.0205
+$AN_CEC[2,24]=-0.0209
+$AN_CEC[2,25]=-0.0217
+$AN_CEC[2,26]=-0.0228
+$AN_CEC[2,27]=-0.0235
+$AN_CEC[2,28]=-0.0239
+$AN_CEC[2,29]=-0.0252
+$AN_CEC[2,30]=-0.0262
+$AN_CEC[2,31]=-0.0263
+$AN_CEC[2,32]=-0.0273
+$AN_CEC[2,33]=-0.0276
+$AN_CEC[2,34]=-0.0285
+$AN_CEC[2,35]=-0.0282
+$AN_CEC[2,36]=-0.0289
+$AN_CEC[2,37]=-0.0291
+$AN_CEC[2,38]=-0.0294
+$AN_CEC[2,39]=-0.0302
+$AN_CEC[2,40]=-0.0306
+$AN_CEC[2,41]=-0.0316
+$AN_CEC[2,42]=-0.0307
+$AN_CEC[2,43]=-0.0320
+$AN_CEC[2,44]=-0.0319
+$AN_CEC[2,45]=-0.0316
+$AN_CEC[2,46]=-0.0317
+$AN_CEC[2,47]=-0.0319
+$AN_CEC[2,48]=-0.0320
+$AN_CEC[2,49]=-0.0332
+$AN_CEC[2,50]=-0.0323
+$AN_CEC[2,51]=-0.0307
+$AN_CEC[2,52]=-0.0307
+
+$AN_CEC_INPUT_AXIS[2]=(AX3) ; basic axis
+$AN_CEC_OUTPUT_AXIS[2]=(AX3) ; compensation axis
+$AN_CEC_STEP[2]=20.0 ; distance between interpolation points
+$AN_CEC_MIN[2]=-520 ; starting position
+$AN_CEC_MAX[2]=520 ; end position
+$AN_CEC_DIRECTION[2]=1 ; table applies to positive traversing directions
+$AN_CEC_MULT_BY_TABLE[2]=0 ; no multiplication (not relevant here)
+$AN_CEC_IS_MODULO[2]=0 ; compensation without modulo function
+
+m00
+$AN_CEC[3,0]=-0.0099 
+$AN_CEC[3,1]=-0.0087 ; correction value interpolation point 1
+$AN_CEC[3,2]=-0.0091 ; correction value interpolation point 2
+$AN_CEC[3,3]=-0.0097 ; correction value interpolation point 3
+$AN_CEC[3,4]=-0.0111 ; correction value interpolation point 4
+$AN_CEC[3,5]=-0.0123 ; correction value interpolation point 5
+$AN_CEC[3,6]=-0.0126 ; correction value interpolation point 6
+$AN_CEC[3,7]=-0.0131 ; correction value interpolation point 7
+$AN_CEC[3,8]=-0.0138 ; correction value interpolation point 8
+$AN_CEC[3,9]=-0.0142
+$AN_CEC[3,10]=-0.0155 ; correction value interpolation point 9
+$AN_CEC[3,11]=-0.0162; correction value interpolation point 10
+$AN_CEC[3,12]=-0.0182
+$AN_CEC[3,13]=-0.0187
+$AN_CEC[3,14]=-0.0193
+$AN_CEC[3,15]=-0.0207
+$AN_CEC[3,16]=-0.0217
+$AN_CEC[3,17]=-0.0225
+$AN_CEC[3,18]=-0.0239
+$AN_CEC[3,19]=-0.0246
+$AN_CEC[3,20]=-0.0256
+$AN_CEC[3,21]=-0.0259
+$AN_CEC[3,22]=-0.0269
+$AN_CEC[3,23]=-0.0281
+$AN_CEC[3,24]=-0.0291
+$AN_CEC[3,25]=-0.0298
+$AN_CEC[3,26]=-0.0316
+$AN_CEC[3,27]=-0.0320
+$AN_CEC[3,28]=-0.0333
+$AN_CEC[3,29]=-0.0341
+$AN_CEC[3,30]=-0.0345
+$AN_CEC[3,31]=-0.0351
+$AN_CEC[3,32]=-0.0354
+$AN_CEC[3,33]=-0.0360
+$AN_CEC[3,34]=-0.0365
+$AN_CEC[3,35]=-0.0361
+$AN_CEC[3,36]=-0.0367
+$AN_CEC[3,37]=-0.0365
+$AN_CEC[3,38]=-0.0372
+$AN_CEC[3,39]=-0.0376
+$AN_CEC[3,40]=-0.0378
+$AN_CEC[3,41]=-0.0385
+$AN_CEC[3,42]=-0.0377
+$AN_CEC[3,43]=-0.0390
+$AN_CEC[3,44]=-0.0383
+$AN_CEC[3,45]=-0.0384
+$AN_CEC[3,46]=-0.0381
+$AN_CEC[3,47]=-0.0383
+$AN_CEC[3,48]=-0.0379
+$AN_CEC[3,49]=-0.0397
+$AN_CEC[3,50]=-0.0386
+$AN_CEC[3,51]=-0.0374
+$AN_CEC[3,52]=-0.0376
+
+
+$AN_CEC_INPUT_AXIS[3]=(AX3) ; basic axis
+$AN_CEC_OUTPUT_AXIS[3]=(AX3) ; compensation axis
+$AN_CEC_STEP[3]=20.0 ; distance between interpolation points
+$AN_CEC_MIN[3]=-520 ; starting position
+$AN_CEC_MAX[3]=520 ; end position
+$AN_CEC_DIRECTION[3]=-1 ; table applies to negative traversing directions
+$AN_CEC_MULT_BY_TABLE[3]=0 ; no multiplication (not relevant here)
+$AN_CEC_IS_MODULO[3]=0 ; compensation without modulo function (for rotary axes only)
+m00
+;$MA_CEC_ENABLE[AX3]=1 ; compensation ON
+$SN_CEC_TABLE_ENABLE[2]=1 ; enable table 1
+$SN_CEC_TABLE_ENABLE[3]=1 ; enable table 2
+NEWCONF
+M17 ; end of program

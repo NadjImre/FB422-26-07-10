@@ -1,0 +1,9 @@
+Proc _Contour_Setup(String[32] NazivKonture,Int DefinicijaKonture ,Real Korekcija1 ,Real Korekcija2 ,Int NacinUlaza ,Real ParamUlaza1 ,Real ParamUlaza2 ,Int NacinIzlaza,Real ParamIzlaza1, Real ParamIzlaza2)
+
+Th_Conture = NazivKonture
+Gr_ContureDef = DefinicijaKonture
+Gr_Taper_Correction1 = Korekcija1
+Gr_Taper_Correction2 = Korekcija2
+
+
+M17

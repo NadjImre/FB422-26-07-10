@@ -1,0 +1,24 @@
+proc ms100
+;Kalibracija sonde po X osi
+;sa mašine FB422
+;april 2026
+
+def real xpos;pocetna pozicija po X osi
+g18
+stopre
+
+g500
+xpos=$aa_iw[x]
+G1 X=xpos-me_distance MEAS=me_probe_number F=me_feed
+IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
+MSG("$66019")
+$tc_dp4[me_tool_number,me_tool_Dnumber]=$AA_MM[x]-me_target/2
+g1 x=xpos
+m17
+
+greska:
+  SETAL(66028)
+  M00
+  M96
+m17
+

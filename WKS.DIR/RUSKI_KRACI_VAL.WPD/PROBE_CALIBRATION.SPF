@@ -1,0 +1,8 @@
+
+;NCG#probe_calibration#cprobe_calibration.com#NCCODE2#*NCG;*RO*;*HD*
+;#5#1#1#2#2#5#1#1#*NCG;*RO*;*HD*
+_PROBE_CALIBRATION("zond2",1,20,60,19.67,1)
+;#END#*NCG;*RO*;*HD*
+
+M17
+

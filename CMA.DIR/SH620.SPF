@@ -1,0 +1,9 @@
+PROC SH620
+;FB274 - jul.2019
+;FB271 i FB272
+
+MSG("prvi impuls merne glave")
+impuls_glave[1]=$aa_iw[x]-R070 ;umanjuje za TRANS korekciju
+greska_glave[1]=impuls_glave[1]-nominalno_glava[1]
+
+M17
