@@ -1,0 +1,22 @@
+***Brušenje prečnika
+- u maskama nema podrške za mernu glavu, treba dodati
+
+
+*** Brušenje navoja
+
+* usecanje navoja *
+- predviđen je program SH811.spf koji nije testiran i nije skroz sigurno ni šta se tačno nalazi u fajlu. treba napisati novi program koji će koristiti postojeće maske cthredad.com i cthread_setup.com 
+
+* pritupljenje levo i desno *
+- predviđeni su programi SH381.spf i SH382.spf od kojih je prvi korišćen u radu za pritupljivanje rolika 1 , podešavanje kroz maske je delimično rešeno kroz cthread_startend_setup, treba proveriti stanje posebno 832 i testirati ako može u radu
+
+*** Poravnavanje kamena
+
+- masku cwheel_setup koji treba da ima sliku i treba da ima iscrtavanje profila ovo treba srediti
+- treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao
+- ne radi dobro odskok kod poravnavanja strana i kosina
+
+*** Merenje
+-  kalibracija - obezbediti i samo merenje na istom principu kao kalibracija - ručno se dovede blizu pa se pusti merenje
+-  rekalibracija - radi samo za prečnik treba i za čelo. Ne znam čemu služi kada merenje već ima opciju za rekalibraciju?
+-  merenje prečnika - nema maske i ulaznih parametara treba novi program
