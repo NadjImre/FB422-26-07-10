@@ -19,13 +19,6 @@ PRESS(HS5)
   LS("merenje","ceditor.com",1)
 END_PRESS
 
-HS6=("",,se2)
-;HS6=($89463,,se1)
-;aktivira vertikalni meni za navoje i profile
-PRESS(HS6)
-  ;LS("navoj","ceditor.com",1)
-END_PRESS
-
 //END
 
 //S(brusenje)
@@ -59,12 +52,6 @@ END_PRESS
 VS5=("Thread%nStart-End",,se1)
 PRESS(VS5)
   LM("Thread_StartEnd_Setup","cthread_startend_setup.com")
-END_PRESS
-
-;podešavanje linete
-VS6=("Steady rest%nSetup",,se1)
-PRESS(VS6)
-  LM("SteadyRest","csteady.com")
 END_PRESS
 
 ;kontura brusenja
@@ -101,11 +88,6 @@ PRESS(VS3)
   LM("dressing","cdressing.com",1)
 END_PRESS
 
-;korekcija precnika kamena - usaglasavanje stavrog precnika sa alatom
-VS5=($89791,,se1)
-PRESS(VS5)
-  LM("Korekcija","cporavnavanje2.com",1)
-END_PRESS
 
 VS8=("<<",,se1)
 
@@ -117,11 +99,6 @@ END_PRESS
 
 //S(merenje)
 
-;Podesavanje oblika kamena
-VS1=("Measuring%nHead",,se1)
-PRESS(VS1)
-  LM("MeasurinHead","csonda.com",1)
-END_PRESS
 
 ;rekalibracija
 VS2=("Diameter%nrecalibration",,se1)
@@ -170,56 +147,6 @@ END_PRESS
 
 //END
 
-//S(navoj)
-
-VS1=("Thread%nSetup",,se1)
-
-PRESS(VS1)
-  LM("SetupNavoja","cnavoj.com",1)
-END_PRESS
-
-VS2=($89564,,se1)
-
-PRESS(VS2)
-  LM("ProfilKamena","cnavoj.com",1)
-END_PRESS
-
-VS3=($89674,,se1)
-
-PRESS(VS3)
-  LM("AbrihtNavoja","cnavoj.com",1)
-END_PRESS
-
-;rezimi obrade "feed and speeds"
-VS4=($89171,,se1)
-PRESS(VS4)
-  LM("Rezimi22","crezimi_za_navoj.com",1)
-END_PRESS
-
-VS5=($89571,,se1)
-
-PRESS(VS5)
-  LM("BrusenjeProfila","cnavoj.com",1)
-END_PRESS
-
-VS6=($89866,,se1)
-
-PRESS(VS6)
-  LM("RadniPredmet","cnavoj.com",1)
-END_PRESS
-
-VS7=($89865 ,,se1)
-
-PRESS(VS7)
-  LM("Navoj","cnavoj.com",1)
-END_PRESS
-
-
-VS8=("<<",,se1)
-
-PRESS(VS8)
-  EXIT
-END_PRESS
 
 //END
 

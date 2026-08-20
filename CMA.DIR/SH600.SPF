@@ -1,9 +1,0 @@
-PROC SH600
-
-MSG("$66007")
-M01
-M96
-STOPRE
-M17
-
-

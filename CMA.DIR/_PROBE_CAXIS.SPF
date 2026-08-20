@@ -29,7 +29,7 @@ me_MeasureCount = ((Status div 2048 ) b_and 15)+1
 me_ReturnMode = ( Status b_and 48)
 me_Probe_AutoUP = (Status b_and 64)
 
-ms150
+ms130
 
 ;merenje  bez korekcije,samo provera rezultata i ispis greske ako ima
 if (me_c_type==1)
