@@ -17,11 +17,17 @@ Gr_Contur_Pos1 = Pocetak
 Gr_Contur_Pos2 = Kraj
 Gr_Taper_Correction1 = Korekcija1
 Gr_Taper_Correction2 = Korekcija2
-;*** promenljive se ne koriste - za buduca prosirenja i unapredjenja ***
-Gr_Contur_Start = NacinUlaza
+;*** merna glava (NacinUlaza) i prekidi faza 1-6 (NacinIzlaza, po jedna cifra)
+Gr_measuring_head = NacinUlaza
+Gr_interrupts[0] = NacinIzlaza DIV 100000
+Gr_interrupts[1] = (NacinIzlaza DIV 10000) MOD 10
+Gr_interrupts[2] = (NacinIzlaza DIV 1000) MOD 10
+Gr_interrupts[3] = (NacinIzlaza DIV 100) MOD 10
+Gr_interrupts[4] = (NacinIzlaza DIV 10) MOD 10
+Gr_interrupts[5] = NacinIzlaza MOD 10
+;*** sakriveno u masci - rezervisano
 Gr_Contur_StartDist = DuzinaUlaza
 Gr_Contur_StartAngle = UgaoUlaza
-Gr_Contur_End = NacinIzlaza
 Gr_Contur_EndDist = DuzinaIzlaza
 Gr_Contur_EndAngle = UgaoIzlaza
 
