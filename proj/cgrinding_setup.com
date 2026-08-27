@@ -1,5 +1,5 @@
 
-//M(GrindingSetup/$89172////300,100,200,200)
+//M(GrindingSetup/$89172)
 ;FB422
 
 DEF RB0= (S//"RB"/,,,,/WR1///15,,140/6,10,23//"pomoc.html","9218"),
@@ -102,16 +102,16 @@ BRZKAMBRUS6 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218")
 
 DEF ZBIR=(R4//0/$89212,,,/wr1////120,,44/10,126/)
 
-DEF RB00= (S//"RB"/,,,,/WR1///15,,140/30,200,23//"pomoc.html","9218"),
-BrzOccil0 = (s//"Brzina_Osc"/$89212/wr1////90,200,50//"pomoc.html","9218"),
-Korak0 = (s//"Korak"/$89212,,,/wr1////150,200,50//"pomoc.html","9218"),
-Zadr01 = (s//"Zadr1"/$89212,,,/wr1////210,200,50//"pomoc.html","9218"),
-Zadr02 = (s//"Zadr2"/$89212,,,/wr1////270,200,50//"pomoc.html","9218"),
-Primicanje0=(s//"Prilaz"/$89212,,,/wr1////330,200,50//"pomoc.html","9218"),
-BrzinaUsecanja0 = (s//"BrzUsec"/$89212,,,/wr1////390,200,50//"pomoc.html","9218"),
-Oscil0 = (s//"Oscil lenght"/$89212,,,/wr1////450,200,50//"pomoc.html","9218"),
-Izbrusavanje0 = (s//"Izbrus"/$89212,,,/wr1////510,200,50//"pomoc.html","9218"),
-PrecnikOdskoka0 = (s//"PrecOdskok"/$89212,,,/wr1////570,200,50//"pomoc.html","9218")
+DEF RB00= (S//"RB"/,,,,/WR1///15,,140/6,200,23//"pomoc.html","9218"),
+BrzOccil0 = (s//"Brzina_Osc"/$89212/wr1////30,200,50//"pomoc.html","9218"),
+Korak0 = (s//"Korak"/$89212,,,/wr1////90,200,50//"pomoc.html","9218"),
+Zadr01 = (s//"Zadr1"/$89212,,,/wr1////150,200,50//"pomoc.html","9218"),
+Zadr02 = (s//"Zadr2"/$89212,,,/wr1////210,200,50//"pomoc.html","9218"),
+Primicanje0=(s//"Prilaz"/$89212,,,/wr1////270,200,50//"pomoc.html","9218"),
+BrzinaUsecanja0 = (s//"BrzUsec"/$89212,,,/wr1////330,200,50//"pomoc.html","9218"),
+Oscil0 = (s//"Oscil lenght"/$89212,,,/wr1////390,200,50//"pomoc.html","9218"),
+Izbrusavanje0 = (s//"Izbrus"/$89212,,,/wr1////450,200,50//"pomoc.html","9218"),
+PrecnikOdskoka0 = (s//"PrecOdskok"/$89212,,,/wr1////510,200,50//"pomoc.html","9218")
 
 DEF RB10 = (I//1/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
 BrzOscil1 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
@@ -275,7 +275,7 @@ end_change
 
 
 LOAD
-   LA("OffOnNiz","cnizovi.com")
+   ;LA("OffOnNiz","cnizovi.com")
    RECT(5,8,565,150,133,127,1)
   RECT(5,200,565,150,133,132,1)
   ; line(5,10,570,10,7,1)  
@@ -299,13 +299,23 @@ BRZKAMABR0 = "Brz.kam.abr."
 BRZROL0 = "Brz.rolna"
 BROBRTKOM0 = "BrObrt.Kom."
 BRZKAMBRUS0 = "Brz.Kam.Brus."
-   zbir6=dub6*prol6
-   zbir5=dub5*prol5
-   zbir4=dub4*prol4
-   zbir3=dub3*prol3
-   zbir2=dub2*prol2
-   zbir1=dub1*prol1
-   zbir=zbir1+zbir2+zbir3+zbir4+zbir5+zbir6
+RB00="RB"
+BrzOccil0 = "Brzina_Osc"
+Korak0 = "Korak"
+Zadr01 = "Zadr1"
+Zadr02 = "Zadr2"
+Primicanje0="Prilaz"
+BrzinaUsecanja0 = "BrzUsec"
+Oscil0 = "Oscil lenght"
+Izbrusavanje0 = "Izbrus"
+PrecnikOdskoka0 = "PrecOdskok"
+zbir6=dub6*prol6
+zbir5=dub5*prol5
+zbir4=dub4*prol4
+zbir3=dub3*prol3
+zbir2=dub2*prol2
+zbir1=dub1*prol1
+zbir=zbir1+zbir2+zbir3+zbir4+zbir5+zbir6
 END_LOAD
 
 //END
