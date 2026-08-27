@@ -22,3 +22,4 @@
 -  rekalibracija - radi samo za prečnik treba i za čelo. Ne znam čemu služi kada merenje već ima opciju za rekalibraciju?
 -  merenje prečnika - nema maske i ulaznih parametara treba novi program
 -  _PROBE_CAXIS sada zove MS130 (sa FB357) - treba ozbiljno testirati; u obradi rezultata mode nije postavljen (kopija me_w_result kod tipa 3)
+….
