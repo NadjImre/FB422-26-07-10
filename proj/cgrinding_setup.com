@@ -102,7 +102,9 @@ BRZKAMBRUS6 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218")
 
 DEF ZBIR=(R4//0/$89212,,,/wr1////120,,44/10,126/)
 
-DEF RB00= (S//"RB"/,,,,/WR1///15,,140/6,200,23//"pomoc.html","9218"),
+DEF FILTER=(I/* 0=$89152, 150=$89079, 200=$89081, 300=$89516, 304=$89518, 840="Konturno"/0/,"Filter",,/wr2///400,175,100/450,175,120//)
+
+DEF RB00= (S//"RB"/,,,,/WR1///15,200,140/6,200,23//"pomoc.html","9218"),
 BrzOccil0 = (s//"Brzina_Osc"/$89212/wr1////30,200,50//"pomoc.html","9218"),
 Korak0 = (s//"Korak"/$89212,,,/wr1////90,200,50//"pomoc.html","9218"),
 Zadr01 = (s//"Zadr1"/$89212,,,/wr1////150,200,50//"pomoc.html","9218"),
@@ -273,6 +275,161 @@ change(Prol6)
   zbir=zbir1+zbir2+zbir3+zbir4+zbir5+zbir6
 end_change
 
+CHANGE(FILTER)
+  BrzOccil0.WR=1
+  BrzOscil1.WR=2
+  BrzOscil2.WR=2
+  BrzOscil3.WR=2
+  BrzOscil4.WR=2
+  BrzOscil5.WR=2
+  BrzOscil6.WR=2
+  Korak0.WR=1
+  Korak1.WR=2
+  Korak2.WR=2
+  Korak3.WR=2
+  Korak4.WR=2
+  Korak5.WR=2
+  Korak6.WR=2
+  Zadr01.WR=1
+  Zadr11.WR=2
+  Zadr21.WR=2
+  Zadr31.WR=2
+  Zadr41.WR=2
+  Zadr51.WR=2
+  Zadr61.WR=2
+  Zadr02.WR=1
+  Zadr12.WR=2
+  Zadr22.WR=2
+  Zadr32.WR=2
+  Zadr42.WR=2
+  Zadr52.WR=2
+  Zadr62.WR=2
+  Primicanje0.WR=1
+  Primicanje1.WR=2
+  Primicanje2.WR=2
+  Primicanje3.WR=2
+  Primicanje4.WR=2
+  Primicanje5.WR=2
+  Primicanje6.WR=2
+  BrzinaUsecanja0.WR=1
+  BrzinaUsecanja1.WR=2
+  BrzinaUsecanja2.WR=2
+  BrzinaUsecanja3.WR=2
+  BrzinaUsecanja4.WR=2
+  BrzinaUsecanja5.WR=2
+  BrzinaUsecanja6.WR=2
+  Oscil0.WR=1
+  Oscil1.WR=2
+  Oscil2.WR=2
+  Oscil3.WR=2
+  Oscil4.WR=2
+  Oscil5.WR=2
+  Oscil6.WR=2
+  Izbrusavanje0.WR=1
+  Izbrusavanje1.WR=2
+  Izbrusavanje2.WR=2
+  Izbrusavanje3.WR=2
+  Izbrusavanje4.WR=2
+  Izbrusavanje5.WR=2
+  Izbrusavanje6.WR=2
+  PrecnikOdskoka0.WR=1
+  PrecnikOdskoka1.WR=2
+  PrecnikOdskoka2.WR=2
+  PrecnikOdskoka3.WR=2
+  PrecnikOdskoka4.WR=2
+  PrecnikOdskoka5.WR=2
+  PrecnikOdskoka6.WR=2
+  IF ((FILTER==150) OR (FILTER==300))
+    Korak0.WR=4
+    Korak1.WR=4
+    Korak2.WR=4
+    Korak3.WR=4
+    Korak4.WR=4
+    Korak5.WR=4
+    Korak6.WR=4
+    Zadr01.WR=4
+    Zadr11.WR=4
+    Zadr21.WR=4
+    Zadr31.WR=4
+    Zadr41.WR=4
+    Zadr51.WR=4
+    Zadr61.WR=4
+    Zadr02.WR=4
+    Zadr12.WR=4
+    Zadr22.WR=4
+    Zadr32.WR=4
+    Zadr42.WR=4
+    Zadr52.WR=4
+    Zadr62.WR=4
+    Primicanje0.WR=4
+    Primicanje1.WR=4
+    Primicanje2.WR=4
+    Primicanje3.WR=4
+    Primicanje4.WR=4
+    Primicanje5.WR=4
+    Primicanje6.WR=4
+  ENDIF
+  IF ((FILTER==200) OR (FILTER==840))
+    BrzinaUsecanja0.WR=4
+    BrzinaUsecanja1.WR=4
+    BrzinaUsecanja2.WR=4
+    BrzinaUsecanja3.WR=4
+    BrzinaUsecanja4.WR=4
+    BrzinaUsecanja5.WR=4
+    BrzinaUsecanja6.WR=4
+    Oscil0.WR=4
+    Oscil1.WR=4
+    Oscil2.WR=4
+    Oscil3.WR=4
+    Oscil4.WR=4
+    Oscil5.WR=4
+    Oscil6.WR=4
+  ENDIF
+  IF (FILTER==304)
+    BrzOccil0.WR=4
+    BrzOscil1.WR=4
+    BrzOscil2.WR=4
+    BrzOscil3.WR=4
+    BrzOscil4.WR=4
+    BrzOscil5.WR=4
+    BrzOscil6.WR=4
+    Korak0.WR=4
+    Korak1.WR=4
+    Korak2.WR=4
+    Korak3.WR=4
+    Korak4.WR=4
+    Korak5.WR=4
+    Korak6.WR=4
+    Zadr01.WR=4
+    Zadr11.WR=4
+    Zadr21.WR=4
+    Zadr31.WR=4
+    Zadr41.WR=4
+    Zadr51.WR=4
+    Zadr61.WR=4
+    Zadr02.WR=4
+    Zadr12.WR=4
+    Zadr22.WR=4
+    Zadr32.WR=4
+    Zadr42.WR=4
+    Zadr52.WR=4
+    Zadr62.WR=4
+    Primicanje0.WR=4
+    Primicanje1.WR=4
+    Primicanje2.WR=4
+    Primicanje3.WR=4
+    Primicanje4.WR=4
+    Primicanje5.WR=4
+    Primicanje6.WR=4
+    Oscil0.WR=4
+    Oscil1.WR=4
+    Oscil2.WR=4
+    Oscil3.WR=4
+    Oscil4.WR=4
+    Oscil5.WR=4
+    Oscil6.WR=4
+  ENDIF
+END_CHANGE
 
 LOAD
    ;LA("OffOnNiz","cnizovi.com")
