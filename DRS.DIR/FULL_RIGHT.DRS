@@ -1,3 +1,4 @@
+
 G90 G18 DIAM90
 X0 Z=ds_tool_width+ds_podhodZ
 if ((ds_taper_length2>0) and (ds_taper_angle2<>0))

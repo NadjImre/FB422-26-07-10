@@ -16,6 +16,7 @@
 - treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao
 - ne radi dobro odskok kod poravnavanja strana i kosina
 - AL600 je vraćen za odskok u _DRESSING; ne radi ispravno kod poravnavanja čela
+- kompenzacija radijusa (G41/G42) se na FACE*.DRS ponaša drugačije nego na FULL* i PLANE*; nije hitno, pogledati kada bude vremena
 
 *** Merenje
 -  kalibracija - obezbediti i samo merenje na istom principu kao kalibracija - ručno se dovede blizu pa se pusti merenje

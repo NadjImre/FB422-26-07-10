@@ -8,8 +8,10 @@ ds_radius2=radius1var
 ds_taper_length2=duzkon1
 ds_taper_angle2=ugaokon1
 
-ds_podhodx=podhodxvar
-ds_podhodz=podhodzvar
+; AX/AZ na ovoj masci se ne koriste.
+; ds_podhodX/Z i ds_podhodXL/XR pise samo _DRESSING_SETUP.
+;ds_podhodx=podhodxvar
+;ds_podhodz=podhodzvar
 
 ds_face_depth2=Dub21
 

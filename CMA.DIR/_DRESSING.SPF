@@ -29,10 +29,20 @@ def real prekidxa
 DEF INT SPINU
 ;unutrasnje ili spoljno abrihtovanje
 DEF REAL UNUT   
-;smer poravnavanja
-def int smer_por
-;brzina primicanja odmicanja
-def int ds_rabhod = 300
+
+;Broj komada između 2 abrihtovanjaA
+IF (ds_workpieces_left<DS_WORKPIECES)
+;ako nismo dostigli broj komada posle kojeg se abrihtuje 
+;uvecamo brojac
+  ds_workpieces_left=ds_workpieces_left+1
+;i preskacemo abriht
+  GOTOF KRAJ
+else
+;inace resetujemo brojac
+;i nastavljamo sa abrihtovanjem
+  ds_workpieces_left=0
+endif
+
 ;preuzimanje T broja tocila - nedostaje provera
 BRTOC = DS_TOOL_NUM
 ;preuzimanje D brojeva za tocilo
@@ -76,11 +86,6 @@ UNUT=1
 if (ds_type<>0)
    UNUT=-1
 ENDIF
-;preuzimanje levo/desno
-smer_por=1
-if(ds_direction<>0)
-  smer_por=-1
-endif
 
 ;bezbedna udaljenos od tocila i start X za korisnicki profil
 prekidxa=DS_PODHODXL
@@ -160,10 +165,10 @@ FOR BROJAC=1 TO BrojProlaza
       STOPRE
 ;spanovanje stupa na snagu
       Trans X=$TC_DP3[BRTOC,DBRTOC1]/2 Z=$TC_DP4[BRTOC,DBRTOC1]+ds_poscorrection
-;Pocetna tacka i kompenzacija radijusa
-      G1 X0 Z=ds_podhodZL G42 F=DS_RABHOD 
-;postavka brzine brusenja
-      F=BrzAbriht
+;napred na nulu
+      G1 X0 Z=ds_podhodZL G[7]=ds_direction_L F=ds_rabhod
+;postavka brzine abrihtovanja
+      G1 F=BrzAbriht
 ;poziv programa za abriht
       CALL PROGRAM1
 ;povalcenje na visinu kamena
@@ -182,15 +187,15 @@ FOR BROJAC=1 TO BrojProlaza
          STOPRE
       endif
 ;spanovanje po Z 
-      $TC_DP4[BRTOC,DBRTOC1]=$TC_DP4[BRTOC,DBRTOC1]+korakz
+      $TC_DP4[BRTOC,DBRTOC2]=$TC_DP4[BRTOC,DBRTOC2]+korakz
       ;smanjenje sirine
       $TC_TPG5[BRTOC]=$TC_TPG5[BRTOC]-ABS(korakZ)
 ;spanovanje stupa na snagu
-      Trans X=$TC_DP3[BRTOC,DBRTOC1]/2 Z=$TC_DP4[BRTOC,DBRTOC1]+ds_poscorrection
-;Pocetna tacka i kompenzacija radijusa
-      G1 X0 Z=ds_podhodZR G41 F=DS_RABHOD 
-;postavka brzine brusenja za svaki slucaj
-     F=BrzAbriht 
+      Trans X=$TC_DP3[BRTOC,DBRTOC2]/2 Z=$TC_DP4[BRTOC,DBRTOC2]+ds_poscorrection
+;zauzimanje nule
+      G1 F=ds_rabhod X0 Z=ds_podhodZR G[7]=ds_direction_R
+;postavka brzine abrihtovanja
+      G1 F=BrzAbriht
 ;poziv programa za abriht
       CALL PROGRAM2
 ;povalcenje na visinu kamena

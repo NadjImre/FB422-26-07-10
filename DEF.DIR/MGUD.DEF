@@ -88,6 +88,8 @@ Def chan int ds_workpieces; broj komada posle kojeg se abrihtuje
 Def Chan Int ds_workpieces_left ; broj komada preostalo do abrihtovanja
 Def Chan Int ds_type ; tip poravnavanja, 0 iz plusa u minus po precniku, <>0 iz minusa u plus po precniku
 Def Chan Int ds_direction ; smer poravnavanja po z osi, 0 u plus smer
+Def Chan Int ds_direction_L ; G41/G42 levi bok, racuna _START_Z_POSITION_LEFT
+Def Chan Int ds_direction_R ; G41/G42 desni bok, racuna _START_Z_POSITION_RIGHT
 Def Chan Real ds_PosCorrection ; korekcija pozicije
 Def Chan String[100] Ds_Comment ; komentar na operaciju brusenja
 Def Chan Int Ds_Profile ; abrihtovanje sa jednosecnim (300) dvosecnim (310) ili profilnim alatom (320)

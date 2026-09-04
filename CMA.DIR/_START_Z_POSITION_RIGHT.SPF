@@ -1,0 +1,62 @@
+PROC _START_Z_POSITION_RIGHT
+
+Def Int Greska
+Def Int Izlazi
+Def Real KTAB[30,11]
+Def String[100] ProgramL
+Def String[100] ProgramR
+Def Int Brojac=1
+
+DEF REAL START_TACKA_ZL
+DEF REAL END_TACKA_ZL
+
+DEF REAL START_TACKA_ZR
+DEF REAL END_TACKA_ZR
+
+DEF REAL VISINA_X
+
+ProgramR="/_N_DRS_DIR/_N_"<<ds_conture2<<"_DRS"
+
+DiamOn
+
+Stopre
+;desna strana
+;=================================
+Brojac=1
+CONTPRON(KTAB,"L",Izlazi)
+  call ProgramR
+EXECUTE(Greska)
+
+ds_podhodZR = KTab[brojac,3]
+VISINA_X=KTab[brojac,4]
+
+while (KTab[brojac,1]>0)
+  brojac = brojac+1
+  VISINA_X=maxval(KTab[brojac,6],VISINA_X)
+endwhile
+
+START_TACKA_ZR = KTab[1,3]
+END_TACKA_ZR = KTab[brojac,5]
+;=================================
+Stopre
+
+IF (START_TACKA_ZR)>(END_TACKA_ZR)
+  ds_direction_R=3
+ELSE
+  ds_direction_R=2
+ENDIF
+
+;provera sigurnosnog dodatka i visine profila od nule
+;===================================================
+;IF (ds_profile==3) 
+  IF ds_podhodXR <= VISINA_X
+    msg("Podhod X  <  X(profil) ---- "<<"  "<<ds_podhodXR<<" < "<<VISINA_X)
+    lab_d:
+    m00
+    gotob lab_d
+  endif
+;endif
+;===================================================
+
+;M00
+M17

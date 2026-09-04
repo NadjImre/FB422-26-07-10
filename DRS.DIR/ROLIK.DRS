@@ -1,0 +1,6 @@
+
+G90 G18 ;DIAM90
+X=0
+G04 F=ds_time
+
+M17

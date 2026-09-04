@@ -44,6 +44,12 @@ endif
 if (levo==5)
    ds_conture1="ROLIK"
 endif
+if (levo==6)
+   ds_conture1="FACE_LEFT2"
+endif
+if (levo==7)
+   ds_conture1="FULL_LEFT2"
+endif
 if (desno==1)
    ds_conture2="PLANE_RIGHT"
 endif
@@ -56,42 +62,56 @@ endif
 if (desno==4)
    ds_conture2=ProgAbrihtD
 endif
-
+if (desno==5)
+   ds_conture2="FACE_RIGHT2"
+endif
+if (desno==6)
+   ds_conture2="FULL_RIGHT2"
+endif
 ds_marposs=(brojMarpossCiklusa mod 10)+80
 ds_swivelpointX=TackaX
 ds_swivelpointZ=TackaZ
 ds_approach=zaokret
 ds_BAxisAngle=UgaoB
 DS_WORKPIECES=komadavar
-ds_workpieces_left=preostalovar
+
+ds_time = preostalovar
+
 ds_coolant=hlad_a
 ds_type=Status B_and 01
 ds_comment=koment
+; AX = apsolutni X za ciklus (XL/XR) i inc X; AZ = inc Z u DRS konturi (putanja + RND)
 ds_podhodX = PodhodXVar
 ds_podhodZ = PodHodZVar
-if ((levo==1) or (levo==3))
-   ds_podhodXL=PODHODXVAR
-   ds_podhodZL=-ds_tool_width - PODHODZVAR
-else
-   ds_podhodXL=PODHODXVAR
-   ds_podhodZL=PODHODZVAR
+
+ds_podhodXL=PODHODXVAR
+ds_podhodXR=PODHODXVAR
+
+;IZMENA_C
+;provera sigurnosnog dodatka ako rade oba dijamanta
+;===================================================
+IF (ds_profile==3) 
+  IF PodhodXVar <= abs(abs($TC_DP3[ds_dresser_num,ds_dresser_dnum1])-abs($TC_DP3[ds_dresser_num,ds_dresser_dnum2]))
+    msg("Podhod X  <  X(D1-D2) ---- "<<"  "<<PodhodXVar<<" < "<<abs(abs($TC_DP3[ds_dresser_num,ds_dresser_dnum1])-abs($TC_DP3[ds_dresser_num,ds_dresser_dnum2])))
+    lab_d:
+    m00
+    gotob lab_d
+  endif
 endif
-if (levo==2)
-   ds_podhodZL=0
-endif
-if ((desno==1) or (desno==3))
-   ds_podhodXR=PODHODXVAR
-   ds_podhodZR=ds_tool_width + PODHODZVAR
-endif
-if (desno==2)
-   ds_podhodXR=PODHODXVAR
-   ds_podhodZR=0
-endif
-if (desno==4)
-   ds_podhodXR=PODHODXVAR
-   ds_podhodZR=-ds_tool_width - PODHODZVAR
-endif
-ds_direction=0;SMERABRIHT
+;===================================================
+
+IF ds_conture1 == "ROLIK"
+ELSE
+  IF LEVO>0 
+    _START_Z_POSITION_LEFT
+  ENDIF
+ENDIF
+
+  IF DESNO>0
+    _START_Z_POSITION_RIGHT
+  ENDIF
+
+;ds_direction=0;SMERABRIHT
 ds_poscorrection=KORPOZ
 
 STOPRE
