@@ -88,8 +88,9 @@ Def chan int ds_workpieces; broj komada posle kojeg se abrihtuje
 Def Chan Int ds_workpieces_left ; broj komada preostalo do abrihtovanja
 Def Chan Int ds_type ; tip poravnavanja, 0 iz plusa u minus po precniku, <>0 iz minusa u plus po precniku
 Def Chan Int ds_direction ; smer poravnavanja po z osi, 0 u plus smer
-Def Chan Int ds_direction_L ; G41/G42 levi bok, racuna _START_Z_POSITION_LEFT
-Def Chan Int ds_direction_R ; G41/G42 desni bok, racuna _START_Z_POSITION_RIGHT
+Def Chan Int ds_direction_L ; smer poravnavanja LEVO
+Def Chan Int ds_direction_R ; smer poravnavanja DESNO
+Def Chan Int ds_time ; vreme izbrusavanja kod abrihtovanja profilnom rolnom
 Def Chan Real ds_PosCorrection ; korekcija pozicije
 Def Chan String[100] Ds_Comment ; komentar na operaciju brusenja
 Def Chan Int Ds_Profile ; abrihtovanje sa jednosecnim (300) dvosecnim (310) ili profilnim alatom (320)
@@ -104,7 +105,7 @@ Def chan Real Ds_Radius1,Ds_Radius2 ; Radijus prelaza na vrhu kamena
 Def chan Real Ds_Margin1, Ds_Margin2 ; ravna fazeta na bocnoj strani kamena
 Def chan Real Ds_Taper_Length1,Ds_Taper_Length2 ; duzina konusa na precniku kamena
 Def chan Real Ds_Taper_Angle1,Ds_Taper_Angle2 ; ugao konusa na precniku kamena
-
+Def chan Int ds_rabhod = 300
 ;Parametri navoja
 DEF CHAN INT Th_Type ; tip navoja 0-spoljni, 1-unutrašnji navoj
 Def Chan Real Th_D2 ; Srednji precnik navoja

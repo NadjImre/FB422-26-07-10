@@ -15,5 +15,9 @@ ds_taper_angle1=ugaokon1
 
 ds_face_depth1=Dub21
 
+;izmena_c
+if (ugaokon1 <> 0) and (duzkon1 == 0)
+  ds_taper_length1 = $TC_TPG5[BrojAlata]
+endif
 M17
 

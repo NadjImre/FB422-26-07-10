@@ -1,0 +1,17 @@
+Proc _THREAD_WHEEL_SETUP(Int _Vrste_Navoja ,Real BOK1 ,Real UGAO1 ,Real UGAO2 ,Real RADIUS1 ,Real RADIUS2 ,Real SIRINA_W ,Real KORAK_NAVOJA ,Real PODHODX ,Real PODHODZ ,Real BrojAlata ,Real POLOZAJ_ZUBA_X3 ,Real PODIZANJE_PODNOZJA_X1 )
+
+;_Vrste_Navoja 
+Th_H=BOK1 
+Th_Alpha=UGAO1 
+Th_Beta=UGAO2 
+Th_R1=RADIUS1 
+Th_R2=RADIUS2 
+Th_B1=SIRINA_W 
+Th_Pitch=KORAK_NAVOJA 
+ds_podhodx=PODHODX 
+ds_podhodz=PODHODZ 
+;BrojAlata 
+Ds_X3=POLOZAJ_ZUBA_X3 
+Ds_X1=PODIZANJE_PODNOZJA_X1
+
+M17

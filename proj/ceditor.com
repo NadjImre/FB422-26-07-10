@@ -88,6 +88,12 @@ PRESS(VS3)
   LM("dressing","cdressing.com",1)
 END_PRESS
 
+;profil kamena za navoj (Cirina maska)
+VS5=($89673,,se1)
+PRESS(VS5)
+  LM("ThreadWheelSetup","cthread_wheel_setup.com",1)
+END_PRESS
+
 
 VS8=("<<",,se1)
 
