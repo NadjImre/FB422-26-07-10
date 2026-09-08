@@ -97,6 +97,7 @@
 89191 0 0 "Left"
 89192 0 0 "Right"
 89193 0 0 "dressing direction"
+89194 0 0 "Thread"
 89195 0 0 "Taper length"
 89196 0 0 "Taper angle"
 89197 0 0 "Position of center"

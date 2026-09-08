@@ -24,12 +24,12 @@ DEF SMER = (I///,$89223,"t",$89071/WR2///235/375,,200)
 
 ;izmena_c
 ;DEF NacinAbrihtLevo = (I/* 0=$89135, 1="Samo precnik", 2="Samo celo", 3="Precnik i celo", 4="Konturno", 5="Sa rolnom" /0/,"Alat",,"-"/WR2///235/375,,200//"POMOC.HTML","9302")
-DEF NacinAbrihtLevo = (I/* 0=$89135, 1=$89086, 2=$89087, 3=$89088, 4=$89860,5=$89193,6="Celo 2",7="Celo i precnik 2"/0/,$89689,,$89191/WR2///235,,165/375,,200//"POMOC.HTML","9302")
+DEF NacinAbrihtLevo = (I/* 0=$89135, 1=$89086, 2=$89087, 3=$89088, 4=$89860,5=$89193,6="Celo 2",7="Celo i precnik 2",8=$89194/0/,$89689,,$89191/WR2///235,,165/375,,200//"POMOC.HTML","9302")
 DEF PROGABRIHTLEVO = (S//""/$89689,$89864,,".dsr"/WR2///235/375,,200//"pomoc.html","9314")
 
 ;izmena_c
 ;DEF NACINABRIHTDesno = (I/* 0=$89135, 10="Samo precnik", 20="Samo celo", 30="Precnik i celo", 40="Konturno"/0/,$89689,,"-"/WR2///235/375,,200//"POMOC.HTML","9302")
-DEF NACINABRIHTDesno = (I/* 0=$89135, 10=$89086, 20=$89087, 30=$89088, 40=$89860,50="Celo 2",60="Celo i precnik 2"/0/,$89689,,$89192/WR2///235,,165/375,,200//"POMOC.HTML","9302")
+DEF NACINABRIHTDesno = (I/* 0=$89135, 10=$89086, 20=$89087, 30=$89088, 40=$89860,50="Celo 2",60="Celo i precnik 2",80=$89194/0/,$89689,,$89192/WR2///235,,165/375,,200//"POMOC.HTML","9302")
 DEF PROGABRIHTDESNO = (S//""/$89689,$89864,,".dsr"/WR2///235/375,,200//"pomoc.html","9314")
 
 DEF MARPOSS = (IDD/0,9/0/$89696,"Broj Marposs cikusa","","-"////235,,180/375,,200//"pomoc.html","9311")

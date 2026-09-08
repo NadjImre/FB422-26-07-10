@@ -50,6 +50,21 @@ endif
 if (levo==7)
    ds_conture1="FULL_LEFT2"
 endif
+if (levo==8)
+  IF (desno==8)
+    IF (Thread_Type==2) OR (Thread_Type==3)
+      ds_conture1="THREAD_TRAP_LEFT"
+    ELSE
+      ds_conture1="THREAD_TRI_LEFT"
+    ENDIF
+  ELSE
+    IF (Thread_Type==2) OR (Thread_Type==3)
+      ds_conture1="THREAD_TRAP_FULL"
+    ELSE
+      ds_conture1="THREAD_TRI_FULL"
+    ENDIF
+  ENDIF
+endif
 if (desno==1)
    ds_conture2="PLANE_RIGHT"
 endif
@@ -67,6 +82,21 @@ if (desno==5)
 endif
 if (desno==6)
    ds_conture2="FULL_RIGHT2"
+endif
+if (desno==8)
+  IF (levo==8)
+    IF (Thread_Type==2) OR (Thread_Type==3)
+      ds_conture2="THREAD_TRAP_RIGHT"
+    ELSE
+      ds_conture2="THREAD_TRI_RIGHT"
+    ENDIF
+  ELSE
+    IF (Thread_Type==2) OR (Thread_Type==3)
+      ds_conture2="THREAD_TRAP_FULL"
+    ELSE
+      ds_conture2="THREAD_TRI_FULL"
+    ENDIF
+  ENDIF
 endif
 ds_marposs=(brojMarpossCiklusa mod 10)+80
 ds_swivelpointX=TackaX

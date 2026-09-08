@@ -1,17 +1,29 @@
-Proc _THREAD_WHEEL_SETUP(Int _Vrste_Navoja ,Real BOK1 ,Real UGAO1 ,Real UGAO2 ,Real RADIUS1 ,Real RADIUS2 ,Real SIRINA_W ,Real KORAK_NAVOJA ,Real PODHODX ,Real PODHODZ ,Real BrojAlata ,Real POLOZAJ_ZUBA_X3 ,Real PODIZANJE_PODNOZJA_X1 )
-
-;_Vrste_Navoja 
-Th_H=BOK1 
-Th_Alpha=UGAO1 
-Th_Beta=UGAO2 
-Th_R1=RADIUS1 
-Th_R2=RADIUS2 
-Th_B1=SIRINA_W 
-Th_Pitch=KORAK_NAVOJA 
-ds_podhodx=PODHODX 
-ds_podhodz=PODHODZ 
-;BrojAlata 
-Ds_X3=POLOZAJ_ZUBA_X3 
+Proc _THREAD_WHEEL_SETUP(Int _Vrste_Navoja ,Real BOK1 ,Real UGAO1 ,Real UGAO2 ,Real RADIUS1 ,Real RADIUS2 ,Real SIRINA_W ,Real KORAK_NAVOJA ,Real PODHODX ,Real PODHODZ ,Real BrojAlata ,Real POLOZAJ_ZUBA_X3 ,Real PODIZANJE_PODNOZJA_X1,Real PODIZANJE_VRHA_X2 )
+;polozaj centra radijusa
+DEF REAL XO
+Thread_Type=_Vrste_Navoja
+Th_H=BOK1
+Th_Alpha=UGAO1
+Th_Beta=UGAO2
+Th_R1=RADIUS1
+Th_R2=RADIUS2
+Th_B2=SIRINA_W
+Th_Pitch=KORAK_NAVOJA
+Ds_X3=POLOZAJ_ZUBA_X3
 Ds_X1=PODIZANJE_PODNOZJA_X1
+Ds_X2=PODIZANJE_VRHA_X2
+
+; default imena; _DRESSING_SETUP nacin 8 precizira FULL vs LEFT/RIGHT
+IF (Thread_Type==2) OR (Thread_Type==3)
+   ds_conture1="THREAD_TRAP_FULL"
+   ds_conture2="THREAD_TRAP_FULL"
+ELSE
+;tacka centra, po radijusu zadato
+   XO = Th_H+Ds_X1-Th_R1
+;teorijska visina ostrog trougla, istovremeno pola od X koordinate vrha
+   Th_H0 = XO+Th_R1*(cos(0.5*(Th_Beta-Th_Alpha))/sin(0.5*(Th_Beta+Th_Alpha)))
+   ds_conture1="THREAD_TRI_FULL"
+   ds_conture2="THREAD_TRI_FULL"
+ENDIF
 
 M17

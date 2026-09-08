@@ -1,0 +1,9 @@
+; trougao levi bok D1 + zaobljenje na vrhu (ne prelazi na desni bok)
+; isti H_prg kao FULL da RND na vrhu zavrsi na visini H
+G90 G18 DIAM90
+G1 X=0 Z=ds_podhodz
+G1 X=0 Z=-Ds_X3+Th_H0*TAN(Th_Beta) RND=Th_R2
+G1 X=2*(Th_H+Ds_X1) Z=-Ds_X3+(Th_H0-Th_H-Ds_X1)*TAN(Th_Beta) RND=Th_R1
+G1 X=2*(Th_H+Ds_X1) Z=-Ds_X3-1-(Th_H0-Th_H-Ds_X1)*TAN(Th_Alpha)
+
+M17

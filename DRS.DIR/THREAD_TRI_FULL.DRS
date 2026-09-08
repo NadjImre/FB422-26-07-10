@@ -1,0 +1,17 @@
+; trougao kompletan, jedna ostrica
+; ds_profile==2: prilaz s desna
+G90 G18 DIAM90
+IF (ds_profile==2)
+G1 X=0 Z=-ds_tool_width-ds_podhodz
+G1 X=0 Z=-Ds_X3-Th_H0*TAN(Th_Alpha) RND=Th_R2
+G1 X=2*Th_H0 Z=-Ds_X3 RND=Th_R1
+G1 X=0 Z=-Ds_X3+Th_H0*TAN(Th_Beta) RND=Th_R2
+G1 X=0 Z=ds_podhodz
+ELSE
+G1 X=0 Z=ds_podhodz
+G1 X=0 Z=-Ds_X3+Th_H0*TAN(Th_Beta) RND=Th_R2
+G1 X=2*Th_H0 Z=-Ds_X3 RND=Th_R1
+G1 X=0 Z=-Ds_X3-Th_H0*TAN(Th_Alpha) RND=Th_R2
+G1 X=0 Z=-ds_tool_width-ds_podhodz
+ENDIF
+M17

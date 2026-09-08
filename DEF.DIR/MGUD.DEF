@@ -107,6 +107,7 @@ Def chan Real Ds_Taper_Length1,Ds_Taper_Length2 ; duzina konusa na precniku kame
 Def chan Real Ds_Taper_Angle1,Ds_Taper_Angle2 ; ugao konusa na precniku kamena
 Def chan Int ds_rabhod = 300
 ;Parametri navoja
+DEF CHAN INT Thread_Type ; vrsta profila kamena 0-metricki 1-cevni 2-trapezni 3-testerasti 4-obli
 DEF CHAN INT Th_Type ; tip navoja 0-spoljni, 1-unutrašnji navoj
 Def Chan Real Th_D2 ; Srednji precnik navoja
 Def chan real Th_Pitch ; korak navoja

@@ -13,7 +13,7 @@
 *** Poravnavanje kamena
 
 - masku cwheel_setup koji treba da ima sliku i treba da ima iscrtavanje profila ovo treba srediti
-- treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao
+- treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao (svedeno na THREAD_TRI/TRAP FULL/LEFT/RIGHT; IZRAČUNAJ iz standarda)
 - ne radi dobro odskok kod poravnavanja strana i kosina
 - AL600 je vraćen za odskok u _DRESSING; ne radi ispravno kod poravnavanja čela
 - kompenzacija radijusa (G41/G42) se na FACE*.DRS ponaša drugačije nego na FULL* i PLANE*; nije hitno, pogledati kada bude vremena
