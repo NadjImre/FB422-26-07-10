@@ -35,7 +35,7 @@ DEF PODHODZ = (R1/0,50/5/,,"AZ",$89068/WR4///255,,200/435,,120)
 Def Alat = (S///,,,/Wr1///255,,200/435,,120)
 Def BrojAlata = (I//1/,,"","."/wr4///255,,200/435,,120)
 Def _ac = (r4///,,"","."/wr4///255,,200/435,,120) ;zazor kod trapeznog navoja između matice i vijka
-;Def _bc = (r4///,,"","."/wr4///255,,200/435,,120) ;zazor kod trapeznog navoja između vijka i matice _bc=_ac
+;Def _bc = (r4///,,"","."/wr4///255,,200/435,,120) ;zazor kod trapeznog navoja između vijka i matice ;_bc=_ac
 
 DEF Graph = (W///,"slesgraphcustomwidget.SlEsGraphCustomWidget"/////0,0,250,360/0,0,0,0)
 DEF Slika = (I///,,,/wr1///0,0,250,360/0,320,25,2) 
@@ -126,7 +126,7 @@ Press(vs4)
     UGAO2=15
 
     ;vredosti su iz GOST - tablice
-    if KORAK_NAVOJA==1.5
+    if (KORAK_NAVOJA<2)
       RADIUS2=0.075 ;R2 max = ac/2
       RADIUS1=0.15 ;R1 max = ac
       _ac=0.15
@@ -136,12 +136,12 @@ Press(vs4)
       RADIUS1=0.25
       _ac=0.25
     endif
-    if (KORAK_NAVOJA>=6) and (KORAK_NAVOJA<=12)
+    if (KORAK_NAVOJA>5) and (KORAK_NAVOJA<=12)
       RADIUS2=0.25
       RADIUS1=0.5
       _ac=0.5
     endif
-    if (KORAK_NAVOJA>=14) and (KORAK_NAVOJA<=44)
+    if (KORAK_NAVOJA>12)
       RADIUS2=0.5
       RADIUS1=1.0 
       _ac=1.0
@@ -155,7 +155,7 @@ Press(vs4)
   ENDIF
 
   ;testerasti
-  IF _Vrste_Navoja == 3
+  IF (_Vrste_Navoja == 3)
     
     UGAO1=30
     UGAO2=3
@@ -167,7 +167,7 @@ Press(vs4)
     ;BOK1=0.86777*KORAK_NAVOJA - PODIZANJE_VRHA_X2
     BOK1=0.75*KORAK_NAVOJA ;bez zazora x2
    
-    SIRINA_W=(0.5*KORAK_NAVOJA) - ((0.409*KORAK_NAVOJA+PODIZANJE_VRHA_X2)*(TAN(SRAD(UGAO1))+TAN(SRAD(UGAO2))))
+    SIRINA_W=(0.5*KORAK_NAVOJA) - ((0.375*KORAK_NAVOJA+PODIZANJE_VRHA_X2)*(TAN(SRAD(UGAO1))+TAN(SRAD(UGAO2))))
     PODIZANJE_PODNOZJA_X1=0
     
   ENDIF
@@ -265,7 +265,7 @@ change (PODIZANJE_VRHA_X2)
 
     ;BOK1=0.75*KORAK_NAVOJA; - PODIZANJE_VRHA_X2
    
-    SIRINA_W=(0.5*KORAK_NAVOJA) - ((0.409*KORAK_NAVOJA+PODIZANJE_VRHA_X2)*(TAN(SRAD(UGAO1))+TAN(SRAD(UGAO2))))   ;----(_ac*tan(15)*2)
+    SIRINA_W=(0.5*KORAK_NAVOJA) - ((0.375*KORAK_NAVOJA+PODIZANJE_VRHA_X2)*(TAN(SRAD(UGAO1))+TAN(SRAD(UGAO2))))   ;----(_ac*tan(15)*2)
     ;PODIZANJE_PODNOZJA_X1=0
     
   ENDIF
@@ -331,7 +331,7 @@ end_change
 LOAD
    KORAK_NAVOJA.bc=9
 
-   if (_Vrste_Navoja == 2) or (_Vrste_Navoja == 3)
+   if ((_Vrste_Navoja == 2) or (_Vrste_Navoja == 3))
      ;trapezni i testerasti
      SIRINA_W.wr=2
      PODIZANJE_VRHA_X2.wr=2

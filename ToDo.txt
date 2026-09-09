@@ -13,7 +13,14 @@
 *** Poravnavanje kamena
 
 - masku cwheel_setup koji treba da ima sliku i treba da ima iscrtavanje profila ovo treba srediti
-- treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao (svedeno na THREAD_TRI/TRAP FULL/LEFT/RIGHT; IZRAČUNAJ iz standarda)
+- treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao (svedeno na THREAD_TRI/TRAP FULL/LEFT/RIGHT; IZRAČUNAJ iz standarda)-URAĐENO sa primedbama:
+    + kod testerastog pravi ravan vrh a po standardu treba radijus
+    + konusni navoji se traže po ugovoru ali se ne uklapaju u sistem - pokušati sa promenom u trouglastim profilima ili 
+    + za brusšenje navoja usecanjem trebaju višesečna tocila koja ovde nisu podržana , samo za FULL verziju treba dopuniti
+    + cthread_wheel_setup.com je prepun komentarisanih linija, treba srediti kod
+    + blokada polja koje se ne koriste ili proračunavaju
+    + opšti (univerzalni) profili za trougao i trapez u masku 
+
 - ne radi dobro odskok kod poravnavanja strana i kosina
 - AL600 je vraćen za odskok u _DRESSING; ne radi ispravno kod poravnavanja čela
 - kompenzacija radijusa (G41/G42) se na FACE*.DRS ponaša drugačije nego na FULL* i PLANE*; nije hitno, pogledati kada bude vremena

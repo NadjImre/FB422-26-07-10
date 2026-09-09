@@ -3,5 +3,5 @@ G90 G18 DIAM90
 G1 X=0 Z=ds_podhodz
 G1 X=0 Z=-Ds_X3+Th_B2/2+(Ds_X1+Ds_X2+Th_H)*TAN(Th_Beta) RND=Th_R2
 G1 X=2*(Th_H+Ds_X1+Ds_X2) Z=-Ds_X3+Th_B2/2 RND=Th_R1
-G1 X=2*(Th_H+Ds_X1+Ds_X2) Z=-Ds_X3
+G1 X=2*(Th_H+Ds_X1+Ds_X2) Z=-Ds_X3-1
 M17
