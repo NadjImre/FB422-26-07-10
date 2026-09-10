@@ -14,7 +14,7 @@ Ds_X1=PODIZANJE_PODNOZJA_X1
 Ds_X2=PODIZANJE_VRHA_X2
 
 ; default imena; _DRESSING_SETUP nacin 8 precizira FULL vs LEFT/RIGHT
-IF (Thread_Type==2) OR (Thread_Type==3)
+IF (Thread_Type==2) OR (Thread_Type==3) OR (Thread_Type==6)
    ds_conture1="THREAD_TRAP_FULL"
    ds_conture2="THREAD_TRAP_FULL"
 ELSE
