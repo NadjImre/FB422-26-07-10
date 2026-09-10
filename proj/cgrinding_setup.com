@@ -1,127 +1,127 @@
 
-//M(GrindingSetup/$89172)
+//M(GrindingSetup/$89044)
 ;FB422
 
-DEF RB0= (S//"RB"/,,,,/WR1///15,,140/6,10,23//"pomoc.html","9218"),
-DUB0 = (S//"Dubina"/$89210/wr1////30,10,44//"pomoc.html","9218"),
-PROL0 = (s//"Prol.Brus."/$89212/wr1////75,10,44//"pomoc.html","9218"),
-ZBIR0 = (s//"Zbir3"/$89212,,,/wr1////120,10,44//"pomoc.html","9218"),
-PROLDOABR0 = (s//"Prol.do"/$89212,,,/wr1////165,10,44//"pomoc.html","9218"),
-PROLABR0=(s//"Prol.Abriht."/$89212,,,/wr1////210,10,44//"pomoc.html","9218"),
-DUBABR0 = (s//"Dub.Abrihr."/$89212,,,/wr1////255,10,44//"pomoc.html","9218"),
-PAUSA0 = (s//"Pausa5"/$89212,,,/wr1////300,10,44//"pomoc.html","9218"),
-BRZABR0 = (s//"Brz.Abriht."/$89212,,,/wr1////345,10,44//"pomoc.html","9218"),
-BRZKAMABR0 = (s//"Brz.kam.abr."/$89212,,,/wr1////390,10,44//"pomoc.html","9218"),
-BRZROL0 = (s//"Brz.rolna"/$89212,,,/wr1////435,10,44//"pomoc.html","9218"),
-BROBRTKOM0 = (s//"BrObrt.Kom."/$89212,,,/wr1////480,10,44//"pomoc.html","9218"),
-BRZKAMBRUS0 = (s//"Brz.Kam.Brus."/$89212,,,/wr1////525,10,44//"pomoc.html","9218")
+DEF RB0= (S//$89294/,,,,/WR1///15,,140/6,10,23//"pomoc.html","9218"),
+DUB0 = (S//$89270/$89054/wr1////30,10,44//"pomoc.html","9218"),
+PROL0 = (s//$89271/$89055/wr1////75,10,44//"pomoc.html","9218"),
+ZBIR0 = (s//$89272/$89055,,,/wr1////120,10,44//"pomoc.html","9218"),
+PROLDOABR0 = (s//$89273/$89055,,,/wr1////165,10,44//"pomoc.html","9218"),
+PROLABR0=(s//$89274/$89055,,,/wr1////210,10,44//"pomoc.html","9218"),
+DUBABR0 = (s//$89275/$89055,,,/wr1////255,10,44//"pomoc.html","9218"),
+PAUSA0 = (s//$89276/$89055,,,/wr1////300,10,44//"pomoc.html","9218"),
+BRZABR0 = (s//$89277/$89055,,,/wr1////345,10,44//"pomoc.html","9218"),
+BRZKAMABR0 = (s//$89278/$89055,,,/wr1////390,10,44//"pomoc.html","9218"),
+BRZROL0 = (s//$89279/$89055,,,/wr1////435,10,44//"pomoc.html","9218"),
+BROBRTKOM0 = (s//$89280/$89055,,,/wr1////480,10,44//"pomoc.html","9218"),
+BRZKAMBRUS0 = (s//$89281/$89055,,,/wr1////525,10,44//"pomoc.html","9218")
 
 DEF RB1 = (I//1/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB1 = (R4/0,10/0.5/"Dubina brusenja po jednom prolazu"/////30,,44//"pomoc.html","9218"),
-PROL1 = (I/0,1/100/"Broj prolaza brusenja za ovu fazu"/////75,,44//"pomoc.html","9218"),
-ZBIR1 = (R4//0/"Kolicina materijala koji se skida u ovoj fazi",,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR1 = (I//0/"Broj prolaza posle kojeg se radi abrihtovanje",,,/////164,,44//"pomoc.html","9218"),
-PROLABR1=(I//0/"Broj prolaza poravnavanja za svako abrihtovanje",,,/////210,,44//"pomoc.html","9218"),
-DUBABR1 = (R3//0/"Dubina za jedan prolaz abrihtovanja",,,/////255,,44//"pomoc.html","9218"),
-PAUSA1 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR1 = (I//100/"Brzina abrihtovanja",,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR1 = (R1//10/"Obimna brzina kamena kod abrihtovanja",,,/////390,,44//"pomoc.html","9218"),
-BRZROL1 = (R1//-0.5/"Faktor brzine rolne (obimna brzina rolne/obimna brzina kamena)",,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM1 = (R1//10/"Broj obrtaja komada u toku brusenja",,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS1 = (R1//10/"Obimna brzina kamena kod brusenje",,,/////525,,44//"pomoc.html","9218")
+DUB1 = (R4/0,10/0.5/$89295/////30,,44//"pomoc.html","9218"),
+PROL1 = (I/0,1/100/$89296/////75,,44//"pomoc.html","9218"),
+ZBIR1 = (R4//0/$89297,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR1 = (I//0/$89298,,,/////164,,44//"pomoc.html","9218"),
+PROLABR1=(I//0/$89299,,,/////210,,44//"pomoc.html","9218"),
+DUBABR1 = (R3//0/$89300,,,/////255,,44//"pomoc.html","9218"),
+PAUSA1 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR1 = (I//100/$89301,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR1 = (R1//10/$89302,,,/////390,,44//"pomoc.html","9218"),
+BRZROL1 = (R1//-0.5/$89303,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM1 = (R1//10/$89304,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS1 = (R1//10/$89305,,,/////525,,44//"pomoc.html","9218")
 
 DEF RB2 = (I//2/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB2 = (R4/0,10/0.5/$89210/////30,,44//"pomoc.html","9218"),
-PROL2 = (I/0,1/1/$89212/////75,,44//"pomoc.html","9218"),
-ZBIR2 = (R4//0/$89212,,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR2 = (I//0/$89212,,,/////165,,44//"pomoc.html","9218"),
-PROLABR2=(I//0/$89212,,,/////210,,44//"pomoc.html","9218"),
-DUBABR2 = (R3//0/$89212,,,/////255,,44//"pomoc.html","9218"),
-PAUSA2 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR2 = (I//100/$89212,,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR2 = (R1//10/$89212,,,/////390,,44//"pomoc.html","9218"),
-BRZROL2 = (R1//-0.5/$89212,,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM2 = (R1//10/$89212,,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS2 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218")
+DUB2 = (R4/0,10/0.5/$89054/////30,,44//"pomoc.html","9218"),
+PROL2 = (I/0,1/1/$89055/////75,,44//"pomoc.html","9218"),
+ZBIR2 = (R4//0/$89055,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR2 = (I//0/$89055,,,/////165,,44//"pomoc.html","9218"),
+PROLABR2=(I//0/$89055,,,/////210,,44//"pomoc.html","9218"),
+DUBABR2 = (R3//0/$89055,,,/////255,,44//"pomoc.html","9218"),
+PAUSA2 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR2 = (I//100/$89055,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR2 = (R1//10/$89055,,,/////390,,44//"pomoc.html","9218"),
+BRZROL2 = (R1//-0.5/$89055,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM2 = (R1//10/$89055,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS2 = (R1//10/$89055,,,/////525,,44//"pomoc.html","9218")
 
 DEF RB3 = (I//3/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB3 = (R4/0,10/0.5/$89210/////30,,44//"pomoc.html","9218"),
-PROL3 = (I/0,1/1/$89212/////75,,44//"pomoc.html","9218"),
-ZBIR3 = (R4//0/$89212,,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR3 = (I//0/$89212,,,/////165,,44//"pomoc.html","9218"),
-PROLABR3=(I//0/$89212,,,/////210,,44//"pomoc.html","9218"),
-DUBABR3 = (R3//0/$89212,,,/////255,,44//"pomoc.html","9218"),
-PAUSA3 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR3 = (I//100/$89212,,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR3 = (R1//10/$89212,,,/////390,,44//"pomoc.html","9218"),
-BRZROL3 = (R1//-0.5/$89212,,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM3 = (R1//10/$89212,,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS3 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218") 
+DUB3 = (R4/0,10/0.5/$89054/////30,,44//"pomoc.html","9218"),
+PROL3 = (I/0,1/1/$89055/////75,,44//"pomoc.html","9218"),
+ZBIR3 = (R4//0/$89055,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR3 = (I//0/$89055,,,/////165,,44//"pomoc.html","9218"),
+PROLABR3=(I//0/$89055,,,/////210,,44//"pomoc.html","9218"),
+DUBABR3 = (R3//0/$89055,,,/////255,,44//"pomoc.html","9218"),
+PAUSA3 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR3 = (I//100/$89055,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR3 = (R1//10/$89055,,,/////390,,44//"pomoc.html","9218"),
+BRZROL3 = (R1//-0.5/$89055,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM3 = (R1//10/$89055,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS3 = (R1//10/$89055,,,/////525,,44//"pomoc.html","9218") 
 
 DEF RB4 = (I//4/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB4 = (R4/0,10/0.5/$89210/////30,,44//"pomoc.html","9218"),
-PROL4 = (I/0,1/1/$89212/////75,,44//"pomoc.html","9218"),
-ZBIR4 = (R4//0/$89212,,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR4 = (I//0/$89212,,,/////165,,44//"pomoc.html","9218"),
-PROLABR4=(I//0/$89212,,,/////210,,44//"pomoc.html","9218"),
-DUBABR4 = (R3//0/$89212,,,/////255,,44//"pomoc.html","9218"),
-PAUSA4 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR4 = (I//100/$89212,,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR4 = (R1//10/$89212,,,/////390,,44//"pomoc.html","9218"),
-BRZROL4 = (R1//-0.5/$89212,,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM4 = (R1//10/$89212,,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS4 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218") 
+DUB4 = (R4/0,10/0.5/$89054/////30,,44//"pomoc.html","9218"),
+PROL4 = (I/0,1/1/$89055/////75,,44//"pomoc.html","9218"),
+ZBIR4 = (R4//0/$89055,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR4 = (I//0/$89055,,,/////165,,44//"pomoc.html","9218"),
+PROLABR4=(I//0/$89055,,,/////210,,44//"pomoc.html","9218"),
+DUBABR4 = (R3//0/$89055,,,/////255,,44//"pomoc.html","9218"),
+PAUSA4 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR4 = (I//100/$89055,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR4 = (R1//10/$89055,,,/////390,,44//"pomoc.html","9218"),
+BRZROL4 = (R1//-0.5/$89055,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM4 = (R1//10/$89055,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS4 = (R1//10/$89055,,,/////525,,44//"pomoc.html","9218") 
 
 DEF RB5 = (I//5/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB5 = (R4/0,10/0.5/$89210/////30,,44//"pomoc.html","9218"),
-PROL5 = (I/0,1/1/$89212/////75,,44//"pomoc.html","9218"),
-ZBIR5 = (R4//0/$89212,,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR5 = (I//0/$89212,,,/////165,,44//"pomoc.html","9218"),
-PROLABR5=(I//0/$89212,,,/////210,,44//"pomoc.html","9218"),
-DUBABR5 = (R3//0/$89212,,,/////255,,44//"pomoc.html","9218"),
-PAUSA5 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR5 = (I//100/$89212,,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR5 = (R1//10/$89212,,,/////390,,44//"pomoc.html","9218"),
-BRZROL5 = (R1//-0.5/$89212,,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM5 = (R1//10/$89212,,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS5 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218")
+DUB5 = (R4/0,10/0.5/$89054/////30,,44//"pomoc.html","9218"),
+PROL5 = (I/0,1/1/$89055/////75,,44//"pomoc.html","9218"),
+ZBIR5 = (R4//0/$89055,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR5 = (I//0/$89055,,,/////165,,44//"pomoc.html","9218"),
+PROLABR5=(I//0/$89055,,,/////210,,44//"pomoc.html","9218"),
+DUBABR5 = (R3//0/$89055,,,/////255,,44//"pomoc.html","9218"),
+PAUSA5 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR5 = (I//100/$89055,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR5 = (R1//10/$89055,,,/////390,,44//"pomoc.html","9218"),
+BRZROL5 = (R1//-0.5/$89055,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM5 = (R1//10/$89055,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS5 = (R1//10/$89055,,,/////525,,44//"pomoc.html","9218")
 
 DEF RB6 = (I//6/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
-DUB6 = (R4/0,10/0.5/$89210/////30,,44//"pomoc.html","9218"),
-PROL6 = (I/0,1/1/$89212/////75,,44//"pomoc.html","9218"),
-ZBIR6 = (R4//0/$89212,,,/wr1////120,,44//"pomoc.html","9218"),
-PROLDOABR6 = (I//0/$89212,,,/////165,,44//"pomoc.html","9218"),
-PROLABR6=(I//0/$89212,,,/////210,,44//"pomoc.html","9218"),
-DUBABR6 = (R3//0/$89212,,,/////255,,44//"pomoc.html","9218"),
-PAUSA6 = (R3//0/$89212,,,/wr2////300,,44//"pomoc.html","9218"),
-BRZABR6 = (I//100/$89212,,,/////345,,44//"pomoc.html","9218"),
-BRZKAMABR6 = (R1//10/$89212,,,/////390,,44//"pomoc.html","9218"),
-BRZROL6 = (R1//-0.5/$89212,,,/////435,,44//"pomoc.html","9218"),
-BROBRTKOM6 = (R1//10/$89212,,,/////480,,44//"pomoc.html","9218"),
-BRZKAMBRUS6 = (R1//10/$89212,,,/////525,,44//"pomoc.html","9218")
+DUB6 = (R4/0,10/0.5/$89054/////30,,44//"pomoc.html","9218"),
+PROL6 = (I/0,1/1/$89055/////75,,44//"pomoc.html","9218"),
+ZBIR6 = (R4//0/$89055,,,/wr1////120,,44//"pomoc.html","9218"),
+PROLDOABR6 = (I//0/$89055,,,/////165,,44//"pomoc.html","9218"),
+PROLABR6=(I//0/$89055,,,/////210,,44//"pomoc.html","9218"),
+DUBABR6 = (R3//0/$89055,,,/////255,,44//"pomoc.html","9218"),
+PAUSA6 = (R3//0/$89055,,,/wr2////300,,44//"pomoc.html","9218"),
+BRZABR6 = (I//100/$89055,,,/////345,,44//"pomoc.html","9218"),
+BRZKAMABR6 = (R1//10/$89055,,,/////390,,44//"pomoc.html","9218"),
+BRZROL6 = (R1//-0.5/$89055,,,/////435,,44//"pomoc.html","9218"),
+BROBRTKOM6 = (R1//10/$89055,,,/////480,,44//"pomoc.html","9218"),
+BRZKAMBRUS6 = (R1//10/$89055,,,/////525,,44//"pomoc.html","9218")
 
-DEF ZBIR=(R4//0/$89212,,,/wr1////120,,44/10,126/)
+DEF ZBIR=(R4//0/$89055,,,/wr1////120,,44/10,126/)
 
-DEF FILTER=(I/* 0=$89152, 150=$89079, 200=$89081, 300=$89516, 304=$89518, 840="Konturno"/0/,"Filter",,/wr2///400,175,100/450,175,120//)
+DEF FILTER=(I/* 0=$89037, 150=$89017, 200=$89018, 300=$89089, 304=$89090, 840=$89177/0/,$89180,,/wr2///400,175,100/450,175,120//)
 
-DEF RB00= (S//"RB"/,,,,/WR1///15,200,140/6,200,23//"pomoc.html","9218"),
-BrzOccil0 = (s//"Brzina_Osc"/$89212/wr1////30,200,50//"pomoc.html","9218"),
-Korak0 = (s//"Korak"/$89212,,,/wr1////90,200,50//"pomoc.html","9218"),
-Zadr01 = (s//"Zadr1"/$89212,,,/wr1////150,200,50//"pomoc.html","9218"),
-Zadr02 = (s//"Zadr2"/$89212,,,/wr1////210,200,50//"pomoc.html","9218"),
-Primicanje0=(s//"Prilaz"/$89212,,,/wr1////270,200,50//"pomoc.html","9218"),
-BrzinaUsecanja0 = (s//"BrzUsec"/$89212,,,/wr1////330,200,50//"pomoc.html","9218"),
-Oscil0 = (s//"Oscil lenght"/$89212,,,/wr1////390,200,50//"pomoc.html","9218"),
-Izbrusavanje0 = (s//"Izbrus"/$89212,,,/wr1////450,200,50//"pomoc.html","9218"),
-PrecnikOdskoka0 = (s//"PrecOdskok"/$89212,,,/wr1////510,200,50//"pomoc.html","9218")
+DEF RB00= (S//$89294/,,,,/WR1///15,200,140/6,200,23//"pomoc.html","9218"),
+BrzOccil0 = (s//$89282/$89055/wr1////30,200,50//"pomoc.html","9218"),
+Korak0 = (s//$89283/$89055,,,/wr1////90,200,50//"pomoc.html","9218"),
+Zadr01 = (s//$89284/$89055,,,/wr1////150,200,50//"pomoc.html","9218"),
+Zadr02 = (s//$89285/$89055,,,/wr1////210,200,50//"pomoc.html","9218"),
+Primicanje0=(s//$89286/$89055,,,/wr1////270,200,50//"pomoc.html","9218"),
+BrzinaUsecanja0 = (s//$89287/$89055,,,/wr1////330,200,50//"pomoc.html","9218"),
+Oscil0 = (s//$89288/$89055,,,/wr1////390,200,50//"pomoc.html","9218"),
+Izbrusavanje0 = (s//$89289/$89055,,,/wr1////450,200,50//"pomoc.html","9218"),
+PrecnikOdskoka0 = (s//$89290/$89055,,,/wr1////510,200,50//"pomoc.html","9218")
 
 DEF RB10 = (I//1/,,,,/wr1///15,,140/6,,23//"pomoc.html","9218"),
 BrzOscil1 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak1 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr11 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr12 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje1=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja1 = (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje1=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja1 = (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil1 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje1 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka1 = (R3////wr2////510,,50//"pomoc.html","9218")
@@ -131,8 +131,8 @@ BrzOscil2 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak2 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr21 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr22 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje2=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja2 = (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje2=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja2 = (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil2 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje2 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka2 = (R3////wr2////510,,50//"pomoc.html","9218")
@@ -142,8 +142,8 @@ BrzOscil3 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak3 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr31 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr32 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje3=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja3= (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje3=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja3= (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil3 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje3 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka3 = (R3////wr2////510,,50//"pomoc.html","9218")
@@ -153,8 +153,8 @@ BrzOscil4 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak4 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr41 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr42 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje4=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja4 = (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje4=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja4 = (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil4 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje4 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka4 = (R3////wr2////510,,50//"pomoc.html","9218")
@@ -164,8 +164,8 @@ BrzOscil5 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak5 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr51 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr52 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje5=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja5 = (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje5=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja5 = (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil5 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje5 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka5 = (R3////wr2////510,,50//"pomoc.html","9218")
@@ -175,14 +175,14 @@ BrzOscil6 = (R3/0,6000/600//wr2////30,,50//"pomoc.html","9218"),
 Korak6 = (R3/0,0.2/0.02//wr2////90,,50//"pomoc.html","9218"),
 Zadr61 = (r1/-2,12/-2//wr2////150,,50//"pomoc.html","9218"),
 Zadr62 = (r1/-2,12/-2//wr2////210,,50//"pomoc.html","9218"),
-Primicanje6=(I/*0=$89156,1=$89157,-1=$89158/0/$89122/////270,,50//"pomoc.html","9226"),
-BrzinaUsecanja6 = (R3/0,10/1/$89218/////330,,50//"pomoc.html","9219"),
+Primicanje6=(I/*0=$89040,1=$89041,-1=$89042/0/$89028/////270,,50//"pomoc.html","9226"),
+BrzinaUsecanja6 = (R3/0,10/1/$89056/////330,,50//"pomoc.html","9219"),
 Oscil6 = (R3/-10,10/0//wr2////390,,50//"pomoc.html","9218"),
 Izbrusavanje6 = (r1/0,100/0//wr2////450,,50//"pomoc.html","9222"),
 PrecnikOdskoka6 = (R3////wr2////510,,50//"pomoc.html","9218")
 
-VS8=("OK",,se1)
-VS7=($89842,,se1)
+VS8=($89163,,se1)
+VS7=($89157,,se1)
 
 OUTPUT(NCCODE1)
   "_GRINDING_SETUP(" RB1 "," DUB1 "," PROL1 "," PAUSA1 "," PROLDOABR1 "," PROLABR1 "," DUBABR1 "," BRZABR1 "," BRZKAMABR1 "," BRZROL1 "," BROBRTKOM1 "," BRZKAMBRUS1")"
@@ -444,28 +444,28 @@ RB3 = 3
 RB4 = 4
 RB5 = 5
 RB6 = 6
-DUB0 = "Dodatak"
-PROL0 = "On/Off"
-ZBIR0 = "Zbir"
-PAUSA0 = "Dub. Z"
-PROLDOABR0 = "Prol.do"
-PROLABR0="Prol.Abriht."
-DUBABR0 = "Dub.Abrihr."
-BRZABR0 = "Brz.Abriht."
-BRZKAMABR0 = "Brz.kam.abr."
-BRZROL0 = "Brz.rolna"
-BROBRTKOM0 = "BrObrt.Kom."
-BRZKAMBRUS0 = "Brz.Kam.Brus."
-RB00="RB"
-BrzOccil0 = "Brzina_Osc"
-Korak0 = "Korak"
-Zadr01 = "Zadr1"
-Zadr02 = "Zadr2"
-Primicanje0="Prilaz"
-BrzinaUsecanja0 = "BrzUsec"
-Oscil0 = "Oscil lenght"
-Izbrusavanje0 = "Izbrus"
-PrecnikOdskoka0 = "PrecOdskok"
+DUB0 = $89291
+PROL0 = $89292
+ZBIR0 = $89272
+PAUSA0 = $89293
+PROLDOABR0 = $89273
+PROLABR0=$89274
+DUBABR0 = $89275
+BRZABR0 = $89277
+BRZKAMABR0 = $89278
+BRZROL0 = $89279
+BROBRTKOM0 = $89280
+BRZKAMBRUS0 = $89281
+RB00=$89294
+BrzOccil0 = $89282
+Korak0 = $89283
+Zadr01 = $89284
+Zadr02 = $89285
+Primicanje0=$89286
+BrzinaUsecanja0 = $89287
+Oscil0 = $89288
+Izbrusavanje0 = $89289
+PrecnikOdskoka0 = $89290
 zbir6=dub6*prol6
 zbir5=dub5*prol5
 zbir4=dub4*prol4

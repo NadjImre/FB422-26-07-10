@@ -1,19 +1,19 @@
 
 //S(Start)
 
-HS3=($89075,,se1)
+HS3=($89016,,se1)
 ;aktivira vertikalni meni za brušenje
 PRESS(HS3)
   LS("brusenje","ceditor.COM",1)
 END_PRESS
 
-HS4=($89151,,se1)
+HS4=($89036,,se1)
 ;aktivira vertikalni meni za poravanavnje
 PRESS(HS4)
   LS("poravnavanje","ceditor.com",1)
 END_PRESS
 
-HS5=($89786,,se1)
+HS5=($89147,,se1)
 ;aktivira vertikalni meni za merenje
 PRESS(HS5)
   LS("merenje","ceditor.com",1)
@@ -25,37 +25,37 @@ END_PRESS
 ;definicije za brušenje
 
 ;rezimi obrade "feed and speeds"
-VS1=("Grinding%nSetup",,se1)
+VS1=($89164,,se1)
 PRESS(VS1)
   LM("GrindingSetup","cgrinding_setup.com",1)
 END_PRESS
 
 ;brusenje osnovne funkcije ->usecanje, oscilacije, kombinovano, čelo, konus
-VS2=($89075,,se1)
+VS2=($89016,,se1)
 PRESS(VS2)
   LM("Grinding","cgrinding.com",1)
 END_PRESS
 
 ;podesavanje brusenja navoja
-VS3=("Thread%nSetup",,se1)
+VS3=($89165,,se1)
 PRESS(VS3)
   LM("ThreadSetup","cthread_setup.com",1)
 END_PRESS
 
 ;brusenje navoja
-VS4=("Thread%nGrinding",,se1)
+VS4=($89166,,se1)
 PRESS(VS4)
   LM("ThreadGrinding","cthread_grinding.com",1)
 END_PRESS
 
 ;brušenje sa mernom glavom
-VS5=("Thread%nStart-End",,se1)
+VS5=($89167,,se1)
 PRESS(VS5)
   LM("Thread_StartEnd_Setup","cthread_startend_setup.com")
 END_PRESS
 
 ;kontura brusenja
-VS7=("Workpiece%nSetup",,se1)
+VS7=($89168,,se1)
 PRESS(VS7)
   LM("WorkpieceSetup","cworkpiece.com")
 END_PRESS
@@ -71,25 +71,25 @@ END_PRESS
 //S(poravnavanje)
 
 ;Podesavanje oblika kamena
-VS1=("Wheel%nSetup",,se1)
+VS1=($89169,,se1)
 PRESS(VS1)
   LM("WheelSetup","cwheel_setup.com",1)
 END_PRESS
 
 ;podesavanje abrihtera
-VS2=("Dressing%nSetup",,se1)
+VS2=($89170,,se1)
 PRESS(VS2)
   LM("DressingSetup","cdressing_setup.com",1)
 END_PRESS
 
 ;PORAVNAVANJW
-VS3=("Dressing",,se1)
+VS3=($89036,,se1)
 PRESS(VS3)
   LM("dressing","cdressing.com",1)
 END_PRESS
 
 ;profil kamena za navoj (Cirina maska)
-VS5=($89673,,se1)
+VS5=($89127,,se1)
 PRESS(VS5)
   LM("ThreadWheelSetup","cthread_wheel_setup.com",1)
 END_PRESS
@@ -107,39 +107,39 @@ END_PRESS
 
 
 ;rekalibracija
-VS2=("Diameter%nrecalibration",,se1)
+VS2=($89171,,se1)
 Press(Vs2)
     LM("probe_recalibration","cprobe_recalibration.com",1) 
 End_Press
 
 ;aksialno pozicioniranje
-VS3=("Measuring%nwith probe",,se1)
+VS3=($89172,,se1)
 Press(Vs3)
     LM("probe_measuring","cprobe_measuring.com",1) 
 End_Press
 
 ;kalibracija po obe ose
 ;tekstovi ne odgovaraju
-VS4=("Probe%nCalibration",,se1)
+VS4=($89173,,se1)
 PRESS(VS4)
     LM("probe_calibration","cprobe_calibration.com",1)
 END_PRESS
 
 ;merenje sirine
-VS5=("Width%nMeasurment",,se1)
+VS5=($89174,,se1)
 PRESS(VS5)
     LM("probe_width","cprobe_width.com",1)
 END_PRESS
 
 ;Orjentacjia po C
-VS6=("C axis%nPosition,,se1)
+VS6=($89175,,se1)
 PRESS(VS6)
     LM("probe_caxis_position","cprobe_caxis_position.com",1)
 END_PRESS
 
 
 ;merenje navoja
-VS7=("Thread%nmeasurment",,se1)
+VS7=($89176,,se1)
 Press(Vs7)
     LM("probe_thread","cprobe_thread.com",1) 
 End_Press

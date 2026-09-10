@@ -2,23 +2,23 @@
 ;FB290
 ;april 2020
 
-DEF PROFIL = (I/* 0=$89191,1=$89192/0/,$89832,,/WR2///255,,200/435,,120)
+DEF PROFIL = (I/* 0=$89046,1=$89047/0/,$89156,,/WR2///255,,200/435,,120)
 
-DEF BOK1 = (R1/-10,210/0/,$89127,"H",$89068////255,,200/435,,120//"POMOC.HTML","9409")
-DEF UGAO1 = (R1/-20,20/0/,$89126,"A",$89072////255,,200/435,,120//"POMOC.HTML","9410")
-DEF DUB1 = (R1/0,2/0/,$89126,"K",$89068////255,,200/435,,120//"POMOC.HTML","9410")
-DEF FAZETA1 = (R1/0,30/0/,$89128,"F",$89068////255,,200/435,,120//"POMOC.HTML","9411")
-DEF RADIUS1 = (R2/-150,150/0/,$89129,"R",$89068////255,,200/435,,120//"POMOC.HTML","9412")
+DEF BOK1 = (R1/-10,210/0/,$89030,"H",$89009////255,,200/435,,120//"POMOC.HTML","9409")
+DEF UGAO1 = (R1/-20,20/0/,$89029,"A",$89013////255,,200/435,,120//"POMOC.HTML","9410")
+DEF DUB1 = (R1/0,2/0/,$89029,"K",$89009////255,,200/435,,120//"POMOC.HTML","9410")
+DEF FAZETA1 = (R1/0,30/0/,$89031,"F",$89009////255,,200/435,,120//"POMOC.HTML","9411")
+DEF RADIUS1 = (R2/-150,150/0/,$89032,"R",$89009////255,,200/435,,120//"POMOC.HTML","9412")
 
-DEF DUZKON1 = (R1/0,100/0/,$89195,"L",$89068////255,,200/435,,120//"POMOC.HTML","9413")
-DEF UGAOKON1 = (R4/-45,45/0/,$89196,"B",$89072////255,,200/435,,120//"POMOC.HTML","9414")
+DEF DUZKON1 = (R1/0,100/0/,$89050,"L",$89009////255,,200/435,,120//"POMOC.HTML","9413")
+DEF UGAOKON1 = (R4/-45,45/0/,$89051,"B",$89013////255,,200/435,,120//"POMOC.HTML","9414")
 
-DEF KONUSX = (R3/-1,1/0/,$89460,"Xk",$89068/wr4///255,,200/435,,120//"POMOC.HTML","9414")
-DEF KONUSZ = (R3/-1,1/0/,,"Zk",$89068/Wr4///255,,200/435,,120//"POMOC.HTML","9414")
-DEF Ugao = (R2/0,45/0/,$89453,"G",$89072/WR2///255,,200/435,,120//"POMOC.HTML","9307")
+DEF KONUSX = (R3/-1,1/0/,$89084,"Xk",$89009/wr4///255,,200/435,,120//"POMOC.HTML","9414")
+DEF KONUSZ = (R3/-1,1/0/,,"Zk",$89009/Wr4///255,,200/435,,120//"POMOC.HTML","9414")
+DEF Ugao = (R2/0,45/0/,$89082,"G",$89013/WR2///255,,200/435,,120//"POMOC.HTML","9307")
 ; AX/AZ vise ne idu u GUD (pise ih _DRESSING_SETUP). Ostaju u OUTPUT zbog PROC potpisa.
-DEF PODHODX = (R1/0,50/3/,$89058,"AX",$89068/WR4///255,,200/435,,120)
-DEF PODHODZ = (R1/0,50/5/,,"AZ",$89068/WR4///255,,200/435,,120)
+DEF PODHODX = (R1/0,50/3/,$89004,"AX",$89009/WR4///255,,200/435,,120)
+DEF PODHODZ = (R1/0,50/5/,,"AZ",$89009/WR4///255,,200/435,,120)
 Def Alat = (S///,,,/Wr1///255,,200/435,,120)
 Def BrojAlata = (I//1/,,"","."/wr4///255,,200/435,,120)
 
@@ -27,12 +27,12 @@ DEF Slika = (I///,,,/wr1///0,0,250,360/0,320,25,2)
 
 DEF BrojSlike=(I////wr4)
 
-VS1=("Prethodni%nalat",,se1)
-VS2=("Sledeći%nalat",,se1)
-VS5=("Grafika",,SE2)
-VS8=("OK",,SE1)
-VS7=($89842,,SE1)
-HS1=($89385,,SE1)
+VS1=($89183,,se1)
+VS2=($89184,,se1)
+VS5=($89185,,SE2)
+VS8=($89163,,SE1)
+VS7=($89157,,SE1)
+HS1=($89068,,SE1)
 
 OUTPUT(NCCODE4)
   "_WHEEL_SETUP_LEFT(" BOK1 "," UGAO1 "," FAZETA1 "," RADIUS1 "," DUZKON1 "," UGAOKON1 "," PODHODX "," PODHODZ "," DUB1 "," KONUSX "," KONUSZ "," Ugao "," BrojAlata ")"
@@ -126,7 +126,7 @@ SUB(IzborAlata)
    REG[2] = RNP("$TC_TP2["<<BrojAlata<<"]")
    if (REG[2]==0) 
       Alat.FC_ST=7
-      Alat.st = "T" <<BrojAlata << " - Alat ne postoji"
+      Alat.st = "T" <<BrojAlata << $89190
       Alat=""
    else
       Alat.FC_ST=1
@@ -139,7 +139,7 @@ SUB(IzborAlata)
          Alat = Round(Reg[3],4)<<"x"<<Round(Reg[4],4)
       else
          Alat.Fc=7
-         Alat = "Alat nije tocilo"
+         Alat = $89191
       endif
    Endif
 

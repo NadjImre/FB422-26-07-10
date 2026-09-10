@@ -4,31 +4,31 @@
 ; geometrija ide u GUD; konturu bira _DRESSING_SETUP nacin 8
 ; Ht i Bs samo prikaz (projektor), ne idu u NC
 
-DEF _Vrste_Navoja = (I/* 0="Metricki",1="Cevni",2="Trapezni",3="Testerasi",4="Obli",5="Univ. trougao",6="Univ. trapez"/0/,$89403,,/WR2///255,,200/435,,120)
+DEF _Vrste_Navoja = (I/* 0=$89306,1=$89187,2=$89307,3=$89308,4=$89309,5=$89188,6=$89189/0/,$89072,,/WR2///255,,200/435,,120)
 
-DEF KORAK_NAVOJA = (R4/,/0/,"Th_Pitch","P",$89068////255,,200/435,,120//"POMOC.HTML","9413")
-DEF POLOZAJ_ZUBA_X3 = (R4/,/0/,"Ds_X3","X3",$89068////255,,200/435,,120//"POMOC.HTML","9412")
+DEF KORAK_NAVOJA = (R4/,/0/,"Th_Pitch","P",$89009////255,,200/435,,120//"POMOC.HTML","9413")
+DEF POLOZAJ_ZUBA_X3 = (R4/,/0/,"Ds_X3","X3",$89009////255,,200/435,,120//"POMOC.HTML","9412")
 DEF PRAZNA_0 = (V////WR0,)
 
-DEF BOK1 = (R4/,/0/,"Th_H","H",$89068////255,,200/435,,120//"POMOC.HTML","9409")
-DEF UGAO1 = (R4/,/0/,"Th_Alpha","A",$89072////255,,200/435,,120//"POMOC.HTML","9410")
-DEF UGAO2 = (R4/,/0/,"Th_Beta","B",$89072////255,,200/435,,120//"POMOC.HTML","9410")
+DEF BOK1 = (R4/,/0/,"Th_H","H",$89009////255,,200/435,,120//"POMOC.HTML","9409")
+DEF UGAO1 = (R4/,/0/,"Th_Alpha","A",$89013////255,,200/435,,120//"POMOC.HTML","9410")
+DEF UGAO2 = (R4/,/0/,"Th_Beta","B",$89013////255,,200/435,,120//"POMOC.HTML","9410")
 
-DEF RADIUS1 = (R4/,/0/,"Th_R1","R1",$89068////255,,200/435,,120//"POMOC.HTML","9412")
-DEF SIRINA_W = (R4/,/0/,"Th_B2","W",$89068////255,,200/435,,120//"POMOC.HTML","9413")
-DEF RADIUS2 = (R4/,/0/,"Th_R2","R2",$89068////255,,200/435,,120//"POMOC.HTML","9412")
-DEF PODIZANJE_PODNOZJA_X1 = (R4/,/0/,"Ds_X1","X1",$89068////255,,200/435,,120//"POMOC.HTML","9412")
-DEF PODIZANJE_VRHA_X2 = (R4/,/0/,"Ds_X2","X2",$89068////255,,200/435,,120//"POMOC.HTML","9412")
+DEF RADIUS1 = (R4/,/0/,"Th_R1","R1",$89009////255,,200/435,,120//"POMOC.HTML","9412")
+DEF SIRINA_W = (R4/,/0/,"Th_B2","W",$89009////255,,200/435,,120//"POMOC.HTML","9413")
+DEF RADIUS2 = (R4/,/0/,"Th_R2","R2",$89009////255,,200/435,,120//"POMOC.HTML","9412")
+DEF PODIZANJE_PODNOZJA_X1 = (R4/,/0/,"Ds_X1","X1",$89009////255,,200/435,,120//"POMOC.HTML","9412")
+DEF PODIZANJE_VRHA_X2 = (R4/,/0/,"Ds_X2","X2",$89009////255,,200/435,,120//"POMOC.HTML","9412")
 
 ; samo prikaz, nema GUD / NC
-DEF VISINA_UKUPNO = (R4///,,"Ht",$89068/WR1///255,,200/435,,120)
-DEF SIRINA_OSNOVE = (R4///,,"Bs",$89068/WR1///255,,200/435,,120)
+DEF VISINA_UKUPNO = (R4///,,"Ht",$89009/WR1///255,,200/435,,120)
+DEF SIRINA_OSNOVE = (R4///,,"Bs",$89009/WR1///255,,200/435,,120)
 
-Def Teo_Visina = (R4///,,"Ho",$89068/WR4///255,,200/435,,120)
+Def Teo_Visina = (R4///,,"Ho",$89009/WR4///255,,200/435,,120)
 
 ; AX/AZ samo prikaz; ds_podhod pise _DRESSING_SETUP
-DEF PODHODX = (R1/0,50/3/,$89058,"AX",$89068/WR4///255,,200/435,,120)
-DEF PODHODZ = (R1/0,50/5/,,"AZ",$89068/WR4///255,,200/435,,120)
+DEF PODHODX = (R1/0,50/3/,$89004,"AX",$89009/WR4///255,,200/435,,120)
+DEF PODHODZ = (R1/0,50/5/,,"AZ",$89009/WR4///255,,200/435,,120)
 DEF Alat = (S///,,,/Wr1///255,,200/435,,120)
 DEF BrojAlata = (I//1/,,"","."/wr4///255,,200/435,,120)
 DEF _ac = (r4///,,"","."/wr4///255,,200/435,,120)
@@ -36,13 +36,13 @@ DEF _ac = (r4///,,"","."/wr4///255,,200/435,,120)
 DEF Graph = (W///,"slesgraphcustomwidget.SlEsGraphCustomWidget"/////0,0,250,360/0,0,0,0)
 DEF Slika = (I///,,,/wr1///0,0,250,360/0,320,25,2)
 
-VS1=("T - ",,se1)
-VS2=("T + ",,se1)
-VS4=("IZRACUNAJ",,SE1)
-VS5=("Grafika",,SE1)
-VS8=("OK",,SE1)
-VS7=($89842,,SE1)
-HS1=($89385,,SE1)
+VS1=($89268,,se1)
+VS2=($89269,,se1)
+VS4=($89186,,SE1)
+VS5=($89185,,SE1)
+VS8=($89163,,SE1)
+VS7=($89157,,SE1)
+HS1=($89068,,SE1)
 
 OUTPUT(NCCODE4)
    "_THREAD_WHEEL_SETUP(" _Vrste_Navoja "," BOK1 "," UGAO1 "," UGAO2 "," RADIUS1 "," RADIUS2 "," SIRINA_W "," KORAK_NAVOJA "," PODHODX "," PODHODZ "," BrojAlata "," POLOZAJ_ZUBA_X3 "," PODIZANJE_PODNOZJA_X1 "," PODIZANJE_VRHA_X2 ")"
@@ -326,7 +326,7 @@ SUB(IzborAlata)
    REG[2] = RNP("$TC_TP2["<<BrojAlata<<"]")
    IF (REG[2]==0)
       Alat.FC_ST=7
-      Alat.st = "T" <<BrojAlata << " - Alat ne postoji"
+      Alat.st = "T" <<BrojAlata << $89190
       Alat=""
    ELSE
       Alat.FC_ST=1
@@ -337,7 +337,7 @@ SUB(IzborAlata)
          Alat = "D1: R"<<RNP("$TC_DP6["<<BrojAlata<<",1]")<<"   D2: R"<<RNP("$TC_DP6["<<BrojAlata<<",2]")
       ELSE
          Alat.Fc=7
-         Alat = "Alat nije dresser"
+         Alat = $89192
       ENDIF
    ENDIF
 END_SUB
