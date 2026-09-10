@@ -14,13 +14,14 @@
 
 - masku cwheel_setup koji treba da ima sliku i treba da ima iscrtavanje profila ovo treba srediti
 - treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao (svedeno na THREAD_TRI/TRAP FULL/LEFT/RIGHT; IZRAČUNAJ iz standarda)-URAĐENO sa primedbama:
-    + kod testerastog pravi ravan vrh a po standardu treba radijus
-    + konusni navoji se traže po ugovoru ali se ne uklapaju u sistem - pokušati sa promenom u trouglastim profilima ili 
-    + za brusšenje navoja usecanjem trebaju višesečna tocila koja ovde nisu podržana , samo za FULL verziju treba dopuniti
+    + kod testerastog pravi ravan vrh a po standardu treba radijus - ostavimo za kasnije 
+    + konusni navoji se traže po ugovoru ali se ne uklapaju u sistem - pokušati sa promenom u trouglastim profilima ili napisati novu konturu 
+    + za brusšenje navoja usecanjem trebaju višesečna tocila koja ovde nisu podržana , samo za FULL verziju treba dopuniti sa mogućnošću da se napravi niz identičnih profila sa razmakom od jednog koraka, stari programi su omogućavali da vrh bude i malo skraćen po visini  tako da pri brušenju prva nit skida manje druga više i tako do kraja, takođe treba omogućiti da razmak između niti bude veći od jednog koraka - dva koraka, tri koraka itd.
     + cthread_wheel_setup.com je prepun komentarisanih linija, treba srediti kod
-    + blokada polja koje se ne koriste ili proračunavaju
-    + opšti (univerzalni) profili za trougao i trapez u masku 
-
+    + blokada polja koje se ne koriste ili proračunavaju, kod metričkog samo korak i x1 se može upisati, samo za čitanje ono što se računa visina , uglovi, radijus i nevidljivo sve ostalo, za trapezni isto tako
+    + opšti (univerzalni) profili za trougao i trapez u masku ako se sprovede prethodni treba jedan gde će biti moguće slobodno zadavati vrednosti 
+    + treba srediti crtanje profila u cthread_wheel_setup.com , ovo može i kasnije
+    + treba u izračunate vrednosti dodati ukupnu visinu i širinu dna jer se često koriste pri kontroli profila na projektoru
 - ne radi dobro odskok kod poravnavanja strana i kosina
 - AL600 je vraćen za odskok u _DRESSING; ne radi ispravno kod poravnavanja čela
 - kompenzacija radijusa (G41/G42) se na FACE*.DRS ponaša drugačije nego na FULL* i PLANE*; nije hitno, pogledati kada bude vremena
