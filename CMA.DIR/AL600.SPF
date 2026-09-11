@@ -1,22 +1,25 @@
 PROC AL600
 DEF BOOL PREKIDU=FALSE
-; jednostavan odskok po X osi
-; koristi se u AL1xx, AL400, AL500 i AL800
+; odskok pri abrihtovanju: ako je X u WCS < 0 prvo Z pa X, inace samo X
 MSG("$66007")
-g1
-G40 
-;IZMENA 19/Mar/2019 12:52
+G40
+DIAMOF
+G90
+STOPRE
 IF (PREKIDU==FALSE)
-   DIAMOF
-   G75X0 M11 M2=5 M3=5 M5
+   IF ($AA_IW[X] < 0)
+      G0 Z=Ds_OdskokZ
+      G0 X=Ds_OdskokX M11 M2=5 M3=5 M5
+   ELSE
+      G0 X=Ds_OdskokX M11 M2=5 M3=5 M5
+   ENDIF
    M20
 ELSE
    G1 G40 G90 X=PREKIDXA F=RABHOD
    G75Z0 M11 M2=5 M3=5 M5
 ENDIF
 
-M96 
+M96
 STOPRE
 
 M17
-

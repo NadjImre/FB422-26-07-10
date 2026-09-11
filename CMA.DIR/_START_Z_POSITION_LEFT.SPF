@@ -35,6 +35,8 @@ endwhile
 
 START_TACKA_ZL = KTab[1,3]
 END_TACKA_ZL = KTab[brojac,5]
+Ds_OdskokZL = END_TACKA_ZL
+Ds_OdskokZ = END_TACKA_ZL
 ;=================================
 
 Stopre

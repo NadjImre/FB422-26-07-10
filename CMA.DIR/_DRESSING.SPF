@@ -134,6 +134,13 @@ T=DS_DRESSER D=DS_DRESSER_DNUM1
 ;Translacija za precnik kamena
 Trans X=$TC_DP3[BRTOC,1]/2 Z=$TC_DP4[BRTOC,1]+DS_POSCORRECTION
 ;prekid
+if (ds_profile==2)
+   Ds_OdskokX=ds_podhodXR
+   Ds_OdskokZ=Ds_OdskokZR
+else
+   Ds_OdskokX=ds_podhodXL
+   Ds_OdskokZ=Ds_OdskokZL
+endif
 SETINT(8) PRIO=1 AL600
 ;prilaz zavisno da li je spoljni ili unutrasnji
 IF(unut>0)
@@ -155,6 +162,8 @@ FOR BROJAC=1 TO BrojProlaza
    if ((ds_profile==1) or (ds_profile==3))
 ;aktiviraj oštricu
       T=DS_DRESSER D=DS_DRESSER_DNUM1
+      Ds_OdskokX=ds_podhodXL
+      Ds_OdskokZ=Ds_OdskokZL
 ;pocetak jos jednom
       G0 Z=ds_podhodZL
 ;spanovanje
@@ -178,6 +187,8 @@ FOR BROJAC=1 TO BrojProlaza
    If (ds_profile>1)
 ;ako se radi desni profil prebaci nma drugi D
       T=ds_dresser D=ds_dresser_dnum2
+      Ds_OdskokX=ds_podhodXR
+      Ds_OdskokZ=Ds_OdskokZR
 ;predji na pocetak za drugi profil
       G0 Z=ds_podhodZR
 ;ako se radi samo desni spanovanje po precniku 

@@ -116,6 +116,7 @@ ds_podhodZ = PodHodZVar
 
 ds_podhodXL=PODHODXVAR
 ds_podhodXR=PODHODXVAR
+Ds_OdskokX=PODHODXVAR
 
 ;IZMENA_C
 ;provera sigurnosnog dodatka ako rade oba dijamanta

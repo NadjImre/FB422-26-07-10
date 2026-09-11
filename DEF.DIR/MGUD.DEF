@@ -83,6 +83,8 @@ Def Chan Int Ds_Coolant
 Def chan real Ds_PodhodXL, Ds_PodhodZL ; podhod u smeru x i z ose za levu konturu abs koordinate
 Def chan real Ds_PodhodXR, Ds_PodhodZR ; podhod u smeru x i z ose za desnu konturu abs koordinate
 Def chan real Ds_PodhodX, Ds_PodhodZ ; podhod u smeru x i z ose za obe konturu inc koordinate
+Def chan real Ds_OdskokX, Ds_OdskokZ ; apsolutne koordinate odskoka pri abrihtovanju (AL600)
+Def chan real Ds_OdskokZL, Ds_OdskokZR ; krajnja Z konture levo/desno (izvor za Ds_OdskokZ)
 Def chan String[32] Ds_Conture1,Ds_Conture2 ; naziv profila navoja
 Def chan int ds_workpieces; broj komada posle kojeg se abrihtuje
 Def Chan Int ds_workpieces_left ; broj komada preostalo do abrihtovanja
