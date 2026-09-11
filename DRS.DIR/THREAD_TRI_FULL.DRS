@@ -1,17 +1,32 @@
 ; trougao kompletan, jedna ostrica
 ; ds_profile==2: prilaz s desna
+; brojac petlje
+def int Brojac
+;polozaj zuba
+def real PozZuba
+;visina zuba
+def real VisZuba
+;pocetne vrednosti
 G90 G18 DIAM90
 IF (ds_profile==2)
-G1 X=0 Z=-ds_tool_width-ds_podhodz
-G1 X=0 Z=-Ds_X3-Th_H0*TAN(Th_Alpha) RND=Th_R2
-G1 X=2*Th_H0 Z=-Ds_X3 RND=Th_R1
-G1 X=0 Z=-Ds_X3+Th_H0*TAN(Th_Beta) RND=Th_R2
-G1 X=0 Z=ds_podhodz
+   G1 X=0 Z=-ds_tool_width-ds_podhodz
+   For Brojac=1 to Ds_RibNum
+      PozZuba=Ds_X3+(Ds_RibNum-Brojac)*Ds_RibDist
+      VisZuba=Th_H0-(Brojac-1)*Ds_RibDelta
+      G1 X=0 Z=-PozZuba-VisZuba*TAN(Th_Alpha) RND=Th_R2
+      G1 X=2*VisZuba Z=-PozZuba RND=Th_R1
+      G1 X=0 Z=-PozZuba+VisZuba*TAN(Th_Beta) RND=Th_R2
+   Endfor
+   G1 X=0 Z=ds_podhodz
 ELSE
-G1 X=0 Z=ds_podhodz
-G1 X=0 Z=-Ds_X3+Th_H0*TAN(Th_Beta) RND=Th_R2
-G1 X=2*Th_H0 Z=-Ds_X3 RND=Th_R1
-G1 X=0 Z=-Ds_X3-Th_H0*TAN(Th_Alpha) RND=Th_R2
-G1 X=0 Z=-ds_tool_width-ds_podhodz
+   G1 X=0 Z=ds_podhodz
+   For Brojac=1 to Ds_RibNum
+      PozZuba=Ds_X3+(Brojac-1)*Ds_RibDist
+      VisZuba=Th_H0-(Ds_RibNum-Brojac)*Ds_RibDelta
+      G1 X=0 Z=-PozZuba+VisZuba*TAN(Th_Beta) RND=Th_R2
+      G1 X=2*VisZuba Z=-PozZuba RND=Th_R1
+      G1 X=0 Z=-PozZuba-VisZuba*TAN(Th_Alpha) RND=Th_R2
+   Endfor
+   G1 X=0 Z=-ds_tool_width-ds_podhodz
 ENDIF
 M17

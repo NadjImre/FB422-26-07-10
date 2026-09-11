@@ -202,7 +202,7 @@ Def chan Real Ds_X2 ; parametar X2 sa starog sistema – podizanje vrha kamena
 def chan real Ds_X3 ; parametar x3 - položaj prvog zuba od leve ivice kamena
 Def chan real Ds_XB ; korekcija širine kamena
 Def chan real Ds_RibNum ; broj zuba na kamenu ako je višeprofilni kamen
-Def chan int Ds_RibDist ; skaliranje koraka na kamenu,razmak zuba je ovoliko puta veći od koraka navoja
+Def chan real Ds_RibDist ; razmak zuba
 Def chan real Ds_RibDelta ; smanjenje veličine zuba na višeprofilnom kamenu
 
 ;parametri leđne obrade

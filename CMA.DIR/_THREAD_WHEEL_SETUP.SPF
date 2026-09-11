@@ -1,4 +1,4 @@
-Proc _THREAD_WHEEL_SETUP(Int _Vrste_Navoja ,Real BOK1 ,Real UGAO1 ,Real UGAO2 ,Real RADIUS1 ,Real RADIUS2 ,Real SIRINA_W ,Real KORAK_NAVOJA ,Real PODHODX ,Real PODHODZ ,Real BrojAlata ,Real POLOZAJ_ZUBA_X3 ,Real PODIZANJE_PODNOZJA_X1,Real PODIZANJE_VRHA_X2 )
+Proc _THREAD_WHEEL_SETUP(Int _Vrste_Navoja ,Real BOK1 ,Real UGAO1 ,Real UGAO2 ,Real RADIUS1 ,Real RADIUS2 ,Real SIRINA_W ,Real KORAK_NAVOJA ,Real PODHODX ,Real PODHODZ ,Real BrojAlata ,Real POLOZAJ_ZUBA_X3 ,Real PODIZANJE_PODNOZJA_X1,Real PODIZANJE_VRHA_X2 ,Real BROJ_ZUBA ,Real RAZMAK_ZUBA ,Real DELTA_ZUBA )
 ;polozaj centra radijusa
 DEF REAL XO
 Thread_Type=_Vrste_Navoja
@@ -12,6 +12,12 @@ Th_Pitch=KORAK_NAVOJA
 Ds_X3=POLOZAJ_ZUBA_X3
 Ds_X1=PODIZANJE_PODNOZJA_X1
 Ds_X2=PODIZANJE_VRHA_X2
+Ds_RibNum=BROJ_ZUBA
+Ds_RibDist=RAZMAK_ZUBA
+Ds_RibDelta=DELTA_ZUBA
+IF (Ds_RibNum<1)
+   Ds_RibNum=1
+ENDIF
 
 ; default imena; _DRESSING_SETUP nacin 8 precizira FULL vs LEFT/RIGHT
 IF (Thread_Type==2) OR (Thread_Type==3) OR (Thread_Type==6)
