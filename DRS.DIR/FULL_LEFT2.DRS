@@ -1,17 +1,24 @@
 G90 G18 DIAM90
 X0 Z=-ds_tool_width-ds_podhodZ
-if ((ds_taper_length1>0) and (ds_taper_angle1<>0))
-   X0 Z=-ds_taper_length1
-   X=-ds_taper_length1*tan(ds_taper_angle1) Z0 Rnd=ds_radius1
-else
-   X0 Z0 Rnd=ds_radius1
+;ako se radi čelo kamena
+if (ds_Face_Length1>0)
+   if ((ds_taper_length1>0) and (ds_taper_angle1<>0))
+      X0 Z=-ds_taper_length1
+      X=-ds_taper_length1*tan(ds_taper_angle1) Z0 Rnd=ds_radius1
+   else
+      X0 Z0 Rnd=ds_radius1
+   endif
+   if (ds_margin1>0)
+      Z0 X=IC(-2*ds_Margin1)
+   endif
+   if ((ds_face_depth1>0) and (ds_face_angle1>0))
+      Z=-ds_Face_Depth1 X=IC(-2*ds_Face_Depth1*tan(ds_Face_Angle1)) RND=ds_PodhodZ/2
+   endif
+   X=-2*ds_Face_Length1 RND=ds_PodhodZ/2
+   Z=ds_PodhodZ
+else ; ako nema čela kamena smo prečnik i eventualno konus
+      X0 Z=-ds_taper_length1
+      X=-(ds_taper_length1+ds_podhodZ)*tan(ds_taper_angle1) Z=ds_podhodZ
 endif
-if (ds_margin1>0)
-   Z0 X=IC(-2*ds_Margin1)
-endif
-if ((ds_face_depth1>0) and (ds_face_angle1>0))
-   Z=-ds_Face_Depth1 X=IC(-2*ds_Face_Depth1*tan(ds_Face_Angle1)) RND=ds_PodhodZ/2
-endif
-X=-2*ds_Face_Length1 RND=ds_PodhodZ/2
-Z=ds_PodhodZ
+
 M17
