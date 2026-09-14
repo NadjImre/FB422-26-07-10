@@ -12,7 +12,7 @@ II) pritupljenje levo i desno *
 C) Poravnavanje kamena
 
 1) masku cwheel_setup koji treba da ima sliku i treba da ima iscrtavanje profila ovo treba srediti
-2) ne radi dobro odskok kod poravnavanja strana i kosina - Obavezno srediti
+2) ***ne radi dobro odskok kod poravnavanja strana i kosina - URAĐENO ne može da se testira na SINUTRAINU
 3) *** treba integrisati programe za poravnavanje standradnih navojnih profila koje je Ćira  pisao-URAĐENO sa primedbama:
     a) kod testerastog pravi ravan vrh a po standardu treba radijus - ostavimo za kasnije 
     b) konusni navoji se traže po ugovoru ali se ne uklapaju u sistem - pokušati sa promenom u trouglastim profilima ili napisati novu konturu 

@@ -6,6 +6,8 @@ Programi podržavaju :
 - poravnavanje po konturi
 - specijalni ciklusi merenja 
 
+Tekstovi maski su u lng/myalz_eng.txt i lng/myalz_rus.txt (ID 89000-89309). Ulaz editora je proj/ceditor.com.
+
 *** Brušenje prečnika :
 
 -> _GRINDING.SPF podprogrami za brušenje prečnika pozivaju se preko njega, ovo je centralni program za brušenje 
@@ -48,6 +50,8 @@ POMOĆNI PROGRAMI
 -> _THREAD_STARTEND_SETUP.SPF program za podešavanje parametara pritupljenja, samo podešavanje bez kretanja
 - CTHREAD_STARTEND_SETUP.COM maska podešavanje pritupljenja 
 
+Profil kamena za navoj nije ovde: ide kroz poravnavanje (CTHREAD_WHEEL_SETUP + način 8 u CDRESSING_SETUP).
+
 PODPROGRAMI brušenje navoja su sledeći:
 -> oscilacije - program SH850.spf
 -> pritupljenje levo i desno - predviđeni su programi SH831.spf i SH832.spf
@@ -68,11 +72,24 @@ NAPOMENE
 
 *** Poravnavanje kamena
 
+Meniji: ceditor.com -> poravnavanje VS1 oblik kamena, VS2 setup abrihtera, VS3 poravnavanje, VS5 Thread Profil.
+
 -> _WHEEL_SETUP_LEFT.SPF je program za podešavanje oblika kamena za levi bok, omogućava podešavane za čelo u dva oblika, čelo i prečnik sa radijusom prelaza u dva oblika i konus u kombinaciji sa čelom ili bez, nije potreban za cilindrično poravnavanje kao ni za poravnavanje navoja i poravnavanje po korisničkom profilu
 -> _WHEEL_SETUP_RIGHT.SPF je isto samo za desni bok
 - CWHEEL_SETUP.COM maska za podešavanje _WHEEL_SETUP_LEFT.SPF i _WHEEL_SETUP_RIGHT.SPF 
--> _DRESSING_SETUP.SPF služi za podešavanje parametara poravnavanja, mora biti pozvan pre poravnavanja ili pre brušenja ako brušenje koristi među poravnavanja, nema nikakvih kretanja iz ovog programa
-- CDRESSING_SETUP.COM - maska za podešavanje 
+-> _THREAD_WHEEL_SETUP.SPF upisuje geometriju navojnog profila u GUD (Thread_Type, Th_*, Ds_X*, Ds_Rib*); konturu bira _DRESSING_SETUP način 8, ne ova maska. AX/AZ u maski su samo prikaz.
+- CTHREAD_WHEEL_SETUP.COM maska Thread Profil
+  Tipovi: 0 metrički, 1 cevni, 2 trapezni, 3 testerasti, 4 obli, 5 univ. trougao, 6 univ. trapez.
+  Tipovi 2, 3 i 6 idu na THREAD_TRAP_* konture, ostali na THREAD_TRI_*.
+  IZRAČUNAJ za metrički računa samo H, A, B, R1 iz koraka; R2 i X1 se zadaju ručno.
+  Ht i Bs su samo prikaz (projektor), ne idu u NC.
+  Višezubni kamen: n, s, d (Ds_RibNum / Ds_RibDist / Ds_RibDelta) važi samo za FULL konture; LEFT/RIGHT su jedan zub. Podrazumevano n=1, s=0, d=0.
+-> _DRESSING_SETUP.SPF služi za podešavanje parametara poravnavanja, mora biti pozvan pre poravnavanja ili pre brušenja ako brušenje koristi među poravnavanja, nema nikakvih kretanja iz ovog programa. Upisuje podhod (XL/XR i inc X/Z) i Ds_OdskokX, zatim zove _START_Z_POSITION_LEFT/RIGHT.
+- CDRESSING_SETUP.COM - maska za podešavanje
+  Način levo 1-8, desno 10/20/30/40/50/60/80:
+  1 samo prečnik (PLANE), 2 samo čelo (FACE), 3 prečnik i čelo (FULL), 4 korisnička kontura (.DRS ime iz maske),
+  5 levo ROLIK / desno FACE_RIGHT2, 6 levo FACE_LEFT2 / desno FULL_RIGHT2, 7 levo FULL_LEFT2, 8 Navoj.
+  Navoj: jedna strana 8 ili 80 bira *_FULL; obe strane 8+80 biraju *_LEFT i *_RIGHT.
 -> _DRESSING je samo poravnavanje uz zadavanje nekih parametara
 - CDRESSING - maska za podešavanje poravnavanja
 
@@ -89,9 +106,14 @@ Poravnavanje sve radi preko kontura, za neke česte i jednostavne stvari postoje
 - FULL_RIGHT.DRS - isto samo za desno čelo kamena
 - FULL_LEFT2.DRS - puno poravnavanje kao i prethodni samo čelo nije pod uglom nego upušteno
 - FULL_RIGHT2.DRS - isto samo za desno čelo kamena
+- ROLIK.DRS - poravnavanje profilnom rolnom (zadrška ds_time), samo leva strana način 5
+- THREAD_TRI_FULL.DRS / THREAD_TRI_LEFT.DRS / THREAD_TRI_RIGHT.DRS - trougao (metrički, cevni, obli, univ. trougao)
+- THREAD_TRAP_FULL.DRS / THREAD_TRAP_LEFT.DRS / THREAD_TRAP_RIGHT.DRS - trapez (trapezni, testerasti, univ. trapez)
+  FULL radi petlju 1..Ds_RibNum; LEFT/RIGHT su jedan bok jedne niti.
 
 Pomoćni programi :
--> AL600 za odskok (SETINT 8 iz _DRESSING); ne radi ispravno kod poravnavanja čela
+-> _START_Z_POSITION_LEFT.SPF / _START_Z_POSITION_RIGHT.SPF - iz konture (CONTPRON) uzimaju početnu Z (Ds_PodhodZL/ZR), smer G41/G42 (ds_direction_L/R) i krajnju Z za odskok (Ds_OdskokZL/ZR i Ds_OdskokZ). Zove ih _DRESSING_SETUP.
+-> AL600 odskok na SETINT 8 iz _DRESSING. Koordinate Ds_OdskokX (prilaz na konturu, isti kao PODHODXVAR) i Ds_OdskokZ (krajnja Z aktivne konture). Ako je trenutni X u WCS < 0 prvo G0 po Z pa po X, inače samo po X. Za čelo i kosine još treba proveriti.
 
 *** MERENJE SA SONDOM RENISHOW
 
