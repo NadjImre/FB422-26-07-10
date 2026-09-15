@@ -1,6 +1,7 @@
 A) Brušenje prečnika
 --- u maskama nema podrške za mernu glavu, treba dodati - URAĐENO
 
+
 B) Brušenje navoja
 
 I) usecanje navoja 
