@@ -1,24 +1,105 @@
+
+Def Real Xa,Za ; 
+Def Real Xb,Zb
+Def Real Xc,Zc
+Def Real Xo,Zo
+Def Real Xd,Zd
+Def Real Xe,Ze
+Def Real Xr,Zr
+Def Real Xf,Zf
+Def Real Xg,Zg
+Def Real Xp,Zp
+Def Real Xi,Zi
+
+;pocetna tacka na kraju kamena
+Xa = 0
+Za = -ds_tool_width-ds_podhodZ
+;pocetak konusa ako ga ima - duzina je duzina kamena ako je programiran nula
+Xb = 0
+Zb = -ds_taper_length1
+;centar radijusa zaobljena po Z
+Zo = -ds_radius1
+;kraj konusa pocetak zaobljenja 
+;ako je radijus nula Zc i Xc su nula isto
+;ako je ugao konusa nula Xc je nula
+;ako se radi čelo kamena
+if (ds_Face_Length1>0)
+   Zc = Zo+ds_radius1*sin(ds_taper_angle1)
+else ; ako se ne radi
+   Zc = ds_PodhodZ
+endif
+Xc = Xb - (Zc-Zb)*tan(ds_taper_angle1)
+;X od centra zobljenja vrha po X osi 
+Xo = Xc - ds_radius1*cos(ds_taper_angle1)
+;kraj radijusa - pocetak fazete
+;ako fazeta nula
+if (ds_Margin1==0)
+   Xd = Xo-ds_radius1*sin(ds_face_angle1)
+   Zd = Zo+ds_radius1*cos(ds_face_angle1)
+else ; i ako nije
+   Xd = Xo
+   Zd = Zo+ds_radius1
+endif
+;kraj fazete ako ima - inace sito kao Zd,Ze
+Ze = Zd
+Xe = Xd-ds_margin1
+;usek K pa na H po konstantnom Z
+if ((ds_face_depth1>0) and (ds_face_angle1>0))
+   Xr = Xe-ds_face_depth1/tan(ds_face_angle1)
+   Zr = Ze-ds_face_depth1
+else
+   Xr = Xe
+   Zr = Ze
+endif
+;kraj donjeg radijusa i njegov centar po X - tacke P i G
+Xg=-ds_face_Length1
+Xp=Xg+ds_podhodZ/2
+;pocetak donjeg radijusa - tip 2 prilaz po konstantnom Z
+Xf=Xp
+Zf=Zr
+;kraj donjeg radijusa i njegov centar po Z
+Zg=Zf+0.5*ds_PodhodZ
+Zp=Zg
+;izlaz iz kamena
+Zi=ds_PodHodZ
+Xi=Xg
+;provera profila
+if (Xr<=Xf)
+   MSG("Visina H premala ---- H="<<ds_Face_Length1<<" R="<<ds_radius1<<" F="<<ds_margin1)
+   lab_h:
+   M00
+   GOTOB lab_h
+endif
+
 G90 G18 DIAM90
-X0 Z=-ds_tool_width-ds_podhodZ
+X=Xa Z=Za
 ;ako se radi čelo kamena
 if (ds_Face_Length1>0)
    if ((ds_taper_length1>0) and (ds_taper_angle1<>0))
-      X0 Z=-ds_taper_length1
-      X=-ds_taper_length1*tan(ds_taper_angle1) Z0 Rnd=ds_radius1
+      X=Xb Z=Zb
+      X=2*Xc Z=Zc
    else
-      X0 Z0 Rnd=ds_radius1
+      X=2*Xc Z=Zc
+   endif
+   if (ds_Radius1>0)
+      G3 X=2*Xd Z=Zd CR=ds_Radius1
    endif
    if (ds_margin1>0)
-      Z0 X=IC(-2*ds_Margin1)
+      G1 X=2*Xe Z=Ze
    endif
    if ((ds_face_depth1>0) and (ds_face_angle1>0))
-      Z=-ds_Face_Depth1 X=IC(-2*ds_Face_Depth1*tan(ds_Face_Angle1)) RND=ds_PodhodZ/2
+      G1 X=2*Xr Z=Zr
    endif
-   X=-2*ds_Face_Length1 RND=ds_PodhodZ/2
-   Z=ds_PodhodZ
+   G1 X=2*Xf Z=Zf
+   G2 X=2*Xg Z=ZG CR=0.5*ds_PodhodZ
+   G1 X=2*Xi Z=Zi
 else ; ako nema čela kamena smo prečnik i eventualno konus
-      X0 Z=-ds_taper_length1
-      X=-(ds_taper_length1+ds_podhodZ)*tan(ds_taper_angle1) Z=ds_podhodZ
+    if ((ds_taper_length1>0) and (ds_taper_angle1<>0))
+      X=Xb Z=Zb
+      X=2*Xc Z=Zc
+   else
+      X=2*Xc Z=Zc
+   endif
 endif
 
 M17

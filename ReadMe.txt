@@ -6,7 +6,7 @@ Programi podržavaju :
 - poravnavanje po konturi
 - specijalni ciklusi merenja 
 
-Tekstovi maski su u lng/myalz_eng.txt i lng/myalz_rus.txt (ID 89000-89309). Ulaz editora je proj/ceditor.com.
+Tekstovi maski su u lng/myalz_eng.txt i lng/myalz_rus.txt (ID 89000-89310). Ulaz editora je proj/ceditor.com.
 
 *** Brušenje prečnika :
 
