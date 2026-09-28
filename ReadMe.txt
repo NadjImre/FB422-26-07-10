@@ -76,7 +76,8 @@ Meniji: ceditor.com -> poravnavanje VS1 oblik kamena, VS2 setup abrihtera, VS3 p
 
 -> _WHEEL_SETUP_LEFT.SPF je program za podešavanje oblika kamena za levi bok, omogućava podešavane za čelo u dva oblika, čelo i prečnik sa radijusom prelaza u dva oblika i konus u kombinaciji sa čelom ili bez, nije potreban za cilindrično poravnavanje kao ni za poravnavanje navoja i poravnavanje po korisničkom profilu
 -> _WHEEL_SETUP_RIGHT.SPF je isto samo za desni bok
-- CWHEEL_SETUP.COM maska za podešavanje _WHEEL_SETUP_LEFT.SPF i _WHEEL_SETUP_RIGHT.SPF 
+- CWHEEL_SETUP.COM maska za podešavanje _WHEEL_SETUP_LEFT.SPF i _WHEEL_SETUP_RIGHT.SPF
+  Živi grafik crta iste tačke kao FULL* (F od kraja R; F=0 ulaz u čelo pod A). Ako H od nule ne ponese konus+R+F (+K kod tipa 2) i donji luk, polje H je crveno (89310). Statične slike (al303…) nisu u tom sistemu. 
 -> _THREAD_WHEEL_SETUP.SPF upisuje geometriju navojnog profila u GUD (Thread_Type, Th_*, Ds_X*, Ds_Rib*); konturu bira _DRESSING_SETUP način 8, ne ova maska. AX/AZ u maski su samo prikaz.
 - CTHREAD_WHEEL_SETUP.COM maska Thread Profil
   Tipovi: 0 metrički, 1 cevni, 2 trapezni, 3 testerasti, 4 obli, 5 univ. trougao, 6 univ. trapez.
@@ -84,6 +85,7 @@ Meniji: ceditor.com -> poravnavanje VS1 oblik kamena, VS2 setup abrihtera, VS3 p
   IZRAČUNAJ za metrički računa samo H, A, B, R1 iz koraka; R2 i X1 se zadaju ručno.
   Ht i Bs su samo prikaz (projektor), ne idu u NC.
   Višezubni kamen: n, s, d (Ds_RibNum / Ds_RibDist / Ds_RibDelta) važi samo za FULL konture; LEFT/RIGHT su jedan zub. Podrazumevano n=1, s=0, d=0.
+  Crtanje je u CTHREAD_CALC.COM (LOAD: LB Proracun). VS5 uključuje grafik, VS6 osvežava; na CHANGE se ne crta (sporo). R=0 se ne crta. Skraćeni zub (d) zadržava isto W. PNG slike profila ostaju odvojene od grafikona.
 -> _DRESSING_SETUP.SPF služi za podešavanje parametara poravnavanja, mora biti pozvan pre poravnavanja ili pre brušenja ako brušenje koristi među poravnavanja, nema nikakvih kretanja iz ovog programa. Upisuje podhod (XL/XR i inc X/Z) i Ds_OdskokX, zatim zove _START_Z_POSITION_LEFT/RIGHT.
 - CDRESSING_SETUP.COM - maska za podešavanje
   Način levo 1-8, desno 10/20/30/40/50/60/80:
@@ -98,14 +100,14 @@ Poravnavanje sve radi preko kontura, za neke česte i jednostavne stvari postoje
 
 - PLANE_LEFT.DRS - cilindrično poravnavanje u levo, nula na levoj ivici kamena, počine skroz desno i ide u levo
 - PLANE_RIGHT.DRS - cilindrično poravnavanje u desno, nula na desnoj ivici kamena , počine skroz levo i ide u desno
-- FACE_LEFT.DRS - poravnavanje levog boka kamena pod zadatim uglom sa opcionom fazetom
+- FACE_LEFT.DRS - poravnavanje levog boka kamena pod zadatim uglom sa opcionom fazetom; ugao A ide od kraja F, H ostaje od nule
 - FACE_LEFT2.DRS - poravnavanje levog boka sa upušteno i opcionom fazetom
 - FACE_RIGHT.DRS - isto kao levi samo za desni bok
 - FACE_RIGHT2.DRS - isto kao levi samo za desni bok
-- FULL_LEFT.DRS - puno poravnavanje leve strane kamena počinje skroz desno poravnava prečnik, opciono konus sa leve strane, radijus prelaza i levo čelo pod uglom sa opcionom fazetom
-- FULL_RIGHT.DRS - isto samo za desno čelo kamena
-- FULL_LEFT2.DRS - puno poravnavanje kao i prethodni samo čelo nije pod uglom nego upušteno
-- FULL_RIGHT2.DRS - isto samo za desno čelo kamena
+- FULL_LEFT.DRS - puno poravnavanje leve strane: prečnik, opciono konus, R i čelo pod A sa opcionom fazetom. Tačke se računaju pa G1/G2/G3 CR= (nema RND na R). F se meri od kraja R; F=0 ide R u čelo pod A. H je od nule; ako Xe predje početak donjeg luka (Xf) — MSG i M00 petlja. Bez čela samo prečnik/konus.
+- FULL_RIGHT.DRS - isto za desno čelo (Z u minus, G2/G3 zamenjeni)
+- FULL_LEFT2.DRS - kao FULL_LEFT, čelo upušteno (K); provera H je Xr naspram Xf
+- FULL_RIGHT2.DRS - isto za desno čelo kamena
 - ROLIK.DRS - poravnavanje profilnom rolnom (zadrška ds_time), samo leva strana način 5
 - THREAD_TRI_FULL.DRS / THREAD_TRI_LEFT.DRS / THREAD_TRI_RIGHT.DRS - trougao (metrički, cevni, obli, univ. trougao)
 - THREAD_TRAP_FULL.DRS / THREAD_TRAP_LEFT.DRS / THREAD_TRAP_RIGHT.DRS - trapez (trapezni, testerasti, univ. trapez)
