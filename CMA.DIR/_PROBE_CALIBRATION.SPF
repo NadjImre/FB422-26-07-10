@@ -1,5 +1,6 @@
 proc _Probe_Calibration(string[32] alat,int ivica,real duz_mer,real brz_mer,real nom_poz, int status)
 
+me_status=status
 if ( (status b_and 3)==0) gotof kraj
 me_tool = alat
 me_tool_dnumber = ivica
@@ -11,6 +12,7 @@ me_target = nom_poz
 if (me_tool_number <= 0)
    gotof nema_sonde
 endif
+me_repetitionCount = ((status b_and 112) / 16) + 1
 
 if ((status b_and 3) == 1) 
    ms100

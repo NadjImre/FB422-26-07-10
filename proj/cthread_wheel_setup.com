@@ -36,13 +36,58 @@ DEF Alat = (S///,,,/Wr1///255,,200/435,,120)
 DEF BrojAlata = (I//1/,,"","."/wr4///255,,200/435,,120)
 DEF _ac = (r4///,,"","."/wr4///255,,200/435,,120)
 
-DEF Graph = (W///,"slesgraphcustomwidget.SlEsGraphCustomWidget"/////0,0,250,360/0,0,0,0)
+DEF Graph = (W///,"slesgraphcustomwidget.SlEsGraphCustomWidget"/////0,0,230,310/0,0,0,0)
 DEF Slika = (I///,,,/wr1///0,0,250,360/0,320,25,2)
+
+;tacke profila
+DEF XA=(R4////wr4)
+DEF ZA=(R4////wr4)
+DEF XB=(R4////wr4)
+DEF ZB=(R4////wr4)
+DEF XC=(R4////wr4)
+DEF ZC=(R4////wr4)
+DEF XD=(R4////wr4)
+DEF ZD=(R4////wr4)
+DEF XE=(R4////wr4)
+DEF ZE=(R4////wr4)
+DEF XF=(R4////wr4)
+DEF ZF=(R4////wr4)
+DEF XG=(R4////wr4)
+DEF ZG=(R4////wr4)
+DEF XB1=(R4////wr4)
+DEF ZB1=(R4////wr4)
+DEF XB2=(R4////wr4)
+DEF ZB2=(R4////wr4)
+DEF XB0=(R4////wr4)
+DEF ZB0=(R4////wr4)
+DEF BB1=(R4////wr4)
+DEF XC1=(R4////wr4)
+DEF ZC1=(R4////wr4)
+DEF XC2=(R4////wr4)
+DEF ZC2=(R4////wr4)
+DEF XC0=(R4////wr4)
+DEF ZC0=(R4////wr4)
+DEF CC1=(R4////wr4)
+DEF XD1=(R4////wr4)
+DEF ZD1=(R4////wr4)
+DEF XD2=(R4////wr4)
+DEF ZD2=(R4////wr4)
+DEF XD0=(R4////wr4)
+DEF ZD0=(R4////wr4)
+DEF DD1=(R4////wr4)
+DEF XE1=(R4////wr4)
+DEF ZE1=(R4////wr4)
+DEF XE2=(R4////wr4)
+DEF ZE2=(R4////wr4)
+DEF XE0=(R4////wr4)
+DEF ZE0=(R4////wr4)
+DEF EE1=(R4////wr4)
 
 VS1=($89268,,se1)
 VS2=($89269,,se1)
 VS4=($89186,,SE1)
 VS5=($89185,,SE1)
+VS6=("Update%ngraphics",,Se2)
 VS8=($89163,,SE1)
 VS7=($89157,,SE1)
 HS1=($89068,,SE1)
@@ -145,9 +190,16 @@ END_PRESS
 PRESS(VS5)
    IF (Slika.wr == 4)
       Slika.wr=1
+      Vs6.se=2
    ELSE
       Slika.wr=4
+      Vs6.se=1
+      call("CrtanjeTocila")
    ENDIF
+END_PRESS
+
+PRESS(VS6)
+      call("CrtanjeTocila")
 END_PRESS
 
 PRESS(VS8)
@@ -213,6 +265,7 @@ END_CHANGE
 LOAD
    KORAK_NAVOJA.bc=9
    LB("Funkcije","cthread_wheel_setup.com")
+   LB("Proracun","cthread_calc.com")
    CALL("PoljaMaske")
    CALL("PromeniSliku")
    CALL("IzborAlata")
