@@ -119,17 +119,19 @@ Pomoćni programi :
 
 *** MERENJE SA SONDOM RENISHOW
 
+Meni ceditor.com -> merenje: VS1 kalibracija, VS2 prečnik, VS3 aksijalno, VS4 cilindričnost, VS5 širina, VS6 C, VS7 navoj.
+
 Programi za merenje sa sondom su :
--> _PROBE_CALIBRATION - kalibracija sonde po X ili Z osi , ne radi nikakva kretanja samo poziva odgovarajući pod program
--> _PROBE_RECALIBRATION - radi rekalibraciju sonde - podešava parametre bez kretanja i poziva pod program MS140.SPF
--> _PROBE_MEASURING - merenje po X ili Z - osam načina: aksijalno 1-4 (samo merenje, korekcija, rekalibracija, udar) i prečnik 5-8 (isto); poziva MS120 za Z ili MS140 za X i obrađuje rezultate merenja
+-> _PROBE_CALIBRATION - kalibracija ili samo merenje po X (MS100) ili Z (MS110). Status: osa (1=X, 2=Z), sonda 1/2, bit 8 = samo merenje (inače kalibracija), ponavljanja 1-8. Nema kretanja do sonde, samo poziva MS1xx.
+-> _PROBE_RECALIBRATION - rekalibracija prečnikom (MS140), parametri iz poziva; maske više nema, zovu ga WKS programi
+-> _PROBE_MEASURING - merenje po X ili Z - osam načina: aksijalno 1-4 (samo merenje, korekcija, rekalibracija, udar) i prečnik 5-8 (isto); poziva MS120 za Z ili MS140 za X. Privremeno ga zovu i CPROBE_AXIAL / CPROBE_DIAMETER / CPROBE_CYLINDRICITY (mesto u meniju, sadržaj još stari)
 -> _PROBE_WIDTH - merenje sredine žljeba - tri mogućnosti : merenje bez korekcije, merenje sa korekcijom Z ose i rekalibracija polozaja sonde. Samo priprema parametre, merenje radi pozivajući MS150
 -> _PROBE_CAXIS - merenje po C, traži ulaznu tačku u žljeb po obimu komada, poziva MS130 (treba testirati)
 -> _PROBE_THREAD - merenje srednjeg prečnika navoja, isto ima tri varijante - samo merenje, merenje i korekcija i rekalibracija. Samo priprema parametre i poziva MS160
 
 Pomoćni programi :
--> MS100 - kalibracija po X osi
--> MS110 - kalibracija po Z osi
+-> MS100 - kalibracija / merenje po X: petlja ponavljanja, log u me_report_file; kalibracija $TC_DP4 sa poslednjeg MCS (target/2), merenje ispisuje prosek WCS
+-> MS110 - isto po Z: hod Z+me_distance, kalibracija $TC_DP5 = MCS-target
 -> MS120 - merenje po Z osi sa ponavljanjem u svakoj tački i okretanjem komada može da meri poziciju po Z ili aksijalni udar
 -> MS130 - traženje i merenje pozicije žljeba po obimu komada (po C osi)
 -> MS140 - merenje prečnika komada u više tačaka okretanjem komada sa mogućnošću ponavljanja u svakoj tački, meri prečnik i/ili radijalni udar
@@ -137,9 +139,11 @@ Pomoćni programi :
 -> MS160 - merenje srednjeg prečnika navoja i ugla ulaska u žljeb
 
 Maske za podešavanje
-- CPROBE_CALIBRATION.COM - podešavanje _PROBE_CALIBRATION 
-- CPROBE_RECALIBRATION.COM - podešavanje _PROBE_RECALIBRATION
-- CPROBE_MEASURING.COM - podešavanje _PROBE_MEASURING
+- CPROBE_CALIBRATION.COM - osa X/Z, sonda, kalibracija ili merenje, broj ponavljanja
+- CPROBE_DIAMETER.COM - merenje prečnika (za sada isti kod kao stari CPROBE_MEASURING)
+- CPROBE_AXIAL.COM - aksijalno merenje (za sada isti kod kao stari CPROBE_MEASURING)
+- CPROBE_CYLINDRICITY.COM - cilindričnost (za sada isti kod kao stari CPROBE_MEASURING)
 - CPROBE_WIDTH.COM - podešavanje _PROBE_WIDTH
-- CPROBE_CAXIS_POSITION.COM - podešavanje _PROBE_CAXIS 
+- CPROBE_CAXIS_POSITION.COM - podešavanje _PROBE_CAXIS
 - CPROBE_THREAD.COM - podešavanje _PROBE_THREAD
+  Nema više CPROBE_MEASURING.COM ni CPROBE_RECALIBRATION.COM.
