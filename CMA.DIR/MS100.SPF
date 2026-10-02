@@ -2,18 +2,59 @@ proc ms100
 ;Kalibracija sonde po X osi
 ;sa mašine FB422
 ;april 2026
-
+def int brojac=0 ; brojac pokusaja
 def real xpos;pocetna pozicija po X osi
+def string[120] poruka ; za izvestaj
+def int errno ; broj greske
 g18
 stopre
-
-g500
+;pocene postavke
+g500 T=me_tool D=me_tool_Dnumber
+;zapamtimo trenutnu poziciju
 xpos=$aa_iw[x]
-G1 X=xpos-me_distance MEAS=me_probe_number F=me_feed
-IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
-MSG("$66019")
-$tc_dp4[me_tool_number,me_tool_Dnumber]=$AA_MM[x]-me_target/2
-g1 x=xpos
+;zaglavlje izvestaja za merenje
+poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","X1", "X","Target","Tolerance","Deviation","Error")
+Write(errno,me_report_file,poruka)
+;petlja za ponavljanje merenja
+petlja:
+  ;merimo
+  G1 X=xpos-me_distance MEAS=me_probe_number F=me_feed
+  ;ako nema kontakta greska, prekidamo merenje
+  IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
+  ;ispisujemo poruku
+  poruka = sprint("Repetit. %3d %12.3f %12.3f %12.3f", brojac+1, $AA_MM[X], $aa_mw[X], me_target)
+  msg(poruka)   
+  ;zapis u fajl 
+     Write(errno,me_report_file,poruka)
+  ;pamtimo rezultate i u MSC i u WCS
+  me_result[0,brojac]=$AA_MM[X]
+  me_result[1,brojac]=$AA_MW[X]
+  ;vracamo se nazad
+  g1 x=xpos
+  ;podizemo brojac
+  brojac=brojac+1
+  ;ponavljamo ako treba
+if (brojac<me_repetitionCount) gotob petlja
+;ako se trazi kalibracija
+if ( (me_status b_and 8) == 0)
+  ;kalibrisemo sa zadnjim rezultatom merenja
+  $tc_dp4[me_tool_number,me_tool_Dnumber]=me_result[0,brojac-1]-me_target/2
+  ;ispisujemo poruku
+  MSG("$66019")
+else
+  ;ako nije kalibracija trazimo srednju vrednost
+  me_avg=0
+  for brojac=0 to me_repetitionCount-1
+      me_avg=me_avg+me_result[1,brojac]
+  endfor
+  me_avg=me_avg/me_repetitionCount
+  ;ispisujemo poruku
+  poruka = sprint("Avg. diam.                %12s %12.3f %12.3f ", "", me_avg, me_target)
+  msg(poruka)   
+  ;zapis u fajl
+  Write(errno,me_report_file,poruka)
+endif
+m00
 m17
 
 greska:

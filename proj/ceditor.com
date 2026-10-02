@@ -105,24 +105,29 @@ END_PRESS
 
 //S(merenje)
 
+;kalibracija po obe ose
+;tekstovi ne odgovaraju
+VS1=($89173,,se1)
+PRESS(VS1)
+    LM("probe_calibration","cprobe_calibration.com",1)
+END_PRESS
 
-;rekalibracija
+;merenje precnika
 VS2=($89171,,se1)
 Press(Vs2)
-    LM("probe_recalibration","cprobe_recalibration.com",1) 
+    LM("probe_diameter","cprobe_diameter.com",1) 
 End_Press
 
 ;aksialno pozicioniranje
 VS3=($89172,,se1)
 Press(Vs3)
-    LM("probe_measuring","cprobe_measuring.com",1) 
+    LM("probe_axial","cprobe_axial.com",1) 
 End_Press
 
-;kalibracija po obe ose
-;tekstovi ne odgovaraju
-VS4=($89173,,se1)
+;merenje cilindricnosti
+VS4=("Cylindricity%nmeasure",,se1)
 PRESS(VS4)
-    LM("probe_calibration","cprobe_calibration.com",1)
+    LM("probe_cylindricity","cprobe_cylindricity.com",1)
 END_PRESS
 
 ;merenje sirine

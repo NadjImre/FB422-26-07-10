@@ -1,7 +1,8 @@
-//M(probe_measuring)
-;maska za merenje po X i Z osi
+//M(probe_cylindricity)
+;maska za precnika u vise preseka
+;racuna i cilindricnost
 ;prvi put na FB422
-;april 2026
+;oktobar 2026
 def KOREKCIJA = (IDD/*0=$89244, 1=$89249, 2=$89250, 3=$89251, 4=$89252, 5=$89253, 6=$89254, 7=$89255, 8=$89256/0/,$89243,"-","."/WR2///235,15,185/395,15,195//"pomoc.html","9709")
 DEF Sonda = (S//"zonda"/$89135,$89085////235,,210/395,,75//"pomoc.html","9701"),
 DBROJSonde = (I/1,9/1/$89136,,"D"////500,,20/500,,40//"pomoc.html","9702")

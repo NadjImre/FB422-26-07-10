@@ -30,14 +30,16 @@ D) Merenje
 1) sva merenja da imaju isti princip rada - četiri moguća režima :
    a) podešavanje (kalibracija) gde se vrh sonde ručno u JOGU dovede blizu mesta merenja i onda se pusti program da meri i zapamti koordinate, treba da može da se zada vrednost koje koordinate treba da imaju
    b) merenje kada se obavlja merenje a rezultati porede sa zapamćenim kod podešavanja  greška je razlika mere, ako greška merenja pređe neku dozvoljenu vrednost prijavljuje se greška i program se zaustavlja 
-   c) merenje sa korekcijom kada se na bazi merenje radi korekcija rada mašine
+   c) merenje sa korekcijom kada se na bazi merenje radi korekcija rada mašine, korekcija se upisuje u Gxx koordinatni sistem
    d) rekalibracija automatski ponavlja merenje prve (ne treba JOG) i koriguje zapaćene vrednosti, treba da ima mogućnost ponavljanja dok se mera ne stabilizuje
+   e) rucno merenje gde ima smisla, isto kao kalibracija, u JOGu se dovede blizu i pusti merenje ali se koordinate ne pamte samo se ispisuje rezultat
 2) Trebaju sledeći programi
-   a) merenje u jednoj tački po X ili Z uz dodatnu mogućnost da pri merenju za podešavanje-kalibraciju ne radi pamćenje koordinata već samo da se ispiše rezultat
-   b) merenje prečnika , kružnosti i cilindričnosti
-   c) merenje položaja žljeba i određivanje širine žljeba
+   a) merenje pozicije - pozicioniranje, aksialni udar sa svih pet mogućnosti, a-kalibracija po X 
+   b) merenje prečnika  i radijalnog udara
+   c) merenje položaja žljeba i određivanje širine žljeba, kod kalibracije određuje radijus vrha alata
    d) merenje položaja ulaska u žljeb - pozicioniranje po C osi
    e) merenje srednjeg prečnika navoja
+   f) merenje prečnika u više tačaka uz proračun cilindričnosti
 3) Svi programi treba da imaju 
    a) masku za unos parametara
    b) masku za pregled rezultata
