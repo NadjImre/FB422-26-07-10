@@ -1,23 +1,35 @@
 //M(WorkpieceSetup)
 ;FB422 mart 2026
 ;DEFINICIJA KONTURE
-DEF DefinicijaKonture = (I/* 0=$89214, 3=$89215/0/,$89213,"","."/WR2///20,12,185/220,12,160)
+DEF DefinicijaKonture = (I/* 1=$89311, 0=$89214, 3=$89215/1/,$89213,"",""/WR2///20,12,185/220,12,160)
 DEF Precnik = (R4/0,450/100/,$89216,"D",$89009/WR2///20,32,185/220,32,160)
 DEF Pocetak = (R4/-1000,1000/0/,$89217,"Z1",$89009/WR2///20,52,185/220,52,160)
 DEF Kraj = (R4/-1000,1000/0/,$89218,"Z2",$89009/WR2///20,72,185/220,72,160)
 DEF Korekcija1 = (R4/-1,1/0/,$89219,"K1",$89009/WR2///20,92,185/220,92,160)
 DEF Korekcija2 = (R4/-1,1/0/,$89220,"K2",$89009/WR2///20,112,185/220,112,160)
 DEF NazivKonture = (S///,$89162,"",".spf"/WR2///20,132,185/220,132,160)
+
+
 ;MERNA GLAVA I PREKIDI FAZA (NacinUlaza / NacinIzlaza)
-Def NacinUlaza = (I/*0=$89223,1=$89224/0/,$89222,,"."/WR2///20,168,185/220,168,160)
-DEF Prekid1 = (I/0,7/0/,$89225,"","."/WR2///20,190,70/95,190,70)
-DEF Prekid2 = (I/0,7/0/,$89226,"","."/WR2///160,190,70/235,190,70)
-DEF Prekid3 = (I/0,7/0/,$89227,"","."/WR2///300,190,70/375,190,70)
-DEF Prekid4 = (I/0,7/0/,$89228,"","."/WR2///20,212,70/95,212,70)
-DEF Prekid5 = (I/0,7/0/,$89229,"","."/WR2///160,212,70/235,212,70)
-DEF Prekid6 = (I/0,7/0/,$89230,"","."/WR2///300,212,70/375,212,70)
+Def NacinUlaza = (I/*0=$89223,1=$89224/0/,$89222,,""/WR2///20,168,185/220,168,160)
+
+;izmena-ki 
+;DEF Prekid1 = (I/0,7/0/,$89225,"","."/WR2///20,190,70/95,190,70)
+;DEF Prekid2 = (I/0,7/0/,$89226,"","."/WR2///160,190,70/235,190,70)
+;DEF Prekid3 = (I/0,7/0/,$89227,"","."/WR2///300,190,70/375,190,70)
+;DEF Prekid4 = (I/0,7/0/,$89228,"","."/WR2///20,212,70/95,212,70)
+;DEF Prekid5 = (I/0,7/0/,$89229,"","."/WR2///160,212,70/235,212,70)
+;DEF Prekid6 = (I/0,7/0/,$89230,"","."/WR2///300,212,70/375,212,70)
+
+DEF Prekid1 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89225,"",""/WR2///20,190,75/60,190,88)
+DEF Prekid2 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89226,"",""/WR2///160,190,75/200,190,88)
+DEF Prekid3 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89227,"",""/WR2///300,190,75/340,190,88)
+DEF Prekid4 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89228,"",""/WR2///20,212,75/60,212,88)
+DEF Prekid5 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89229,"",""/WR2///160,212,75/200,212,88)
+DEF Prekid6 = (I/* 0=$89312,4="GAP",6=$89316,3=$89315,2=$89314,1=$89313/0/,$89230,"",""/WR2///300,212,75/340,212,88)
+
 ;PARAMETRI LINETE
-DEF Lineta = (I/* 0=$89232,1=$89233/0/,$89231,"-","."/WR2///20,248,185/220,248,160)
+DEF Lineta = (I/* 0=$89232,1=$89233/0/,$89231,"-",""/WR2///20,248,185/220,248,160)
 DEF PozUose = (R4/0,400/0/,$89234,"U",$89009/WR2///20,268,185/220,268,160)
 DeF UlazLinete=(R1/0,400/0/,$89235,"L1",$89009/WR2///20,288,185/220,288,160)
 DeF IzlazLinete=(R1/0,400/0/,$89236,"L2",$89009/WR2///20,308,185/220,308,160)
@@ -39,14 +51,16 @@ OUTPUT(NCCODE3)
 END_OUTPUT
 
 CHANGE(DefinicijaKonture)
-IF (DEFINICIJAKONTURE==3)
+;izmena-ki
+IF (DEFINICIJAKONTURE==1)
    Precnik.WR=4
    Pocetak.WR=4
    Kraj.WR=4
    Korekcija1.WR=4
    Korekcija2.WR=4
-   NazivKonture.WR=2
-ELSE
+   NazivKonture.WR=4
+ENDIF
+IF (DEFINICIJAKONTURE==0)
    Precnik.WR=2
    Pocetak.WR=2
    Kraj.WR=2
@@ -54,23 +68,45 @@ ELSE
    Korekcija2.WR=2
    NazivKonture.WR=4
 ENDIF
+IF (DEFINICIJAKONTURE==3)
+   Precnik.WR=4
+   Pocetak.WR=4
+   Kraj.WR=4
+   Korekcija1.WR=4
+   Korekcija2.WR=4
+   NazivKonture.WR=2
+ENDIF
 END_CHANGE
 
 CHANGE(NacinUlaza)
-IF (NacinUlaza==0)
-   Prekid1.WR=1
-   Prekid2.WR=1
-   Prekid3.WR=1
-   Prekid4.WR=1
-   Prekid5.WR=1
-   Prekid6.WR=1
-ELSE
-   Prekid1.WR=2
-   Prekid2.WR=2
-   Prekid3.WR=2
-   Prekid4.WR=2
-   Prekid5.WR=2
-   Prekid6.WR=2
+;izmena-ki
+;IF (NacinUlaza==0)
+;   Prekid1.WR=1
+;   Prekid2.WR=1
+;   Prekid3.WR=1
+;   Prekid4.WR=1
+;   Prekid5.WR=1
+;   Prekid6.WR=1
+;ELSE
+;   Prekid1.WR=2
+;   Prekid2.WR=2
+;   Prekid3.WR=2
+;   Prekid4.WR=2
+;   Prekid5.WR=2
+;   Prekid6.WR=2
+;ENDIF
+END_CHANGE
+
+CHANGE(Lineta)
+;izmena-ki
+IF (Lineta==0)
+  PozUose.wr = 4
+  UlazLinete.wr = 4
+  IzlazLinete.wr = 4
+else
+  PozUose.wr = 2
+  UlazLinete.wr = 2
+  IzlazLinete.wr = 2
 ENDIF
 END_CHANGE
 
@@ -88,14 +124,16 @@ LOAD
   RECT(5,6,560,148,133,127,1)
   RECT(5,158,560,78,133,132,1)
   RECT(5,242,560,88,134,131,1)
-IF (DEFINICIJAKONTURE==3)
+;izmena-ki
+IF (DEFINICIJAKONTURE==1)
    Precnik.WR=4
    Pocetak.WR=4
    Kraj.WR=4
    Korekcija1.WR=4
    Korekcija2.WR=4
-   NazivKonture.WR=2
-ELSE
+   NazivKonture.WR=4
+ENDIF
+IF (DEFINICIJAKONTURE==0)
    Precnik.WR=2
    Pocetak.WR=2
    Kraj.WR=2
@@ -103,26 +141,45 @@ ELSE
    Korekcija2.WR=2
    NazivKonture.WR=4
 ENDIF
+IF (DEFINICIJAKONTURE==3)
+   Precnik.WR=4
+   Pocetak.WR=4
+   Kraj.WR=4
+   Korekcija1.WR=4
+   Korekcija2.WR=4
+   NazivKonture.WR=2
+ENDIF
+;izmena-ki
+IF (Lineta==0)
+  PozUose.wr = 4
+  UlazLinete.wr = 4
+  IzlazLinete.wr = 4
+else
+  PozUose.wr = 2
+  UlazLinete.wr = 2
+  IzlazLinete.wr = 2
+ENDIF
 Prekid1 = NacinIzlaza / 100000
 Prekid2 = (NacinIzlaza / 10000) MOD 10
 Prekid3 = (NacinIzlaza / 1000) MOD 10
 Prekid4 = (NacinIzlaza / 100) MOD 10
 Prekid5 = (NacinIzlaza / 10) MOD 10
 Prekid6 = NacinIzlaza MOD 10
-IF (NacinUlaza==0)
-   Prekid1.WR=1
-   Prekid2.WR=1
-   Prekid3.WR=1
-   Prekid4.WR=1
-   Prekid5.WR=1
-   Prekid6.WR=1
-ELSE
-   Prekid1.WR=2
-   Prekid2.WR=2
-   Prekid3.WR=2
-   Prekid4.WR=2
-   Prekid5.WR=2
-   Prekid6.WR=2
+;izmena-ki
+;IF (NacinUlaza==0)
+;   Prekid1.WR=1
+;   Prekid2.WR=1
+;   Prekid3.WR=1
+;   Prekid4.WR=1
+;   Prekid5.WR=1
+;   Prekid6.WR=1
+;ELSE
+;   Prekid1.WR=2
+;   Prekid2.WR=2
+;   Prekid3.WR=2
+;   Prekid4.WR=2
+;   Prekid5.WR=2
+;   Prekid6.WR=2
 ENDIF
 END_LOAD
 

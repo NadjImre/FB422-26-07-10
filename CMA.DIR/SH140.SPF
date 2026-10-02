@@ -16,6 +16,9 @@ Def String[100] Poruka
 Def Real UgaoAOse=0
 Def Real AktXV,AktIzbrus
 Def Int LevoDesno=0
+;izmena-ki
+R54=0 ;nema impulsa merne glave
+
 ;Prethodni proracun
 ;broj tocila i vretena
 BrojTocila=GETT(Gr_Tool)
@@ -96,8 +99,14 @@ msg(Poruka)
 ;brusenje
 JEDAN_PROLAZ:
 ;podesavanje prekida
-if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) )
+if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) and (Gr_measuring_head<>0) )
    setint(Gr_interrupts[IndeksFaze]) prio=1 Sh6202
+   ;izmena-ki
+   if (R54==1)
+     msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+     gotof kraj
+   endif
+   R54=0 ;0-nema impulsa 1-ima impulsa
 endif
 ;broj izbrusavanja u ovom delu
 AktIzbrus=Gr_DwellTime[indeksfaze]
@@ -137,8 +146,37 @@ OSCILACIJE:
 KRAJ_OSCIL:
 
 ;isklucivanje prekida
-if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) )
-   clrint(Gr_interrupts[IndeksFaze])
+if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) and (Gr_measuring_head<>0) )
+  clrint(Gr_interrupts[IndeksFaze])
+
+  ;izmena-ki
+  ;=================================================
+  if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
+    ;nema impulsa merne glave, GAP signal se ne racuna
+    msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+    gotof kraj
+  endif
+
+  ;=================================================
+  ;aktivirati ako treba nova nulta tacka
+  gotof preskoci
+  if (R54==1) and (Gr_interrupts[IndeksFaze]==1)
+  ;definisanje nove nulte tacke
+  
+  ;IF R093==0
+  ;spoljasnje
+    $P_UIFR[$P_GG[8]-1,X,TR]=$AA_IM[X]-R075/2-R074/2
+    ;R074 - pomoćni parametar prečnik tocila
+    ;R075 - pomoćni parametar završna mera brušenja
+    $P_UIFR[$P_GG[8]-1,X,FI]=0
+  ;ENDIF
+
+  endif
+  preskoci:
+  ;=================================================
+
+  R54=0
+
 endif
 PRORACUN:
 ;povecaj proj prolaza
@@ -166,12 +204,42 @@ KRAJ:
 OS[Z]=0
 G1 X=Gr_Diameter1+Gr_Podhod XV=Gr_Podhod F=Gr_Rabhod 
 M=Gr_measuring_head_out
-msg("Kraj")
+
+;izmena-ki
+if (IndeksFaze<MaxFaza) and (Gr_measuring_head<>0)
+
+if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
+  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+else
+  if (R54==1)
+    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+  else
+    msg("Kraj")
+  endif
+endif
+
+endif
+
 TRANS
 G90G53X0G0T0D0M11M5U0
 WaitP(Z)
 STOPRE
+;izmena-ki
+if (IndeksFaze<MaxFaza) and (Gr_measuring_head<>0)
 
+if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
+  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+  m00
+else
+  if (R54==1)
+    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+    m00
+  else
+    msg("Kraj")
+  endif
+endif
+
+endif
 M17
 
 TREBAABRIHT:

@@ -2,7 +2,7 @@ PROC SH6202
 
 MSG("IMPULS ZA PREKID")
 ;M01
-
+R54=1 ;impuls je dobijen
 M17
 
 
