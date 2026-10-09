@@ -49,7 +49,12 @@ For Brojac=1 to MaxFaza
          UkupnoProlazaUFazi[Indeks]=1
        endif
 
-       UkupnoOscilacija[Indeks]=(Gr_Steps[Indeks]/Gr_Steps_Oscilation[Indeks])
+       if Gr_StrokesToDress[Indeks]==0
+         UkupnoOscilacija[Indeks]=(Gr_Steps[Indeks]/Gr_Steps_Oscilation[Indeks])
+       else
+         UkupnoOscilacija[Indeks]=((Gr_Steps[Indeks]/Gr_StrokesToDress[Indeks])/Gr_Steps_Oscilation[Indeks])
+       endif
+
        if (UkupnoOscilacija[Indeks]*1000 - 1000*trunc(UkupnoOscilacija[Indeks])) <> 0
           UkupnoOscilacija[Indeks] = trunc(UkupnoOscilacija[Indeks]) +1
        endif
