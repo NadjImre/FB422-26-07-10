@@ -17,12 +17,17 @@ Def int BrojTocila,BrojVretena
 Def String[100] Poruka
 Def Real UgaoAOse=0
 ;izmena-ki
+Def int UkupnoProlazaUFazi[MaxFaza]
 R54=0 ;nema impulsa merne glave
 
 ;Prethodni proracun
 ;broj tocila i vretena
 BrojTocila=GETT(Gr_Tool)
 BrojVretena=$TC_TPG1[BrojTocila]
+;izmena-ki
+R074=$TC_DP3[BrojTocila,Gr_DNumber] ;precnik tocila
+R075=Gr_Diameter1 ;zavrsna mera brusenja
+
 ;dodela vrednosti za koord system jer se clan niza ne moze dodeliti g funkciji
 Kord=Gr_Frame
 ;ugao A ose je nula
@@ -33,6 +38,14 @@ For Brojac=1 to MaxFaza
        UkupniDodatak=UkupniDodatak+Gr_Steps[Indeks]
        UkupnoProlaza=UkupnoProlaza+Gr_StrokesToDress[Indeks]
        indeksfaze=indeks
+
+       ;IZMENA-KI
+       UkupnoProlazaUFazi[Indeks]=Gr_StrokesToDress[Indeks]
+       IF (Gr_Strokes[indeks]>0) and (Gr_StrokesToDress[Indeks]==0)
+         UkupnoProlaza=UkupnoProlaza+1
+         UkupnoProlazaUFazi[Indeks]=1
+       endif
+
     endif
     BrojObrtajaTocila[Brojac-1]=19098*Gr_Wheel_Speeds[Brojac-1]/abs($TC_DP3[BrojTocila,Gr_DNumber ])
 EndFor
@@ -93,7 +106,9 @@ EndIf
 IndeksUkupnogProlaza=IndeksUkupnogProlaza+1
 ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
 ;poruka
-poruka = SPRINT("%s: Faza %d (%5.3fx%5.3f) Prolaz %d/%d Ukupno prolaza %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1,Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
+;izmena-ki
+;poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm/min)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1, Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
+poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm/min)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
 msg(Poruka)
 ;brusenje
 JEDAN_PROLAZ:

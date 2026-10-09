@@ -17,22 +17,43 @@ Def Real UgaoAOse=0
 Def Real AktXV,AktIzbrus
 Def Int LevoDesno=0
 ;izmena-ki
+Def int UkupnoProlazaUFazi[MaxFaza]
+Def real UkupnoOscilacija[MaxFaza]
+Def int brojac_oscilacija=2
 R54=0 ;nema impulsa merne glave
 
 ;Prethodni proracun
 ;broj tocila i vretena
 BrojTocila=GETT(Gr_Tool)
 BrojVretena=$TC_TPG1[BrojTocila]
+;izmena-ki
+R074=$TC_DP3[BrojTocila,Gr_DNumber] ;precnik tocila
+R075=Gr_Diameter1 ;zavrsna mera brusenja
+
 ;dodela vrednosti za koord system jer se clan niza ne moze dodeliti g funkciji
 Kord=Gr_Frame
 ;ugao A ose je nula
 UgaoAOse = 0
+;priprema
 For Brojac=1 to MaxFaza
     Indeks = MaxFaza - Brojac
     If (Gr_Strokes[indeks]>0)
        UkupniDodatak=UkupniDodatak+Gr_Steps[Indeks]
        UkupnoProlaza=UkupnoProlaza+Gr_StrokesToDress[Indeks]
        indeksfaze=indeks
+
+       ;IZMENA-KI
+       UkupnoProlazaUFazi[Indeks]=Gr_StrokesToDress[Indeks]
+       IF (Gr_Strokes[indeks]>0) and (Gr_StrokesToDress[Indeks]==0)
+         UkupnoProlaza=UkupnoProlaza+1
+         UkupnoProlazaUFazi[Indeks]=1
+       endif
+
+       UkupnoOscilacija[Indeks]=(Gr_Steps[Indeks]/Gr_Steps_Oscilation[Indeks])
+       if (UkupnoOscilacija[Indeks]*1000 - 1000*trunc(UkupnoOscilacija[Indeks])) <> 0
+          UkupnoOscilacija[Indeks] = trunc(UkupnoOscilacija[Indeks]) +1
+       endif
+
     endif
     BrojObrtajaTocila[Brojac-1]=19098*Gr_Wheel_Speeds[Brojac-1]/abs($TC_DP3[BrojTocila,Gr_DNumber ])
 EndFor
@@ -94,7 +115,10 @@ EndIf
 IndeksUkupnogProlaza=IndeksUkupnogProlaza+1
 ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
 ;poruka
-poruka = SPRINT("%s: Faza %d (%5.3fx%5.3f) Prolaz %d/%d Ukupno prolaza %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1,Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
+
+;izmena-ki
+;poruka = SPRINT("%s: Faza %d (%5.3fx%5.3f) Prolaz %d/%d  Ukupno prolaza %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1,Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
+poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d" ,Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
 msg(Poruka)
 ;brusenje
 JEDAN_PROLAZ:
@@ -119,22 +143,37 @@ OSCILACIJE:
    endif      
    If((Gr_Position_Strokes[indeksfaze]<=0) and (levodesno==0))
      AktXV=AktXV-Gr_Steps_OscilaTion[indeksFaze]
+
+     ;izmena-ki
+     poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d   Oscill: %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
+     brojac_oscilacija=brojac_oscilacija+1
+
    endif
    If((Gr_Position_Strokes[indeksfaze]>=0) and (levodesno<>0))
      AktXV=AktXV-Gr_Steps_OscilaTion[indeksFaze]
+
+     ;izmena-ki
+     poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d   Oscill: %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
+     brojac_oscilacija=brojac_oscilacija+1
+   
    endif
    ;ako je doslo do kraja
    if (AktXV<XVKoord)
       AktXV=XVKoord
    endif
+
    if (AktIzbrus<0) GOTOF KRAJ_OSCIL
    IF (LevoDesno==0)
+      ;izmena-ki
+      msg(Poruka)
       G1 G90 X=Gr_Diameter1+AktXV XV=AktXV
       G1 G90 X=Gr_Diameter2+AktXV Z=Gr_Position2 XV=AktXV F=Gr_Oscilacion_Feeds[IndeksFaze] S=Gr_Speeds[IndeksFaze]
       If(Gr_HoldZ2[IndeksFaze]>0)
         G4 F=Gr_HoldZ2[IndeksFaze]
       Endif
    ELSE
+      ;izmena-ki
+      msg(Poruka)
       G1 G90 X=Gr_Diameter2+AktXV XV=AktXV
       G1 G90 X=Gr_Diameter1+AktXV Z=Gr_Position1 XV=AktXV F=Gr_Oscilacion_Feeds[IndeksFaze] S=Gr_Speeds[IndeksFaze]
       If(Gr_HoldZ1[IndeksFaze]>0)
@@ -142,8 +181,11 @@ OSCILACIJE:
       Endif
    ENDIF
    levodesno = ( levodesno + 1) mod 2
+
    gotob oscilacije
 KRAJ_OSCIL:
+;izmena-ki
+brojac_oscilacija=2
 
 ;isklucivanje prekida
 if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) and (Gr_measuring_head<>0) )
