@@ -112,7 +112,7 @@ ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
 ;poruka
 ;izmena-ki
 ;poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm/min)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1, Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
-poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm/min)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
+poruka = SPRINT("%s:  $66024 %d   (%5.3f mm x %5.3f mm/min)   $66025 %d/%d   $66026 %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_PlungeCut_Feeds[IndeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
 msg(Poruka)
 ;brusenje
 JEDAN_PROLAZ:
