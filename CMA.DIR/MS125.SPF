@@ -1,0 +1,26 @@
+PROC MS125(AXIS osa, REAL pozicija, INT brzina, INT brojSonde, STRING[32] labelaGreske)
+;univerzalni ciklus merenja sa jednom osom
+  ;merenje
+  If (brzina<=0) 
+    G0 AX[osa]=pozicija MEAS=brojSonde
+  else
+    G1 AX[osa]=pozicija F=brzina MEAS=brojSonde
+  endif
+  ;provera kontakta sa sondom -  ako nema greska
+  IF($AC_MEA[brojSonde]==0)
+    if (labelaGreske<>"")
+      RET(labelaGreske)
+    else
+      gotof greska
+    endif
+  Endif
+
+M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17

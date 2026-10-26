@@ -1,144 +1,172 @@
 proc ms140
-;merenje po X osi u više tačaka sa više ponavljanja
+;merenje precnika u vise tacaka sa vise ponavljanja
 ;meri precnik i radijalni udar
 ;sa masine FB422
-;april 2026
+;oktobar 2026
 
-def real start_x,start_z;pocetne tacke sa koje ciklus krece, tu se vraćamo na kraju
-def int errno;broj greske koja se vraca prilikom snimanja
-def string[32] fname;naziv fajla za snimanje
+def int errno ;broj greske koja se vraca prilikom snimanja
+def string[32] fname ;naziv fajla za snimanje
 def string[128] poruka ; pomocna promenljiva za ispis poruke
 def int brojacmerenja ;brojac za broj merenja
 def int brojacpon ; brojac za broj ponavljanja
 def real ugaozaokreta ; ugao zaokreta izmedju dva merenja
-def real srednjiprecnik = 0 ;za racunanje srednjeg precnika
+def real MerKraj,MerStart ; tacka gde se zavrsava i od koje krece merenje
+def real start_c ;pocetni ugao C
 
-;naziv fajla za zspisivanje statusa
+;naziv fajla za zapisivanje statusa
 fname=me_report_file
-;ravan, koordinatni sistem i alat
-g18g500 t=me_tool d=me_tool_dnumber
-;pamtimo pocetnu tacku
-start_x=$aa_iw[x] start_z=$aa_iw[z]
+;ravan , koordinatni sistem i alat
+g18g500 t= me_tool d= me_tool_Dnumber
+;za potrebe rucnog prepisi poziciju C
+start_c=$aa_iw[c]
+me_actual_cposition=$aa_iw[c]
+;za potrebe proracuna
+me_nominal = me_diameter
+;provera vrednosti
+if (me_MeasureCount < 1)
+  me_MeasureCount=1
+endif
+if (me_RepetitionCount < 1)
+  me_RepetitionCount=1
+endif
 ;racunamo ugao zaokreta
-ugaozaokreta=360/me_measurecount
+ugaozaokreta=360/ me_MeasureCount
 stopre
-;poruka
-msg(poruka)
-;zauzimanje ugla ako se traži i dolazak u poziciju C 
-if(me_with_caxis<>0)
-  ;ako se traži ugao C za merenje onda menjac je osa  
+;da li je sonda rucno dovedena do komada ?
+;ako jeste smatramo da je sonda rucno podignuta i dovedena u zonu merenja
+if ( (me_status b_and 7) > 3 ) gotof RUCNO
+;ako nije rucno onda se sonda programski dovodi u zonu merenja
+;zaokret ako treba
+ms124(me_BAxis_Angle,me_Approach,me_SwivelPointX,me_SwivelPointZ)
+;ravan , koordinatni sistem i alat
+g18g500 t= me_tool d= me_tool_Dnumber
+;zauzimanje ugla ako se trazi i dolazak u poziciju Z
+if(me_with_Caxis<>0)
+  ;ako se trazi ugao C za merenje onda menjac je osa
   m70
   ;pozicija merenja po Z i pun krug sa komadom
-  G0 z=me_position meas=me_probe_number C=IC(360)
+  ms126(me_probe_number,,me_position,-1,"greska")
 else
-  ;ako se ne traži ugao C samo pozicija Z bez okretanja C
-  G0 z=me_position meas=me_probe_number
+  ;ako se ne trazi ugao C samo pozicija Z bez okretanja C
+  MS126(me_probe_number,,me_position,,"greska")
 endif
 ;podizanje sonde
-m=me_probeup
-;cekaj da se spusti
-g4 f5
-;ako se traz ugao C
-if(me_with_caxis<>0)
+MS128(me_probe_number)
+g4 f2
+;ako se trazi ugao C
+if( me_with_Caxis<>0)
   ;zakreni komad na ugao
-  G0 C=ACP(me_caxis_position) MEAS=me_probe_number
-  ;ako je doslo do kontakta sa sondom - greska
-  IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
+  ms126(me_probe_number,,,me_Caxis_position,"greska")
 endif
-;dolazak na precnik merenja
-g0 x=me_diameter+me_distance meas=me_probe_number
-;ako je bilo kontakta greska
-IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
+;dolazak sa spoljne strane precnika, hod merenja je dve duzine
+ ms126(me_probe_number,me_diameter+me_distance,,,"GRESKA")
+;ako nije rucno start je programski zadata c pozicija ako jeste ostaje pocetna pozicija
+start_c=me_caxis_position
 STOPRE
-;zaglavlje
-poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","C angle", "Actual","Nominal","Tolerance","Deviation","Error")
-Write(errno,fname,poruka)
-;petlja za pomeranje po uglu 
-for brojacmerenja=1 to me_measurecount
-  ;ako se komad moze okretati po c
-  If(me_with_caxis<>0)
-    ;zakreni komad na ugao
-    G0 C=ACP((me_caxis_position+(brojacmerenja-1)*ugaozaokreta) MOD 360) MEAS=me_probe_number
-    ;ako je doslo do kontakta sa sondom - greska
-    IF($AC_MEA[me_probe_number]==1) GOTOF GRESKA
-  endif 
-  ;petlja za ponavljanje merenje
-  ;zaglavlje
-  msg(Poruka)
-  srednjiprecnik=0
-  for brojacpon=1 to me_repetitioncount
-     ;merenje
-     g1 x=me_diameter-me_distance f=me_feed meas=me_probe_number
-     ;u slucaju da nije bilo kontakta prijavi gresku
-     IF($AC_MEA[me_probe_number]==0) GOTOF GRESKA
-     ;zapisujemo rezultat
-     me_result[brojacmerenja-1,brojacpon-1]=me_diameter-$aa_mw[X]-me_offset
-     ;za racunanje srednjeg precnika
-     srednjiprecnik = srednjiprecnik + $aa_mw[x]+me_offset
-     ;ispis poruke
-     poruka = sprint("Repetit. %3d %12.3f %12.3f %12.3f %12.3f %12.3f", brojacpon, $AA_IW[C], $aa_mw[X]+me_offset, me_diameter, me_tolerance, me_result[brojacmerenja-1,brojacpon-1])
-     msg(poruka)   
-     ;zapis u fajl
-     Write(errno,fname,poruka)
-     ;idemo nazad
-     g1 x=me_diameter+me_distance F=me_feed
-  ;kraj petlje za ponavljanje
+;ako je rucno preskacemo gore
+RUCNO:
+;polazna tacka je trenutni X, cilj je za dve duzine ka osi
+MerStart=$aa_iw[x]
+MerKraj=MerStart-2*me_distance
+;pozicija Z za potrebe rucnog
+me_actual_position=$aa_iw[Z]
+;petlja za ponavljanje merenja
+for brojacpon=1 to me_RepetitionCount
+  ;petlja za pomeranje po uglu
+  for brojacmerenja=1 to  me_MeasureCount
+    ;zauzimanje pocetne po C
+    If( me_with_Caxis<>0)
+      ms126(me_probe_number,,,start_C+((brojacmerenja-1)*ugaozaokreta),"greska")
+    endif
+    MS125((x),MerKraj,me_feed,me_probe_number,"GRESKA")
+    ;izmereni precnik, sa pomerajem stanice ako je zadat
+    me_result[brojacmerenja-1,brojacpon-1]= $aa_mw[X]+me_offset
+    ;ispis poruke na ekran
+    msg(Sprint("Meas. point %4d rep. %4d $66021 %12.4f $66022 %12.4f",brojacmerenja,brojacpon,$aa_mw[X]+me_offset,me_diameter-($aa_mw[X]+me_offset)))
+    ;vracanje na pocetnu tacku
+    g1 x=MerStart F= me_feed
+  ;kraj petlje za merenje po uglu
   endfor
-  ;proracun srednjeg precnika
-  srednjiprecnik = srednjiprecnik / me_repetitioncount
-;  ispis poruke
-  poruka = sprint("Avg. diam.                %12.3f %12.3f %12.3f %12.3f", srednjiprecnik, me_diameter, me_tolerance, me_diameter-srednjiprecnik)
-  msg(poruka)   
-  ;zapis u fajl ako ima vise ponavljanja
-  if (me_repetitioncount>1)
-     Write(errno,fname,poruka)
+  ;Ako je rekalibracija promeni alat pre sledeceg kruga
+  if ( (me_status b_and 7) == 3)
+    MS127(ME_MEASURECOUNT,brojacpon-1,1,"Measured diameter","Radial run-out",0.5)
+    if (ABS(me_deviation)<me_tolerance)
+       poruka="Rekalibracija je zavrsena sa greskom "<< me_deviation
+       msg(poruka)
+       Write(errno,fname,poruka)
+       gotof kraj_rekalibracije
+    endif
+    ;greska je na precniku, duzina alata po X je u radijusu
+    $tc_dp4[ me_tool_number, me_tool_Dnumber]=$tc_dp4[ me_tool_number, me_tool_Dnumber]-0.5*me_deviation
+    t= me_tool d= me_tool_Dnumber
+  else
+
   endif
-;kraj petlje za merenje po uglu
+;Kraj petlje za ponavljanje merenja
 endfor
-
-;da li se vracamo po x 
-if (( me_ReturnMode==0) or ( me_ReturnMode==32))
-   g0 x=start_x
+if ( (me_status b_and 7) == 3)
+       poruka="Rekalibracija je zavrsena posto je dostignot maks. broj pokusaja sa greskom "<< me_deviation
+       msg(poruka)
+       Write(errno,fname,poruka)
 endif
-;da li se vracamo p Z
-if(( me_ReturnMode==0) or ( me_ReturnMode==48))
-   g0 z=start_z
+kraj_rekalibracije:
+;ako je neki od rucnih rezima ne vracamo se nazad vec idemo odmah na proracun
+if ( (me_status b_and 7) > 3 ) gotof PRORACUN
+;da li se vracamo po x
+if ( me_ReturnMode==32)
+   g0 x=me_ReturnDiameter
 endif
-
-;proracun
-me_min=me_result[0,0]
-me_max=me_result[0,0]
-me_avg=0
-;petlja za matematiku 
-for brojacmerenja=0 to me_measurecount-1
-  for brojacpon=0 to me_repetitioncount-1
-      if(me_min>me_result[brojacmerenja,brojacpon])
-        me_min=me_result[brojacmerenja,brojacpon]
-      endif
-      if(me_max<me_result[brojacmerenja,brojacpon])
-        me_max=me_result[brojacmerenja,brojacpon]
-      endif
-      me_avg=me_avg+me_result[brojacmerenja,brojacpon]
-  endfor
-endfor
-me_avg=me_avg/(me_measurecount*me_repetitioncount)
-me_span=abs(me_max-me_min)
-;kraj proracuna
-;  ispis poruke za precnik
-  poruka = sprint("**Diameter**              %12.3f %12.3f %12.3f %12.3f", me_diameter-me_avg, me_diameter, me_tolerance,-me_avg)
-  msg(poruka)   
-  ;zapis u fajl ako ima vise ponavljanja
-  Write(errno,fname,poruka);  ispis poruke za UDAR
-  poruka = sprint("**Run-out**               %12.3f %12.3f %12.3f %12.3f", me_span/2, 0, me_RUNOUT_tolerance, me_span/2)
-  msg(poruka)   
-  ;zapis u fajl ako ima vise ponavljanja
-  Write(errno,fname,poruka)
-
-IF (me_Probe_AutoUP<>64)
-   m=me_probeDown
+if ( me_ReturnMode==0)
+   g0g53t0d0x0
+endif
+;ako treba sonda gore
+IF (me_Probe_AutoUp==0)
+   MS128(-ME_PROBE_NUMBER)
 ENDIF
 
-M17
+
+PRORACUN:
+;Ako je rekalibracija ne radimo proracun
+if ( (me_status b_and 7) <> 3)
+MS127(ME_MEASURECOUNT,0,ME_REPETITIONCOUNT,"Measured diameter","Radial run-out",0.5)
+endif
+;poruka za ekran
+poruka = sprint("Measured diameter=%12.3f deviation=%12.3f run-out=%12.3f ", me_avg, me_deviation, me_span)
+msg(poruka)
+
+;akcije u zavisnosti od moda rada
+
+;merenje precnika bez korekcije
+;isto i za rucno i za programsko pozicioniranje
+if ( ((me_status b_and 7)==1) or ((me_status b_and 7)==4) )
+   me_actual_diameter=me_avg
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   gotof kraj
+endif
+
+;merenje precnika sa korekcijom
+;na bazi srednje vrednosti unosi se korekcija u koord sistem
+;pomak X je u radijusu, greska je na precniku
+if ((me_status b_and 7)==2)
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $P_UIFR[ me_frame-1,X,FI]=-0.5*me_deviation
+   msg("$66023")
+   gotof kraj
+endif
+
+;merenje precnika i kalibracija
+;korekcija ide u duzinu 2 alata, pola greske precnika
+if ( (me_status b_and 7)==5 )
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $tc_dp4[ me_tool_number, me_tool_Dnumber]=$tc_dp4[ me_tool_number, me_tool_Dnumber]-0.5*me_deviation
+endif
+
+KRAJ:
+
+m17
 
 greska:
 
@@ -147,4 +175,3 @@ M00
 M96
 
 m17
-

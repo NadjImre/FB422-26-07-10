@@ -1,0 +1,29 @@
+PROC MS124(Real Ugao, Int NacZaokreta, Real XZaokret, Real Zaokret)
+
+G500
+T0D0
+
+STOPRE
+If (NacZaokreta==32768)
+   G53G0X=XZaokret
+   G0G53B=Ugao
+Endif
+If (NacZaokreta==65536)
+   G53G0Z=Zaokret
+   G0G53B=Ugao
+Endif
+If (NacZaokreta==98304)
+   G53G0X=XZaokret
+   G53G0Z=Zaokret
+   G0G53B=Ugao
+Endif
+If (NacZaokreta==131072)
+   G53G0Z=Zaokret
+   G53G0X=XZaokret
+   G0G53B=Ugao
+Endif
+
+
+
+M17
+

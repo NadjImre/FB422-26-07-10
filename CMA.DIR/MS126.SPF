@@ -1,0 +1,73 @@
+PROC MS126( INT brojSonde , REAL Xpoz, Real ZPoz, Real CPoz , STRING[32] labelaGreske)
+;Pomocni ciklus za pomeranje vise osa brzim hodom uz aktivno sondu
+  ;brzi hod po X sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==True) And ($P_SUBPAR[3]==False) And ($P_SUBPAR[4]==False))
+    G0 X=Xpoz MEAS=brojSonde
+    Gotof Provera
+  Endif
+  ;brzi hod po Z sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==False) And ($P_SUBPAR[3]==True) And ($P_SUBPAR[4]==False))
+    G0 Z=ZPoz MEAS=brojSonde
+    GotoF Provera
+  endif
+  ;brzi hod po C sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==False) And ($P_SUBPAR[3]==False) And ($P_SUBPAR[4]==True))
+    M70
+    If (CPoz<0)
+      G0 C=IC(360) MEAS=brojSonde
+    ELSE 
+      CPoz = CPoz mod 360
+      G0 C=ACP(CPoz) MEAS=brojSonde
+    ENDIF
+    GotoF Provera
+  endif
+  ;brzi hod po X i Z sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==True) And ($P_SUBPAR[3]==True) And ($P_SUBPAR[4]==False))
+    G0 X=XPoz Z=ZPoz MEAS=brojSonde
+    GotoF Provera
+  endif
+  ;brzi hod po X i C sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==True) And ($P_SUBPAR[3]==False) And ($P_SUBPAR[4]==True))
+    M70
+    If (CPoz<0)
+      G0 X=XPoz C=IC(360) MEAS=brojSonde
+    ELSE
+      G0 X=XPoz C=ACP(CPoz) MEAS=brojSonde
+    ENDIF
+    GotoF Provera
+  endif
+  ;brzi hod po Z i C sa proverom kontakta sonde
+  If ( ($P_SUBPAR[2]==False) And ($P_SUBPAR[3]==True) And ($P_SUBPAR[4]==True))
+    M70
+    If (CPoz<0)
+      G0 Z=Zpoz C=IC(360) MEAS=brojSonde
+    ELSE
+      G0 Z=Zpoz C=ACP(CPoz) MEAS=brojSonde
+    ENDIF
+    GotoF Provera
+  endif
+  M70
+  If (CPoz<0)
+    G0 X=XPoz Z=ZPoz C=IC(360) MEAS=brojSonde
+  ELSE
+    G0 X=XPoz Z=ZPoz C=ACP(CPoz) MEAS=brojSonde
+  ENDIF
+PROVERA:
+   ;provera kontakta sa sondom -  ako ima greska
+  IF($AC_MEA[ brojSonde ]==1)
+    if (labelaGreske<>"")
+      RET(labelaGreske)
+    else
+      gotof greska
+    Endif
+  Endif
+
+M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17

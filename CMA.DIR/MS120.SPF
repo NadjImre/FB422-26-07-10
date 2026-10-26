@@ -4,112 +4,171 @@ proc ms120
 ;sa masine FB422
 ;april 2026
 
-def real start_x,start_z;pocetne tacke sa koje ciklus krece, tu se vraćamo na kraju
+def real start_x,start_z,start_c;pocetne tacke sa koje ciklus krece, tu se vraćamo na kraju
 def int errno ;broj greske koja se vraca prilikom snimanja
 def string[32] fname ;naziv fajla za snimanje
 def string[128] poruka ; pomocna promenljiva za ispis poruke
 def int brojacmerenja ;brojac za broj merenja
+def int brojpon=1 ; broj ponavljanja 
 def int brojacpon ; brojac za broj ponavljanja
 def real ugaozaokreta ; ugao zaokreta izmedju dva merenja
+def real MerKraj,MerStart ; tacka gde se zavrsava i od koje kreće merenje
 
 ;naziv fajla za zspisivanje statusa
 fname=me_report_file
-
 ;ravan , koordinatni sistem i alat
 g18g500 t= me_tool d= me_tool_Dnumber
 ;pamtimo pocetnu tacku
-start_x=$aa_iw[x] start_z=$aa_iw[z]
+start_x=$aa_iw[x] start_z=$aa_iw[z] start_c=$aa_iw[c]
+;za potrebe rucnog prepisi poziciju C
+me_actual_cposition=$aa_iw[c]
+;za potrebe proracuna
+me_nominal = me_position
+;provera vrednosti
+if (me_MeasureCount < 1)
+  me_MeasureCount=1
+endif
+if (me_RepetitionCount < 1)
+  me_RepetitionCount=1
+endif
 ;racunamo ugao zaokreta
 ugaozaokreta=360/ me_MeasureCount
 stopre
-;poruka
-msg("$66020")
-;podizanje sonde
-m=me_ProbeUp
+;da li je sonda rucno dovedena do komada ? 
+;ako jeste smatramo da je sonda ručno podignuta i dovedena u zonu merenja
+if ( (me_status b_and 7) > 3 ) gotof RUCNO
+;ako nije rucno onda se sonda programski dovodi u zonu merenja
+;zaokret ako treba
+ms124(me_BAxis_Angle,me_Approach,me_SwivelPointX,me_SwivelPointZ)
+;ravan , koordinatni sistem i alat
+g18g500 t= me_tool d= me_tool_Dnumber
 ;zauzimanje ugla ako se traži i dolazak u poziciju C
 if(me_with_Caxis<>0)
   ;ako se traži ugao C za merenje onda menjac je osa
   m70
   ;pozicija merenja po Z i pun krug sa komadom
-  G0 z= me_position- me_distance meas=me_probe_number C=IC(360)
+  ms126(me_probe_number,,me_position- me_distance ,-1,"greska")
 else
   ;ako se ne traži ugao C samo pozicija Z bez okretanja C
-  G0 z= me_position- me_distance meas=me_probe_number
+  MS126(me_probe_number,,me_position- me_distance,,"greska")
 endif
-;ako je doslo do kontakta sa sondom u toku pozicioniranja - greska
-IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+;podizanje sonde
+MS128(me_probe_number)
+g4 f2
 ;ako se traz ugao C
 if( me_with_Caxis<>0)
   ;zakreni komad na ugao
-  G0 C=ACP( me_Caxis_Position) MEAS=me_probe_number
-  ;ako je doslo do kontakta sa sondom - greska
-  IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+  ms126(me_probe_number,,,me_Caxis_position,"greska")
 endif
 ;dolazak na precnik merenja
-g0 x= me_diameter meas=me_probe_number
-;ako je bilo kontakta greska
-IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
+ ms126(me_probe_number,me_diameter,,,"GRESKA")
+;ako nije rucno start je programski zadata c pozicija ako jeste ostaje pocetna pozicija
+start_c=me_caxis_position
 STOPRE
-;petlja za pomeranje po uglu 
-for brojacmerenja=1 to  me_MeasureCount
-  ;zauzimanje pocetne po C
-  If( me_with_Caxis<>0)
-    ;zakreni komad na ugao
-    G0 C=ACP( me_Caxis_Position+(brojacmerenja-1)*ugaozaokreta) MEAS=me_probe_number
-    ;ako je doslo do kontakta sa sondom - greska
-    IF($AC_MEA[ me_probe_number]==1) GOTOF GRESKA
-  endif 
-  ;petlja za ponavljanje merenje
-  for brojacpon=1 to  me_RepetitionCount
-    ;merenje
-    g1 z=me_position+ me_distance f=me_feed meas=me_probe_number
-    ;ako NIJE bilo kontakta - greska
-    IF($AC_MEA[ me_probe_number]==0) GOTOF GRESKA
+;ako je rucno preskacemo gore
+RUCNO:
+;racunamo tacke merenja - prva je trenutna pozicija
+MerStart=$aa_iw[z] 
+;a druga je pomerena za dve duzine merenja
+MerKraj=MerStart+2*me_distance
+;pozicija X za potrebe rucnog
+me_actual_diameter=$aa_iw[X]
+;petlja za ponavljanje merenje
+for brojacpon=1 to me_RepetitionCount
+  ;petlja za pomeranje po uglu 
+  for brojacmerenja=1 to  me_MeasureCount
+    ;zauzimanje pocetne po C
+    If( me_with_Caxis<>0)
+      ms126(me_probe_number,,,start_C+((brojacmerenja-1)*ugaozaokreta),"greska")
+    endif 
+    MS125((z),MerKraj,me_feed,me_probe_number,"GRESKA")
     ;razlika između nominalne i izmerene tačke
-    me_result[brojacmerenja-1,brojacpon-1]= me_position-$aa_mw[Z]
-    ;ispis poruke
-    msg("Meas. point " << brojacmerenja << " rep. " << brojacpon << " $66021 "<<$aa_mw[Z]<<" $66022 "<<me_result[brojacmerenja-1,brojacpon-1])   
-    ;zapis u fajl
-    poruka = SPRINT("Merenje %d ponavljanje %d mera %7.4F greska %7.4F",brojacmerenja,brojacpon,$aa_mw[Z],me_result[brojacmerenja-1,brojacpon-1])
-    Write(errno,fname,poruka) 
+    me_result[brojacmerenja-1,brojacpon-1]= $aa_mw[Z]
+    ;ispis poruke na ekran
+    msg(Sprint("Meas. point %4d rep. %4d $66021 %12.4f $66022 %12.4f",brojacmerenja,brojacpon,$aa_mw[Z],me_position-$aa_mw[Z]))
     ;vracanje na pocetnu tacku
-    g1 z= me_position- me_distance F= me_feed
-  ;Kraj petlje za ponavljanje merenja
+    g1 z=MerStart F= me_feed
+  ;kraj petlje za merenje po uglu
   endfor
- ;kraj petlje za merenje po uglu
+  brojpon = brojacpon
+  ;Ako je rekalibracija promeni alat pre sledecg kruga
+  if ( (me_status b_and 7) == 3)
+    MS127(ME_MEASURECOUNT,brojacpon-1,1,"Measured position","Axial run-out",1)
+    if (ABS(me_deviation)<me_tolerance) 
+       poruka="Rekalibracija je zavrsena sa greskom "<< me_deviation
+       msg(poruka)
+       Write(errno,fname,poruka)
+       gotof kraj_rekalibracije
+    endif
+    $tc_dp5[ me_tool_number, me_tool_Dnumber]=$tc_dp5[ me_tool_number, me_tool_Dnumber]-me_deviation
+    t= me_tool d= me_tool_Dnumber
+  else
+
+  endif
+;Kraj petlje za ponavljanje merenja
 endfor
+if ( (me_status b_and 7) == 3)
+       poruka="Rekalibracija je zavrsena posto je dostignot maks. broj pokusaja sa greskom "<< me_deviation
+       msg(poruka)
+       Write(errno,fname,poruka)
+endif
+kraj_rekalibracije:
+;ako je neki od rucnih rezima ne vracamo se nazad vec idemo odmah na proracun
+if ( (me_status b_and 7) > 3 ) gotof PRORACUN
 ;da li se vracamo po x 
-if (( me_ReturnMode==0) or ( me_ReturnMode==32))
-   g0 x=start_x
+if ( me_ReturnMode==32)
+   g0 x=me_ReturnDiameter
 endif
-;da li se vracamo p Z
-if(( me_ReturnMode==0) or ( me_ReturnMode==48))
-   g0 z=start_z
+if ( me_ReturnMode==0)
+   g0g53t0d0x0
 endif
-
-;proracun
-me_min=me_result[0,0]
-me_max=me_result[0,0]
-me_avg=0
-;petlja za matematiku 
-for brojacmerenja=0 to  me_MeasureCount-1
-  for brojacpon=0 to  me_RepetitionCount-1
-      if(me_min>me_result[brojacmerenja,brojacpon])
-        me_min=me_result[brojacmerenja,brojacpon]
-      endif
-      if(me_max<me_result[brojacmerenja,brojacpon])
-        me_max=me_result[brojacmerenja,brojacpon]
-      endif
-      me_avg=me_avg+me_result[brojacmerenja,brojacpon]
-  endfor
-endfor
-me_avg=me_avg/( me_MeasureCount* me_RepetitionCount)
-me_span=abs(me_max-me_min)
-;kraj proracuna
-
+;ako treba sonda gore
 IF (me_Probe_AutoUp==0)
-   m= me_probeDown
+   MS128(-ME_PROBE_NUMBER)
 ENDIF
+
+
+PRORACUN:
+;Ako je rekalibracija ne radimo proracun
+if ( (me_status b_and 7) <> 3)
+MS127(ME_MEASURECOUNT,0,ME_REPETITIONCOUNT,"Measured position","Axial run-out",1)
+endif
+;poruka za ekran
+poruka = sprint("Measured position=%12.3f deviation=%12.3f run-out=%12.3f ", me_avg, me_deviation, me_span)
+msg(poruka)
+
+;akcije u zavisnosti od moda rada
+
+;merenje aksijalno bez korekcije, koristi srednju gresku i aksijalno bacanje
+;samo provera rezultata i ispis greske ako ima, isto i za rucno i za programsko pozicioniranje
+if ( ((me_status b_and 7)==1) or ((me_status b_and 7)==4) )
+   me_actual_position=me_avg
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   gotof kraj
+endif
+
+;merenje aksijalno sa korecijom
+;na bazi srednje vrednosti unosi se korekcija u koord sistem
+;ako je greska veće od dozvoljene ispisuje alarm
+if ((me_status b_and 7)==2)
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $P_UIFR[ me_frame-1,Z,FI]=-me_deviation
+   msg("$66023")
+   gotof kraj
+endif
+
+;merenje aksijalno i kalibracija na bazi srednje 
+;vrednosti unosi se korekcija u duzinu alata za merenje
+;ako je greska veće od dozvoljene ispisuje alarm
+if ( (me_status b_and 7)==5 )
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $tc_dp5[ me_tool_number, me_tool_Dnumber]=$tc_dp5[ me_tool_number, me_tool_Dnumber]-me_deviation
+endif
+
+KRAJ:
 
 m17
 

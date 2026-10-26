@@ -1,0 +1,16 @@
+PROC MS128(INT BrojSonde)
+;pomocni ciklus za podizanje i spustanje sonde
+IF (BROJSONDE==1)
+   M23
+ENDIF
+IF (BROJSONDE==2)
+   M33
+ENDIF
+IF (BROJSONDE==-1)
+   M22
+ENDIF
+IF (BROJSONDE==-2)
+   M32
+ENDIF
+
+M17

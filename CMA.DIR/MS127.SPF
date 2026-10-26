@@ -1,0 +1,77 @@
+PROC MS127(INT BROJ_MERENJA,INT PRVO_PONAVLJANJE,INT UKUPNO_PONAVLJANJA,STRING[32] NASLOV,STRING[32] NASLOV_UDARA,REAL FAKTOR_UDARA)
+;pomocni ciklus sa proracun rezultata merenja
+DEF INT BROJACMERENJA,BROJACPON
+DEF INT ERRNO
+DEF STRING[32] FNAME
+DEF STRING[185] PORUKA
+Def Real UgaoC,KorakC,Odstupanje
+Def String[15]  Greska
+
+IF(UKUPNO_PONAVLJANJA<=0)
+   UKUPNO_PONAVLJANJA=1
+ENDIF
+
+;naziv fajla za zspisivanje statusa
+fname=me_report_file
+;zaglavlje
+poruka = SPRINT("%12s %12s %12s %12s %12s %12s %12s","Measure","C angle", "Actual","Nominal","Tolerance","Deviation","Error")
+Write(errno,fname,poruka)
+;proracun
+me_min=me_result[0,prvo_ponavljanje]
+me_max=me_result[0,prvo_ponavljanje]
+me_avg=0
+if (me_with_CAxis<>0)
+   UgaoC=me_caxis_position
+   KorakC=360/me_MeasureCount
+else
+   UgaoC=me_actual_cposition
+   KorakC=0
+endif
+;Petlja
+for brojacpon=prvo_ponavljanje to prvo_ponavljanje+ukupno_ponavljanja-1
+  for brojacmerenja=0 to  BROJ_MERENJA-1
+    me_avg=me_avg+me_result[brojacmerenja,brojacpon]
+    if(me_min>me_result[brojacmerenja,brojacpon])
+      me_min=me_result[brojacmerenja,brojacpon]
+    endif
+    if(me_max<me_result[brojacmerenja,brojacpon])
+      me_max=me_result[brojacmerenja,brojacpon]
+    endif
+     ;upis izvestaja u fajl
+     Odstupanje=me_nominal-ME_RESULT[BROJACMERENJA,BROJACPON]
+     If ((abs(Odstupanje) >= me_tolerance) and (me_tolerance>0))
+       If(Odstupanje<0) 
+         Greska=sprint("%12.3f",Odstupanje+me_tolerance)
+       else
+         Greska=sprint("%12.3f",Odstupanje-me_tolerance)
+       endif
+     else
+       Greska=""
+     endif         
+     poruka = sprint("Repetit. %3d %12.3f %12.3f %12.3f %12.3f %12.3f %12s", brojacpon+1, ugaoC+KorakC*BROJACMERENJA, ME_RESULT[BROJACMERENJA,BROJACPON], me_nominal, me_tolerance, Odstupanje, Greska )
+    Write(errno,fname,poruka)
+  endfor
+endfor
+  me_avg=me_avg/ (BROJ_MERENJA*UKUPNO_PONAVLJANJA)
+  me_span=abs(me_max-me_min)*FAKTOR_UDARA
+  me_deviation=me_nominal-me_avg
+  If ((abs(me_deviation) >= me_tolerance) and (me_Tolerance>0))
+    If(me_deviation<0) 
+      Greska=sprint("%12.3f",me_deviation+me_tolerance)
+    else
+      Greska=sprint("%12.3f",me_deviation-me_tolerance)
+    endif
+  else
+    Greska=""
+  endif         
+    ;ispis poruke u fajl za izvestaj
+    poruka = sprint("%26s%12.3f %12.3f %12.3f %12.3f %12s", NASLOV, me_avg, me_nominal, me_tolerance, me_deviation,greska)
+    Write(errno,fname,poruka)
+    if ((me_span >= me_runout_tolerance) and (me_runout_tolerance>0))
+       Greska = sprint("%12.3f",me_span-me_runout_tolerance)
+    else
+       Greska=""
+    endif
+    poruka = sprint("%26s%12.3f %12s %12.3f %12s %12s", NASLOV_UDARA, me_span, "", me_runout_tolerance, "", greska)
+    Write(errno,fname,poruka)
+M17

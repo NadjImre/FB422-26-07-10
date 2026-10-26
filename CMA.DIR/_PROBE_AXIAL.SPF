@@ -1,0 +1,101 @@
+PROC _PROBE_AXIAL(String[32] Sonda,int DBrojSonde,real Xsafe,real Zsafe,Real UgaoBose ,real Xnom ,real Znom ,real DuzMer, real BrzMer ,int BrojSonde ,int Status ,int kordsys ,real DOZRAZ ,real RunOut, int TrebaC ,real Cnom,Real PrecnikZavrsetka)
+;Aksijalno merenje (po z osi)
+;pozicioniranje i merenje udara
+
+def int mode
+def int errno
+def string[32] fname
+def string[128] poruka
+mode = Status b_and 15
+fname=me_report_file
+
+if (mode == 0)
+   poruka = sprint("*** Axial measuring call without measuring defined ****")
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof kraj
+endif
+
+me_tool=Sonda
+me_tool_number = gett(sonda)
+me_tool_Dnumber = DBrojSonde
+me_diameter = Xnom
+me_position = Znom
+me_distance = DuzMer
+me_feed = BrzMer
+me_probe_number = BrojSonde
+me_status = status
+me_frame = kordsys
+me_tolerance =DozRaz
+me_RunOut_Tolerance = RunOut
+me_with_Caxis = TrebaC
+me_Caxis_Position = Cnom
+me_RepetitionCount = ((Status div 128) b_and 15)+1
+me_MeasureCount = ((Status div 2048 ) b_and 15)+1
+me_ReturnMode = ( Status b_and 48)
+me_Probe_AutoUP = (Status b_and 64)
+me_Approach = (Status b_and 229376)
+me_SwivelPointX = XSafe
+me_SwivelPointZ = ZSafe
+me_BAxis_Angle = UgaoBose
+me_ReturnDiameter = PrecnikZavrsetka
+
+if (me_tool_number <= 0)
+   SETAL(65110,me_tool)
+   GOTOF KRAJ
+endif
+
+if (me_MeasureCount < 1)
+   me_MeasureCount=1
+endif
+
+;zaglavlje i poruka za merenje
+if ( mode==1 )
+   poruka = sprint("*** Axial measuring without correction on diameter %12.4f at position %12.4f ***",me_diameter,me_position)
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof merenje
+endif
+
+if ( mode==2 )
+   if (me_frame < 6)
+      poruka = sprint("*** Axial measuring with correction of frame G%d on diameter %12.4f at position %12.4f ***",52+me_frame,me_diameter,me_position)
+   else
+      poruka = sprint("*** Axial measuring with correction of frame G%d on diameter %12.4f at position %12.4f ***",499+me_frame,me_diameter,me_position)
+   endif
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof merenje
+endif
+
+if ( mode==3 )
+   poruka = sprint("*** Axial measuring recalibration on diameter %12.4f at position %12.4f ***",me_diameter,me_position)
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof merenje
+endif
+
+if ( mode==4 )
+   poruka = sprint("*** Axial measuring with manual setup ***")
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof merenje
+endif
+
+if ( mode==5 )
+   poruka = sprint("*** Axial calibration with manual setup ***")
+   Write(errno,fname,poruka)
+   msg(poruka)
+   gotof merenje
+endif
+
+MERENJE:
+
+if ( (mode>0) and (mode<6) )
+   ms120
+endif
+
+KRAJ:
+
+
+M17

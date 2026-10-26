@@ -32,7 +32,10 @@ me_Caxis_Position = CNOM
 me_RepetitionCount = 1
 me_MeasureCount = 1
 me_ReturnMode = 16 ; bez vracanja nazad, 32-vracanje po X, 48-vracanje po Z, 0 - vracanje X+Z
-me_Probe_AutoUP =  64; bez podizanja sonde na kraju, 0 - sa podizanjem 
+me_Probe_AutoUP =  64; bez podizanja sonde na kraju, 0 - sa podizanjem
+me_Approach = 0
+;niski bitovi statusa su broj pokusaja, ne mod novog MS140
+me_status = 0
 ME_CalibRepetition=(STATUS B_AND 15)
 poruka = SPRINT("Probe recalibration on diameter %8.3f and position Z=%8.3f",me_diameter,me_position)
 Write(errno,fname,poruka)
@@ -44,12 +47,12 @@ ponovo:
 ;merenje
 MS140
 ;rekalibracija
-$tc_dp4[me_tool_number,me_tool_dnumber]=$tc_dp4[me_tool_number,me_tool_dnumber]-0.5*me_avg
+$tc_dp4[me_tool_number,me_tool_dnumber]=$tc_dp4[me_tool_number,me_tool_dnumber]-0.5*me_deviation
 ;provera pokusaja
 if (brojac>me_CalibRepetition) gotof kraj
 ;provera velicine ako je velika ponovo
 brojac=brojac+1
-if (ABS(me_avg)>0.002) gotob ponovo
+if (ABS(me_deviation)>0.002) gotob ponovo
 
 KRAJ:
 ;G500X0G0T0D0

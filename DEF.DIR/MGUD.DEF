@@ -131,6 +131,8 @@ def chan real me_max ; maksimum rezultata
 def chan real me_min ; minimum rezultata
 def chan real me_avg ; prosek rezultata
 def chan real me_span ; razlika izmedju maksimuma i minimuma
+def chan real me_nominal ; nominalna mera
+def chan real me_deviation ; razlika nominalne i izmerene vrednosti
 def chan string[32] me_tool ; naziv alata za merenje
 def chan int me_tool_number ; broj alata za merenje
 def chan int me_tool_dnumber ; D broj alata za merenje
@@ -149,11 +151,18 @@ def chan real me_runout_tolerance ; tolerancija udara
 def chan real me_offset; korekcija merenja precnika
 def chan int me_with_Caxis ; <>0 treba okrenuti C osu po zadati ugao za merenje
 def chan real me_Caxis_Position ; ugao na koji treba okrenuti C osu za merenje
+def chan real me_actual_diameter ; precnik na kojem je obavljeno merenje
+def chan real me_actual_position ; pozicija Z ose na kojem je obavljeno merenje
+def chan real me_actual_Cposition ; pozicija C ose na kojem je obavljeno merenje
 def chan int me_RepetitionCount ; broj ponavljanja merenja u istoj tački
 def chan int me_MeasureCount ; broj merenja po krugu
 def chan int me_Correction ; 0 samo ispis rezultata, 1 - korekcija koors systema, 2 - rekalibracija
 def chan int me_Probe_AutoUp ; 0 - automatsko dizanje i spuštanje sonde 
 def chan int me_ReturnMode ; nacin povrtaka osa posle merenja
+Def chan int me_approach ; nacin odlaska u tacku zaokreta kod merenja
+Def chan Real me_SwivelPointX, me_SwivelPointZ ; tacka zaokreta kod merenja
+Def chan Real me_ReturnDiameter ;precnik odskoka za zavrsetak ciklusa
+def chan real me_Baxis_Angle ; ugao B ose za merenje
 def chan int me_w_type ; nacin merenja širinie ili pozicioniranja po sredini
 def chan real me_w_diameter ; precnik merenja širine, definisan kalibracijom
 def chan real me_w_position ; pozicija sredine žljeba, određuje se kalibracijom
