@@ -94,5 +94,21 @@
       <source>66023</source>
       <translation>Part coordinate system correction is carried out</translation>
     </message>
+    <message>
+      <source>66024</source>
+      <translation>Faza:</translation>
+    </message>
+    <message>
+      <source>66025</source>
+      <translation>Prolaza u fazi:</translation>
+    </message>
+    <message>
+      <source>66026</source>
+      <translation>Ukupno prolaza:</translation>
+    </message>
+    <message>
+      <source>66027</source>
+      <translation>Oscill:</translation>
+    </message>
   </context>
 </TS>

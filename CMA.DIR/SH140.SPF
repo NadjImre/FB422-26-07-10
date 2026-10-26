@@ -123,7 +123,7 @@ ProlazaOdAbrihtovanja=ProlazaODAbrihtovanja+1
 
 ;izmena-ki
 ;poruka = SPRINT("%s: Faza %d (%5.3fx%5.3f) Prolaz %d/%d  Ukupno prolaza %d/%d",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1,Gr_StrokesToDress[IndeksFaze],IndeksUkupnogProlaza,UkupnoProlaza)
-poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d" ,Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
+poruka = SPRINT("%s: $66024 %d   (%5.3f mm x %5.3f mm)   $66025 %d/%d   $66026 %d/%d" ,Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza)
 msg(Poruka)
 ;brusenje
 JEDAN_PROLAZ:
@@ -132,7 +132,7 @@ if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) and (Gr_mea
    setint(Gr_interrupts[IndeksFaze]) prio=1 Sh6202
    ;izmena-ki
    if (R54==1)
-     msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+     msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
      gotof kraj
    endif
    R54=0 ;0-nema impulsa 1-ima impulsa
@@ -150,7 +150,7 @@ OSCILACIJE:
      AktXV=AktXV-Gr_Steps_OscilaTion[indeksFaze]
 
      ;izmena-ki
-     poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d   Oscill: %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
+     poruka = SPRINT("%s: $66024 %d   (%5.3f mm x %5.3f mm)   $66025 %d/%d   $66026 %d/%d   $66027 %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
      brojac_oscilacija=brojac_oscilacija+1
 
    endif
@@ -158,7 +158,7 @@ OSCILACIJE:
      AktXV=AktXV-Gr_Steps_OscilaTion[indeksFaze]
 
      ;izmena-ki
-     poruka = SPRINT("%s: Faza: %d   (%5.3f mm x %5.3f mm)   Prolaza u fazi: %d/%d   Ukupno prolaza: %d/%d   Oscill: %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
+     poruka = SPRINT("%s: $66024 %d   (%5.3f mm x %5.3f mm)   $66025 %d/%d   $66026 %d/%d   $66027 %d ",Gr_Comment,IndeksFaze+1,Gr_Steps[IndeksFaze],Gr_Steps_OscilaTion[indeksFaze],IndeksProlaza+1, UkupnoProlazaUFazi[IndeksFaze], IndeksUkupnogProlaza,UkupnoProlaza, UkupnoOscilacija[IndeksFaze]-brojac_oscilacija+1)
      brojac_oscilacija=brojac_oscilacija+1
    
    endif
@@ -200,7 +200,7 @@ if ( (Gr_interrupts[IndeksFaze]>0) and (Gr_interrupts[IndeksFaze]<8) and (Gr_mea
   ;=================================================
   if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
     ;nema impulsa merne glave, GAP signal se ne racuna
-    msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+    msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
     gotof kraj
   endif
 
@@ -256,10 +256,10 @@ M=Gr_measuring_head_out
 if (IndeksFaze<MaxFaza) and (Gr_measuring_head<>0)
 
 if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
-  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
 else
   if (R54==1)
-    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
   else
     msg("Kraj")
   endif
@@ -275,11 +275,11 @@ STOPRE
 if (IndeksFaze<MaxFaza) and (Gr_measuring_head<>0)
 
 if (R54<>1) and (Gr_interrupts[IndeksFaze]<>4)
-  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+  msg("NET impulsa: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
   m00
 else
   if (R54==1)
-    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  Faza: "<<IndeksFaze+1)
+    msg("NET pripuska  Impuls: "<<Gr_interrupts[IndeksFaze]<<"  $66024 "<<IndeksFaze+1)
     m00
   else
     msg("Kraj")

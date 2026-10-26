@@ -147,3 +147,5 @@ Maske za podešavanje
 - CPROBE_CAXIS_POSITION.COM - podešavanje _PROBE_CAXIS
 - CPROBE_THREAD.COM - podešavanje _PROBE_THREAD
   Nema više CPROBE_MEASURING.COM ni CPROBE_RECALIBRATION.COM.
+
+Proba izmene ----

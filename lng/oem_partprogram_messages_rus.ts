@@ -66,5 +66,21 @@
       <source>66015</source>
       <translation>Проход номер:</translation>
     </message>
+	<message>
+      <source>66024</source>
+      <translation>Фаза:</translation>
+    </message>
+	<message>
+      <source>66025</source>
+      <translation>Проход в фазе:</translation>
+    </message>
+	<message>
+      <source>66026</source>
+      <translation>Итого проход:</translation>
+    </message>
+	<message>
+      <source>66027</source>
+      <translation>Осцил:</translation>
+    </message>
   </context>
 </TS>
