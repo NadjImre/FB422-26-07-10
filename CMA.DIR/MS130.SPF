@@ -1,80 +1,242 @@
 PROC  MS130
 ;merenje orjentacije komada
-;za mašinu FB357
+;za mašinu FB422
+;od oktobra 2026
+
 ;PROMENLJIVE
-;pocetna pozicija pre merenja
-Def Real start_x,start_z
-;brojac merenja
-Def Int Brojac=0
+Def Real start_x,start_z,bezbedni_x;pocetna i bezbedna pozicija po X
+Def Int Brojac=0;brojac merenja
+Def int MaksBroj;maks broj merenja za skeniranje i trazenje zljeba
+Def Real Min=100000,Maks=-100000,Rezult;pomocne promenljive za skeniranje
+def int errno ;broj greske koja se vraca prilikom snimanja
+def string[32] fname ;naziv fajla za snimanje
+def string[128] poruka ; pomocna promenljiva za ispis poruke
+def string[32] PorukaGreska;
+;naziv fajla za zspisivanje statusa
+fname=me_report_file
 ;ravan , koordinatni sistem i alat
 g18g500 t=me_tool d=me_tool_dnumber
 ;zapamti pocetnu poziciju
 start_x=$aa_iw[x] start_z=$aa_iw[z]
+bezbedni_x=start_x
+;pocetne vrednosti
+if (me_c_span<=0)
+   msg("C step is zero")
+   gotof greska
+endif
+;poslednji ugao ostaje ispod 360, i kad korak ne deli krug
+MaksBroj=(360-0.001)/me_c_span
 stopre
-;da li je podesavanje ili kalibracija
-if (me_c_type==4) gotof Kalibracija
-;poruka
-msg("$66020")
+;da li je rucna kalibracija
+;ako jeste smatramo da je sonda ručno podignuta i ne treba prilaz pa ga preskacemo i idemo na skeniranje
+if ( me_c_type == 4 ) gotof SKENIRANJE
+;ako nije rucno onda se sonda programski dovodi u zonu merenja
+;zaokret ako treba
+ms124(me_BAxis_Angle,me_Approach,me_SwivelPointX,me_SwivelPointZ)
+;ravan , koordinatni sistem i alat
+g18g500 t= me_tool d= me_tool_Dnumber
+;menjac je osa jer se meri sa C osom
+m70
+;pozicija merenja po Z i pun krug sa komadom radi natezanja povlakaca
+ms126(me_probe_number,,me_c_position,-1,"greska")
 ;podizanje sonde
-m=me_ProbeUp
-;pun okret komada ako ima kontakta to je greska
-G0 C=IC(360) MEAS=me_Probe_number
-IF(($AC_MEA[me_ProbeNumber]==1) And (Test>0)) GOTOF GRESKA
-;na poziciju gde je zadnji put kalibrisana
-G0 C=ACP(me_C_calibration)
-IF(($AC_MEA[me_Probe_Number]==1) And (Test>0)) GOTOF GRESKA
-;zauzimanje pozicije za merenje - ako ima kontakta to je greska
-G0 Z=me_C_position MEAS=me_probenumber
-IF(($AC_MEA[me_probenumber]==1) And (Test>0)) GOTOF GRESKA
-;zauzimanje pocetne tacke merenja po X u - ako ima kontakta to je greska
-G0 X=me_C_diameter+me_distance MEAS=me_probe_number
-IF(($AC_MEA[me_probe_number]==1) And (Test>0)) GOTOF GRESKA
+MS128(me_probe_number)
+g4 f2
+;zakreni komad na ugao za pocetak merenja
+ms126(me_probe_number,,,0,"greska")
+;dolazak na precnik merenja
+ms126(me_probe_number,me_diameter,,,"GRESKA")
 STOPRE
+;bezbedan X za povratak je precnik na koji smo upravo dosli
+bezbedni_x=me_diameter
+;ako nije rucno/kalibracija idemo na trazenje zljeba
+if (me_c_type<>4) gotof Zljeb
+;******************************
+;pocetak kalibracije
+;******************************
+SKENIRANJE:
+;sonda mora biti rucno podignuta i dovedena blizu komada ali da nije u žljebu
+;tako da kada predje duzinu merenja moze da udje u zljeb 
+;povlakač ne mora biti nategnut ali mora biti na komadu
+;poruka
+msg("**** Skeniranje ****")
+;pravimo dva puna kruga da nategnemo povlakac i da vidimo da li smo van komada
+;ako ima kontakta prijavljujemo gresku
+ms126(me_probe_number,,,-2,"Greska_kalibracije")
+;zaglavlje u fajl
+if (me_test<>0)
+   poruka = sprint("%20s%20s%20s","**Skeniranje**","Ugao C","Osa X")
+   Write(errno,fname,poruka)
+endif
+;skeniranje komada
+;pocine petlja za merenje
+for brojac=0 to maksbroj
+;zauzimamo poziciju za merenje
+   ms126(me_probe_number,,,brojac*me_c_span,"Greska_kalibracije")
+;merimo po X osi
+   ms125((x),start_x-2*me_distance,me_feed,me_probe_number,"BezGreske")
+;preuzimamo rezulatat ako je bilo kontakta     
+   rezult=$AA_MW[X]
+;Poruka
+   poruka = sprint("%20s%20.1f%20.4f","Kontakt",$AA_IW[C],$AA_MW[X])
+   msg(sprint("Contact at angle %12.4f on diameter %12.4f",$AA_IW[C],$AA_MW[X]))
+;preskacemo sledece
+   gotof racun
+;ako nije bilo kontakta dolazimo ovde
+   BezGreske:
+;i pamtimo trenutnu poziciju
+   rezult=$AA_IW[X]
+;Poruka
+   poruka = sprint("%20s%20.1f%20.4f","Bez kontakta",$AA_IW[C],$AA_IW[X])
+   msg(sprint("Without contact at angle %12.4f",$AA_IW[C]))
+;odavde se nastvalja ako je bilo kontakta
+   Racun:
+;zapis u fajl
+   if (me_test<>0)
+      Write(errno,fname,poruka)
+   endif
+;odredjivanje maksimuma
+   if (maks<rezult)
+      maks = rezult
+   endif
+;odredjivanje minimuma
+   if (min>rezult)
+      min=rezult
+   endif
+   g1 x=start_x f=me_feed
+endfor
+;racunamo sredinu
+me_C_diameter = 0.5*(maks+min)
+;podesavanje ostalih promenljivih
+;bezbedni X za kasniji programski prilaz, Z ide u me_c_position (maska)
+me_diameter = start_X
+me_c_position = start_Z
+;zapis u fajl
+if (me_test<>0)
+   poruka = sprint("%20s%20s%20.4f","Srednji precnik","",me_c_diameter)
+   Write(errno,fname,poruka)
+endif
+STOPRE
+;***************************
 ;trazimo zljeb
-TRAZI_ZLJEB:
-;ulazimo do precnika merenja
-G57 G1 X=me_C_diameter F=me_feed MEAS=me_probe_number
-;ako smo uspeli nasli smo zljeb
-IF(($AC_MEA[me_probe_number]==0) And (Test>0)) GOTOF ZLJEB
-;ako nismo onda se vracamo nazad
-G57 G0 X=me_C_diameter+me_distance F=me_feed
-;i okrenemo osu za 15 stepeni
-g0 C=IC(me_C_span) MEAS=me_probe_number
-;ako imamo kontak to je greska
-IF(($AC_MEA[me_probe_number]==1) And (Test>0)) GOTOF GRESKA
-;uvecavamo brojac
-Brojac=Brojac+1
-;ako smo prosli maksimalni broj pokusaja onda je to greska
-IF (BROJAC>24) GOTOF GRESKA
-;ako nismo ide novi pokušaj 
-GOTOB TRAZI_ZLJEB
+;***************************
+Zljeb:
+;zaglavlje
+if (me_test<>0)
+   poruka = SPRINT("%25s %12s %12s %12s","Looking for a groove","C angle", "Actual","Nominal")
+   Write(errno,fname,poruka)
+endif
+;petlja za trazenje zljeba
+for brojac=0 to maksbroj
+;zauzimamo poziciju za merenje
+     ms126(me_probe_number,,,brojac*me_c_span,"Greska_Kalibracije")
+;pokusamo da zauzmemo srednji precnik
+     ms125((x),me_c_diameter,me_feed,me_probe_number,"Merenje")
+;ako ima kontakta vracmo nazad
+     g1 x=bezbedni_x f=me_feed
+;zapisujemo izvestaj
+   if (me_test<>0)
+      poruka = sprint("%15s %9d %12.3f %12.3f %12.3f %12s","Attempt", brojac+1,me_C_span*BROJAC, $AA_MW[x], me_c_diameter, "unsuccessful" )
+      Write(errno,fname,poruka)
+   endif
+;na ekran
+   Poruka=sprint("Looking for a groove - attempt %d : C=%12.4f X conntact at %12.4f - unsuccessful (expected %12.4f)",brojac+1,me_C_span*BROJAC, $AA_MW[x], me_c_diameter) 
+   msg(poruka)
+;i pokusamo ponovo
+endfor
+;ako smo dosli dovde ispalili samo sve pokusaje i nismu usli u zljeb
+gotoF Greska_Kalibracije
+;odavde nastavljamo ako smo bez kontakta dosli do srednjeg precnika
+;*******************************
+Merenje:
+;*******************************
+;zapisujemo izvestaj
+if (me_test<>0)
+   poruka = sprint("%15s %9d %12.3f %12.3f %12.3f %12s","Attempt", brojac+1,me_C_span*BROJAC, $AA_IW[x], me_c_diameter, "successful" )
+   Write(errno,fname,poruka)
+endif
+;na ekran
+Poruka=sprint("Looking for a groove - attempt %d : C=%12.4f X conntact at %12.4f - successful",brojac+1,me_C_span*BROJAC, $AA_IW[x]) 
+msg(poruka)
+;merimo u pravcu c ose
+ms125((c),((brojac*me_c_span)+359) mod 360,me_c_feed, me_probe_number,"Greska_C")
+;ako je kalibracija/rucno
+if (me_c_type==4)
+;prepisujemo rezulztat u Me_Caxis_calibration
+   Me_C_Calibration=$AA_MW[C] mod 360
+   ;svodimo ga na 0-360
+   IF (Me_C_Calibration<0)
+      Me_C_Calibration=Me_C_Calibration+360
+   ENDIF
+   ;ispis poruke
+;zapisujemo izvestaj
+   poruka = SPRINT("%12s%12s%12s%12s%12s%12s%12s%12s","Measure","Diameter", "Position","Actual","Nominal","Tolerance","Deviation","Error")
+   Write(errno,fname,poruka)
+   poruka = sprint("%12s%12.3f%12.3f%12.3f%12s%12s%12s%12s", "Calibration",$aa_Iw[x], $AA_IW[z], me_c_calibration, "-", "-", "-", "OK" )
+   Write(errno,fname,poruka)
+;na ekran
+   msg(sprint("Calibration successful at diameter %12.4f and position %12.4f - calibration angle %12.4f",$aa_Iw[x], $AA_IW[z], me_c_calibration))
+Else
+   me_c_result = $AA_MW[C] mod 360
+   if (me_c_result<0)
+      me_C_result=me_C_result+360
+   endif
+   me_deviation = me_C_result-me_C_calibration
+   ;najkraci luk preko nule, inace 359 i 1 daju skoro pun krug
+   if (me_deviation>180)
+      me_deviation=me_deviation-360
+   endif
+   if (me_deviation<-180)
+      me_deviation=me_deviation+360
+   endif
+   If ((abs(me_deviation) >= me_tolerance) and (me_tolerance>0))
+      If (me_deviation<0) 
+         PorukaGreska=sprint("%12.3f",me_deviation+me_tolerance)
+      else
+         PorukaGreska=sprint("%12.3f",me_deviation-me_tolerance)
+      endif
+   else
+       PorukaGreska=""
+   endif   
+;zapisujemo izvestaj
+   poruka = SPRINT("%12s%12s%12s%12s%12s%12s%12s%12s","Measure","Diameter", "Position", "Actual","Nominal","Tolerance","Deviation","Error")
+   Write(errno,fname,poruka)
+   poruka = sprint("%12s%12.3f%12.3f%12.3f%12.3f%12.3f%12.3f%12s", "Ang. meas.",$aa_Iw[x], $AA_IW[z], $aa_mw[c],me_c_calibration, me_tolerance, me_deviation, PorukaGreska )
+   Write(errno,fname,poruka)
+;na ekran
+   msg(SPRINT("Measured angle C=%12.3f at diameter %12.3f and position %12.3f deviation=%12.3f",$AA_MW[c],$AA_IW[x], $AA_IW[z], me_deviation))
+Endif
 
-ZLJEB:
-;pronasli smo žljeb - merimo po C osi
-g1 C=IC(360) F=me_C_feed MEAS=me_probe_number
-;ako nemamo kontak za pun krug - greska
-IF(($AC_MEA[me_probe_number]==0) And (Test>0)) GOTOF GRESKA
-;prepsujemo rezulztat u Mer_C
-me_C_result=$AA_MW[C] mod 360
-;proracun razlike
-me_C_result = me_C_result - me_C_calibration
-;svodimo ga na opseg 0-360
-IF (me_C_result<0)
-   me_C_result=me_C_result+360
-ENDIF
-;ispis poruke
-msg("$66021 "<<me_C_result)
-;vracanje na pocetnu tacku
-g1 x=me_C_diameter+me_distance F=me_feed
-g0 x=start_x
-g0 z=start_z
-;podizanje sonde
-m=me_probeDown
+g1 x=bezbedni_x f=me_feed
+if (me_c_type<>4)
+;da li se vracamo po x 
+   if ( me_ReturnMode==32)
+      g0 x=me_ReturnDiameter
+   endif
+   if ( me_ReturnMode==0)
+      g0g53t0d0x0
+   endif
+   if (me_Probe_AutoUp==0)
+      MS128(-me_probe_number)
+   endif
+endif
+gotof kraj
 
+Greska_Kalibracije:
+g1 x=bezbedni_x f=me_feed
+poruka = "Calibration error"
+Write(errno,fname,poruka)
+msg(poruka)
+M00
+M96
+M17
 
-m17
+Greska_C:
+g1 x=bezbedni_x f=me_feed
 
 greska:
+;da pozivalac ne tretira prekid kao uspelo merenje
+me_c_type=0
 
 SETAL(65002)
 M00
@@ -82,25 +244,7 @@ M96
 
 m17
 
-;pocetak kalibracije
-KALIBRACIJA:
-;sonda mora biti rucno podignuta i dovedena u jedan žljeb na komadu
-;povlakač ne mora biti nategnut ali mora biti na komadu
-;trazimo kontakt po C osi - pravimo dva kruga za slucaj da povlakac nije nategnut
-g1 C=IC(720) F=me_c_feed MEAS=me_probe_number
-;ako nemamo kontak za pun krug - greska
-IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
-;u slucaju kontakta prepsujemo rezulztat u Me_Caxis_calibration
-Me_C_Calibration=$AA_MW[C] mod 360
-;svodimo ga na opseg 0-360
-IF (Me_C_Calibartion<0)
-   Me_C_Calibartion=Me_C_Calibartion+360
-ENDIF
-;podesavanje ostalih promenljivih
-me_C_diameter = start_X
-me_C_position = start_Z
-;ispis poruke
-msg("$66021 "<<Me_C_Calibration)
+kraj:
 
 M17
 

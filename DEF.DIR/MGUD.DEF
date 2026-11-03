@@ -149,6 +149,7 @@ def chan int me_frame ; koord. system koji se koriguje sa rezultatima merenja
 def chan real me_tolerance ; tolerancija odstupanja od nominalne mere
 def chan real me_runout_tolerance ; tolerancija udara
 def chan real me_offset; korekcija merenja precnika
+def chan int me_test; ako je vece od nule izvestaj u fajlu je opsirniji
 def chan int me_with_Caxis ; <>0 treba okrenuti C osu po zadati ugao za merenje
 def chan real me_Caxis_Position ; ugao na koji treba okrenuti C osu za merenje
 def chan real me_actual_diameter ; precnik na kojem je obavljeno merenje
@@ -167,7 +168,6 @@ def chan int me_w_type ; nacin merenja širinie ili pozicioniranja po sredini
 def chan real me_w_diameter ; precnik merenja širine, definisan kalibracijom
 def chan real me_w_position ; pozicija sredine žljeba, određuje se kalibracijom
 def chan real me_w_width ; nominalna širina žljeba, upisuje kalibracija
-def chan real me_w_results[10,10,2] ; rezultati merenja, tačke dodira sa sondom
 def chan real me_w_result ; rezultat merenja, izmerena pozicija sredine žljeba
 def chan int me_c_type ; tip merenja 
 def chan real me_c_diameter ; precnik merenja širine, definisan kalibracijom

@@ -2,9 +2,9 @@ PROC MS125(AXIS osa, REAL pozicija, INT brzina, INT brojSonde, STRING[32] labela
 ;univerzalni ciklus merenja sa jednom osom
   ;merenje
   If (brzina<=0) 
-    G0 AX[osa]=pozicija MEAS=brojSonde
+    G0 AX[osa]=ACP(pozicija) MEAS=brojSonde
   else
-    G1 AX[osa]=pozicija F=brzina MEAS=brojSonde
+    G1 AX[osa]=ACP(pozicija) F=brzina MEAS=brojSonde
   endif
   ;provera kontakta sa sondom -  ako nema greska
   IF($AC_MEA[brojSonde]==0)

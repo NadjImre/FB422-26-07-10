@@ -1,59 +1,112 @@
 PROC  MS150
-;merenje za pozicioniranje preko sredine zljeba
-;za mašinu FB422, maj 2026
-;korekcija - 0 samo merenje, 1 merenje sa korekcijom , 2 podesavanje/kalibracija, 3 rekalibracija
-;PROMENLJIVE
-;pocetna pozicija pre merenja
-Def Real start_x,start_z
-;brojac merenja
-Def Int Brojac=0
-;ravan , koordinatni sistem i alat
+;merenje sredine zljeba u vise tacaka i ponavljanja
+;za masinu FB422
+;prilaz, C osa, odlazak i sonda kao kod MS120
+
+def int errno
+def string[32] fname
+def string[128] poruka
+def int brojacmerenja
+def int brojacpon
+def real ugaozaokreta
+def real start_c
+def real MerStart
+def real zplus,zminus
+def real suma_sirine
+
+fname=me_report_file
+;ravan, koordinatni sistem i alat
 g18g500 t=me_tool d=me_tool_dnumber
-;zapamti pocetnu poziciju
-start_x=$aa_iw[x] start_z=$aa_iw[z]
+;za potrebe rucnog prepisi poziciju C
+start_c=$aa_iw[c]
+me_actual_cposition=$aa_iw[c]
+;nominalna sredina zljeba
+me_nominal=me_w_position
+if (me_MeasureCount<1)
+  me_MeasureCount=1
+endif
+if (me_RepetitionCount<1)
+  me_RepetitionCount=1
+endif
+ugaozaokreta=360/me_MeasureCount
+suma_sirine=0
 stopre
-;da li je podesavanje ili kalibracija
-if (me_W_type==4) gotof Kalibracija
-;poruka
-msg("$66020")
+;rucno dovođenje, kalibracija: sonda je vec u zljebu
+if ( (me_status b_and 7)>3 ) gotof RUCNO
+;zaokret ako treba
+ms124(me_BAxis_Angle,me_Approach,me_SwivelPointX,me_SwivelPointZ)
+;ravan, koordinatni sistem i alat
+g18g500 t=me_tool d=me_tool_dnumber
+;dolazak na sredinu zljeba po Z
+if(me_with_Caxis<>0)
+  m70
+  ;pozicija Z i pun krug sa komadom
+  ms126(me_probe_number,,me_w_position,-1,"greska")
+else
+  MS126(me_probe_number,,me_w_position,,"greska")
+endif
 ;podizanje sonde
-;m=me_ProbeUp
-
-;zauzimanje pozicije za merenje - ako ima kontakta to je greska
-G0 Z=me_W_position MEAS=me_probe_number
-IF(($AC_MEA[me_probe_number]==1) AND (TEST>0)) GOTOF GRESKA
-;zauzimanje pocetne tacke merenja po X u - ako ima kontakta to je greska
-G0 X=me_W_diameter MEAS=me_probe_number
-IF(($AC_MEA[me_probe_number]==1) AND (TEST>0)) GOTOF GRESKA
+MS128(me_probe_number)
+g4 f2
+;ako se trazi ugao C
+if( me_with_Caxis<>0)
+  ms126(me_probe_number,,,me_Caxis_position,"greska")
+endif
+;dolazak na precnik merenja
+ms126(me_probe_number,me_w_diameter,,,"GRESKA")
+;programski zadati pocetni ugao
+start_c=me_caxis_position
 STOPRE
-;merenje zljeba
-MERENJE_ZLJEBA:
-;merimo u plus
-G1 Z=IC(me_W_width) F=me_feed MEAS=me_probe_number
-;ako ako nema kontakta greska
-IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA
-;ako ima onda belezimo rezultat
-me_W_results[0,0,0]=$AA_MW[Z]
-;i vracamo se nazad
-G0 Z=me_W_position
-;i merimo u suprotnom smeru
-G1 Z=IC(-me_W_width) F=me_feed MEAS=me_probe_number
-;ako nemamo kontakt to je greska
-IF(($AC_MEA[me_probe_number]==0) AND (TEST>0) ) GOTOF GRESKA
-;ako ima onda belezimo rezultat
-me_W_results[0,0,1]=$AA_MW[Z]
-;i vracamo se nazad
-G0 Z=me_W_position
-;proracun sredine
-me_W_result = me_W_position - 0.5*(me_W_results[0,0,0] + me_W_results[0,0,1])
-;ispis poruke
-msg("$66021 "<<me_W_result)
-;vracanje na pocetnu tacku
-g0 x=start_x
-;g0 z=start_z
-;podizanje sonde
-;m=me_probeDown
+RUCNO:
+;polazna tacka merenja je trenutni Z, od nje ide traganje na obe strane
+MerStart=$aa_iw[z]
+me_actual_diameter=$aa_iw[x]
+for brojacpon=1 to me_RepetitionCount
+  for brojacmerenja=1 to me_MeasureCount
+    if( me_with_Caxis<>0)
+      ms126(me_probe_number,,,start_c+((brojacmerenja-1)*ugaozaokreta),"greska")
+    endif
+    ;dodir u plus
+    MS125((z),MerStart+me_w_width,me_feed,me_probe_number,"GRESKA")
+    zplus=$aa_mw[z]
+    g0 z=MerStart
+    ;dodir u minus
+    MS125((z),MerStart-me_w_width,me_feed,me_probe_number,"GRESKA")
+    zminus=$aa_mw[z]
+    g0 z=MerStart
+    ;sredina dva dodira
+    me_result[brojacmerenja-1,brojacpon-1]=0.5*(zplus+zminus)
+    suma_sirine=suma_sirine+abs(zplus-zminus)
+    msg(Sprint("Meas. point %4d rep. %4d $66021 %12.4f $66022 %12.4f",brojacmerenja,brojacpon,me_result[brojacmerenja-1,brojacpon-1],me_w_position-me_result[brojacmerenja-1,brojacpon-1]))
+  endfor
+endfor
+;rucni rezim ne vraca ose i ne podize sondu
+if ( (me_status b_and 7)>3 ) gotof PRORACUN
+if ( me_ReturnMode==32)
+   g0 x=me_ReturnDiameter
+endif
+if ( me_ReturnMode==0)
+   g0g53t0d0x0
+endif
+if (me_Probe_AutoUp==0)
+   MS128(-ME_PROBE_NUMBER)
+endif
 
+PRORACUN:
+MS127(ME_MEASURECOUNT,0,ME_REPETITIONCOUNT,"Groove center","Center run-out",1)
+;odstupanje sredine, isto kao ranije me_w_result
+me_w_result=me_deviation
+poruka=sprint("Groove center=%12.3f deviation=%12.3f run-out=%12.3f ", me_avg, me_deviation, me_span)
+msg(poruka)
+;kalibracija upisuje nadjenu sredinu, precnik i sirinu
+if ( (me_status b_and 7)==4 )
+   me_w_diameter=me_actual_diameter
+   me_w_position=me_avg
+   me_w_width=suma_sirine/(me_MeasureCount*me_RepetitionCount)
+   me_caxis_position=start_c
+   g0 z=me_w_position
+   m00
+endif
 
 m17
 
@@ -64,36 +117,3 @@ M00
 M96
 
 m17
-
-;pocetak kalibracije
-KALIBRACIJA:
-;sonda mora biti rucno podignuta i dovedena u  žljeb na komadu
-;trazimo kontakt po Z osi u plus smeru
-g1 Z=START_Z+me_W_width F=me_feed MEAS=me_probe_number
-;ako nemamo kontak  - greska
-IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
-;u slucaju kontakta prepsujemo belezimo rezulztat
-Me_W_Results[0,0,0]=$AA_MW[Z]
-;varcamo se nazad
-G0 Z=Start_Z
-;i merimo u suprotnu stranu
-g1 Z=start_z-me_w_width F=me_feed MEAS=me_probe_number
-;ako nemamo kontak  - greska
-IF(($AC_MEA[me_probe_number]==0) AND (TEST>0)) GOTOF GRESKA_KALIBRACIJE
-;u slucaju kontakta prepsujemo belezimo rezulztat
-Me_W_Results[0,0,1]=$AA_MW[Z]
-;podesavanje ostalih promenljivih
-me_W_diameter = start_X
-me_W_position = 0.5*(me_W_results[0,0,0] + me_W_results[0,0,1])
-me_w_width = abs(me_W_results[0,0,0] - me_W_results[0,0,1])
-;ispis poruke
-msg("$66021 "<<Me_W_Position)
-Z=Start_z 
-m00
-M17
-
-GRESKA_KALIBRACIJE:
-MSG("GRESKA_KALIBRACIJE")
-M00
-M17
-

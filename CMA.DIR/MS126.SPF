@@ -14,7 +14,7 @@ PROC MS126( INT brojSonde , REAL Xpoz, Real ZPoz, Real CPoz , STRING[32] labelaG
   If ( ($P_SUBPAR[2]==False) And ($P_SUBPAR[3]==False) And ($P_SUBPAR[4]==True))
     M70
     If (CPoz<0)
-      G0 C=IC(360) MEAS=brojSonde
+      G0 C=IC(-CPoz*360) MEAS=brojSonde
     ELSE 
       CPoz = CPoz mod 360
       G0 C=ACP(CPoz) MEAS=brojSonde
@@ -30,7 +30,7 @@ PROC MS126( INT brojSonde , REAL Xpoz, Real ZPoz, Real CPoz , STRING[32] labelaG
   If ( ($P_SUBPAR[2]==True) And ($P_SUBPAR[3]==False) And ($P_SUBPAR[4]==True))
     M70
     If (CPoz<0)
-      G0 X=XPoz C=IC(360) MEAS=brojSonde
+      G0 X=XPoz C=IC(-CPoz*360) MEAS=brojSonde
     ELSE
       G0 X=XPoz C=ACP(CPoz) MEAS=brojSonde
     ENDIF
@@ -40,7 +40,7 @@ PROC MS126( INT brojSonde , REAL Xpoz, Real ZPoz, Real CPoz , STRING[32] labelaG
   If ( ($P_SUBPAR[2]==False) And ($P_SUBPAR[3]==True) And ($P_SUBPAR[4]==True))
     M70
     If (CPoz<0)
-      G0 Z=Zpoz C=IC(360) MEAS=brojSonde
+      G0 Z=Zpoz C=IC(-CPoz*360) MEAS=brojSonde
     ELSE
       G0 Z=Zpoz C=ACP(CPoz) MEAS=brojSonde
     ENDIF
@@ -48,7 +48,7 @@ PROC MS126( INT brojSonde , REAL Xpoz, Real ZPoz, Real CPoz , STRING[32] labelaG
   endif
   M70
   If (CPoz<0)
-    G0 X=XPoz Z=ZPoz C=IC(360) MEAS=brojSonde
+    G0 X=XPoz Z=ZPoz C=IC(-CPoz*360) MEAS=brojSonde
   ELSE
     G0 X=XPoz Z=ZPoz C=ACP(CPoz) MEAS=brojSonde
   ENDIF
