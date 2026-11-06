@@ -96,7 +96,38 @@ if ( (mode>0) and (mode<6) )
    ms140
 endif
 
+;merenje bez korekcije, programski i rucno
+if ((mode==1) or (mode==4))
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   gotof kraj
+endif
+
+;korekcija koordinatnog sistema, samo ako je unutar tolerancije
+;pomak X je u radijusu, greska je na precniku
+if (mode==2)
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $P_UIFR[ me_frame-1,X,FI]=-0.5*me_deviation
+   msg("$66023")
+   gotof kraj
+endif
+
+;kalibracija alata, samo ako je unutar tolerancije
+if (mode==5)
+   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
+   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
+   $tc_dp4[ me_tool_number, me_tool_Dnumber]=$tc_dp4[ me_tool_number, me_tool_Dnumber]-0.5*me_deviation
+endif
+
 KRAJ:
 
-
 M17
+
+greska:
+
+SETAL(65002)
+M00
+M96
+
+m17

@@ -44,11 +44,12 @@ MS128(me_probe_number)
 g4 f2
 ;zakreni komad na ugao za pocetak merenja
 ms126(me_probe_number,,,0,"greska")
-;dolazak na precnik merenja
-ms126(me_probe_number,me_diameter,,,"GRESKA")
+;dolazak na precnik prilaza: sredina zljeba plus duzina merenja
+;me_diameter ne diramo, njega koristi merenje precnika
+ms126(me_probe_number,me_c_diameter+me_distance,,,"GRESKA")
 STOPRE
 ;bezbedan X za povratak je precnik na koji smo upravo dosli
-bezbedni_x=me_diameter
+bezbedni_x=me_c_diameter+me_distance
 ;ako nije rucno/kalibracija idemo na trazenje zljeba
 if (me_c_type<>4) gotof Zljeb
 ;******************************
@@ -107,9 +108,8 @@ for brojac=0 to maksbroj
 endfor
 ;racunamo sredinu
 me_C_diameter = 0.5*(maks+min)
-;podesavanje ostalih promenljivih
-;bezbedni X za kasniji programski prilaz, Z ide u me_c_position (maska)
-me_diameter = start_X
+;Z ide u me_c_position (maska)
+;kasniji prilaz po X je me_c_diameter+me_distance, me_diameter ostaje merenju precnika
 me_c_position = start_Z
 ;zapis u fajl
 if (me_test<>0)

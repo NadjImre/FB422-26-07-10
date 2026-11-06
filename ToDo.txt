@@ -39,7 +39,8 @@ D) Merenje
    c) merenje položaja žljeba i određivanje širine žljeba, kod kalibracije određuje radijus vrha alata
    d) merenje položaja ulaska u žljeb - pozicioniranje po C osi
    e) merenje srednjeg prečnika navoja
-   f) merenje prečnika u više tačaka uz proračun cilindričnosti
+   f) merenje prečnika u više tačaka uz proračun cilindričnosti - URAĐENO
+      _PROBE_CYLINDRICITY i CPROBE_CYLINDRICITY: preseci Z1..Z2, izveštaj, ručni setup, rekalibracija u me_cyl_offset[8]. Način 1 i 2 ne upisuju korekciju koordinatnog sistema. Nema posebne maske za pregled rezultata, rezultat je u izveštaju.
 3) Svi programi treba da imaju 
    a) masku za unos parametara
    b) masku za pregled rezultata

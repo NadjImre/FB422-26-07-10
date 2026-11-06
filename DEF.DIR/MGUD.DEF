@@ -149,6 +149,12 @@ def chan int me_frame ; koord. system koji se koriguje sa rezultatima merenja
 def chan real me_tolerance ; tolerancija odstupanja od nominalne mere
 def chan real me_runout_tolerance ; tolerancija udara
 def chan real me_offset; korekcija merenja precnika
+def chan real me_cyl_offset[8] ; pomeraj precnika po preseku cilindricnosti, 0..7
+def chan real me_cyl_max[8] ; maksimum precnika po preseku
+def chan real me_cyl_min[8] ; minimum precnika po preseku
+def chan real me_cyl_avg[8] ; prosek precnika po preseku
+def chan real me_cyl_span[8] ; raspon precnika po preseku
+def chan real me_cyl_tolerance ; tolerancija cilindricnosti, 0 iskljucuje proveru
 def chan int me_test; ako je vece od nule izvestaj u fajlu je opsirniji
 def chan int me_with_Caxis ; <>0 treba okrenuti C osu po zadati ugao za merenje
 def chan real me_Caxis_Position ; ugao na koji treba okrenuti C osu za merenje

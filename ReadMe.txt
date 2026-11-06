@@ -123,29 +123,42 @@ Meni ceditor.com -> merenje: VS1 kalibracija, VS2 prečnik, VS3 aksijalno, VS4 c
 
 Programi za merenje sa sondom su :
 -> _PROBE_CALIBRATION - kalibracija ili samo merenje po X (MS100) ili Z (MS110). Status: osa (1=X, 2=Z), sonda 1/2, bit 8 = samo merenje (inače kalibracija), ponavljanja 1-8. Nema kretanja do sonde, samo poziva MS1xx.
--> _PROBE_RECALIBRATION - rekalibracija prečnikom (MS140), parametri iz poziva; maske više nema, zovu ga WKS programi
--> _PROBE_MEASURING - merenje po X ili Z - osam načina: aksijalno 1-4 (samo merenje, korekcija, rekalibracija, udar) i prečnik 5-8 (isto); poziva MS120 za Z ili MS140 za X. Privremeno ga zovu i CPROBE_AXIAL / CPROBE_DIAMETER / CPROBE_CYLINDRICITY (mesto u meniju, sadržaj još stari)
--> _PROBE_WIDTH - merenje sredine žljeba - tri mogućnosti : merenje bez korekcije, merenje sa korekcijom Z ose i rekalibracija polozaja sonde. Samo priprema parametre, merenje radi pozivajući MS150
--> _PROBE_CAXIS - merenje po C, traži ulaznu tačku u žljeb po obimu komada, poziva MS130 (treba testirati)
--> _PROBE_THREAD - merenje srednjeg prečnika navoja, isto ima tri varijante - samo merenje, merenje i korekcija i rekalibracija. Samo priprema parametre i poziva MS160
+-> _PROBE_RECALIBRATION - rekalibracija prečnika (MS140), parametri iz poziva; maske nema, zovu ga WKS programi. Niski bitovi statusa su broj pokušaja, ne način rada. Pre merenja me_status je 0, da MS140 ne dira alat. Posle svakog merenja $TC_DP4 ide za pola odstupanja, ponovo dok |odstupanje| ne padne na 0.002 ili dok se pokušaji ne potroše.
+-> _PROBE_DIAMETER - jedan presek, MS140. me_offset se na ulazu nulira. Zaokret, prilaz, povratak, dizanje, ugao C, broj tačaka i ponavljanja dolaze sa maske.
+  Način 0 samo zapiše da merenje nije zadato. Način 1 i 4 mere i proveravaju toleranciju prečnika i udara; van nje SETAL(65002). Način 2 isto proveri, pa u fine koordinatnog sistema upiše pomeraj X = −0.5×odstupanje. Način 3 ostavlja status, pa dužinu alata rekalibriše MS140 ($TC_DP4, pola odstupanja, dok ne uđe u toleranciju ili ne istekne broj ponavljanja). Način 5 u ciklusu kalibriše $TC_DP4 posle jednog merenja; maska ga ne nudi.
+  Izveštaj: zaglavlje ciklusa, tabele tačaka iz MS127.
+-> _PROBE_AXIAL - isti raspored parametara kao prečnik, merenje radi MS120. Toleranciju, korekciju okvira i rekalibraciju ne radi ovaj ciklus nego MS120.
+  Način 1 i 4: me_actual_position je prosek, alarm na položaj i aksijalni udar. Način 2: fine Z = −odstupanje. Način 3: MS120 pomera $TC_DP5 za celo odstupanje i ponavlja dok ne uđe u toleranciju. Način 5 (dužina alata posle jednog merenja) postoji u MS120; maska ga ne nudi.
+-> _PROBE_CYLINDRICITY - prečnik u 1..8 preseka od Z1 do Z2 i cilindričnost. Jedan presek ostaje na Z1, inače su ravnomerno raspoređeni. Svaki presek zove MS140. Između preseka povratak je način 16, bez podizanja sonde; na poslednjem važe povratak i dizanje sa maske. Zaokret (X/Z, ugao B, prilaz) i prečnik završetka idu u MS140. Posle petlje me_offset se vraća na 0.
+  Način 0 ne meri. Način 1 i 2 mere sa pomerajem me_cyl_offset[presek] i proveravaju toleranciju prečnika, udar preseka i cilindričnost. Korekcija koordinatnog sistema se ne upisuje, zato su način 1 i 2 u ciklusu isti. Način 3 je rekalibracija pomeraja: meri sa me_offset=0 i bez izmene dužine alata (MS140 vidi način 1), zatim me_cyl_offset[i] = nominalni − prosek preseka. Alarm se ne diže. Način 4 je ručni setup: me_offset=0, jedan MS140 tamo gde je sonda dovedena, bez petlje i bez zbirnog izveštaja.
+  Cilindričnost je (najveći − najmanji prečnik svih preseka) / 2. Izveštaj u me_report_file: zaglavlje opsega, red pred svaki presek, tabele tačaka iz MS127, pa zbir srednjeg prečnika i cilindričnosti. Van tolerancije SETAL(65002), M00, M96. Tolerancija 0 isključuje tu proveru.
+  GUD u MGUD, učitati definiciju: me_cyl_offset[8], me_cyl_max/min/avg/span[8], me_cyl_tolerance. Posle učitavanja niz pomeraja kreće od nule dok se ne uradi rekalibracija.
+-> _PROBE_WIDTH - sredina žleba, MS150. Ima zaokret, prilaz, povratak, C, broj tačaka i ponavljanja. U pozivu je sonda fiksno 23. Širina sa maske ide u me_w_width. Nominalni prečnik i Z se ne prepisuju u me_w_diameter i me_w_position.
+  Način 1 proverava |me_w_result| i diže alarm. Način 2 upisuje fine Z = −me_w_result. Način 3 pomera sačuvani me_w_position za tu grešku. Način 4 MS150 meri gde je sonda dovedena i pamti nađeni prečnik, sredinu i širinu; ciklus posle toga ne proverava toleranciju.
+-> _PROBE_CAXIS - položaj žleba po C, MS130. Poseban hod i brzina po C, zaokret, prilaz, povratak i dizanje. Nema broja ponavljanja ni ugaonih tačaka.
+  Način 1 proverava odstupanje ugla. Način 2 upisuje fine C = −odstupanje. Način 3, ako je unutar tolerancije, pamti izmereni ugao u me_c_calibration. Način 4 ne prilazi: MS130 skenira od trenutnog položaja. Izveštaj piše MS130.
+-> _PROBE_THREAD - srednji prečnik navoja, MS160. Maska šalje nominalni prečnik, početni prečnik i Z, ali ciklus te tri vrednosti ne prepisuje u me_th_*. Korak i korak merenja idu u me_th_pitch i me_th_step. Nema zaokreta ni prilaza.
+  Način 1 poredi me_th_CError sa tolerancijom. Način 2 i 3 gledaju promenljivu mode, koja se ne dodeljuje, pa korekcija okvira i rekalibracija iz maske ne rade. Način 4 MS160 vodi na svoju granu kalibracije.
+
+_PROBE_MEASURING.SPF više nema. CPROBE_DIAMETER i CPROBE_AXIAL zovu svoje cikluse. Staro ime još zovu PROBE_DIAM14_FACE na kraćem i dužem valu.
 
 Pomoćni programi :
 -> MS100 - kalibracija / merenje po X: petlja ponavljanja, log u me_report_file; kalibracija $TC_DP4 sa poslednjeg MCS (target/2), merenje ispisuje prosek WCS
 -> MS110 - isto po Z: hod Z+me_distance, kalibracija $TC_DP5 = MCS-target
--> MS120 - merenje po Z osi sa ponavljanjem u svakoj tački i okretanjem komada može da meri poziciju po Z ili aksijalni udar
--> MS130 - traženje i merenje pozicije žljeba po obimu komada (po C osi)
--> MS140 - merenje prečnika komada u više tačaka okretanjem komada sa mogućnošću ponavljanja u svakoj tački, meri prečnik i/ili radijalni udar
--> MS150 - određivanje centar žljeba po Z osi 
--> MS160 - merenje srednjeg prečnika navoja i ugla ulaska u žljeb
+-> MS120 - položaj po Z i aksijalni udar, više tačaka i ponavljanja, zaokret i ručni prilaz kad je status > 3. Tu su provera tolerancije, fine Z i rekalibracija $TC_DP5. Izveštaj preko MS127.
+-> MS130 - traženje žleba po obimu, korak me_c_span, zaokret i izveštaj. Način 4 preskače prilaz.
+-> MS140 - prečnik i radijalni udar, više tačaka i ponavljanja. Tačka je $AA_MW[X]+me_offset. Toleranciju ne proverava; to rade _PROBE_DIAMETER i _PROBE_CYLINDRICITY. Način 3 sam pomera $TC_DP4. Status > 3 meri bez prilaza. Za način 1 i 4 ostavlja me_actual_diameter. Izveštaj preko MS127.
+-> MS150 - sredina žleba u više tačaka, prilaz kao kod MS120. me_w_result je odstupanje sredine. Način 4 pamti prečnik, sredinu, širinu i C, pa staje na M00.
+-> MS160 - srednji prečnik navoja i ulaz u žleb. Čita me_th_*. Način 4 je kalibracija unutar ciklusa.
 
 Maske za podešavanje
 - CPROBE_CALIBRATION.COM - osa X/Z, sonda, kalibracija ili merenje, broj ponavljanja
-- CPROBE_DIAMETER.COM - merenje prečnika (za sada isti kod kao stari CPROBE_MEASURING)
-- CPROBE_AXIAL.COM - aksijalno merenje (za sada isti kod kao stari CPROBE_MEASURING)
-- CPROBE_CYLINDRICITY.COM - cilindričnost (za sada isti kod kao stari CPROBE_MEASURING)
-- CPROBE_WIDTH.COM - podešavanje _PROBE_WIDTH
-- CPROBE_CAXIS_POSITION.COM - podešavanje _PROBE_CAXIS
-- CPROBE_THREAD.COM - podešavanje _PROBE_THREAD
+- CPROBE_DIAMETER.COM - maska _PROBE_DIAMETER. Načini: bez merenja, samo merenje, korekcija okvira, rekalibracija alata, ručni setup. Zaokret, X i Z, hod, brzina, dozvola prečnika i udara, broj tačaka i ponavljanja, povratak, dizanje, C. VS5 puni X iz me_actual_diameter, Z iz me_actual_position i C iz me_actual_CPosition.
+- CPROBE_AXIAL.COM - isto za _PROBE_AXIAL. Dozvola udara je aksijalna. VS5 puni ista tri polja.
+- CPROBE_CYLINDRICITY.COM - maska _PROBE_CYLINDRICITY. Nominalni prečnik, Z1, Z2, broj preseka, hod, brzina, dozvole D/R/C, koordinatni sistem, zaokret, povratak i dizanje. VS5 iz ručnog merenja puni nominalni prečnik iz me_actual_diameter i Z1 iz me_actual_position.
+- CPROBE_WIDTH.COM - maska _PROBE_WIDTH. Načini: bez merenja, samo merenje, korekcija, rekalibracija, ručni setup. Nema dugmeta za preuzimanje iz ručnog merenja. Poziv fiksira podizanje sonde na 23.
+- CPROBE_CAXIS_POSITION.COM - maska _PROBE_CAXIS. Nominalni prečnik i Z, kalibracioni ugao C, hod po X, korak i brzina po C, dozvola ugla, zaokret i povratak.
+- CPROBE_THREAD.COM - maska _PROBE_THREAD. Dva prečnika, Z, korak, korak merenja, broj sonde za podizanje i C. Nema zaokreta ni prilaza. Povratak je stari izbor 0/16/32/48.
   Nema više CPROBE_MEASURING.COM ni CPROBE_RECALIBRATION.COM.
 
 Proba izmene ----

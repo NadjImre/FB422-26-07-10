@@ -136,32 +136,9 @@ msg(poruka)
 
 ;akcije u zavisnosti od moda rada
 
-;merenje precnika bez korekcije
-;isto i za rucno i za programsko pozicioniranje
+;izmereni precnik ostaje pozivaocu, proveru tolerancije radi _PROBE_DIAMETER
 if ( ((me_status b_and 7)==1) or ((me_status b_and 7)==4) )
    me_actual_diameter=me_avg
-   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
-   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
-   gotof kraj
-endif
-
-;merenje precnika sa korekcijom
-;na bazi srednje vrednosti unosi se korekcija u koord sistem
-;pomak X je u radijusu, greska je na precniku
-if ((me_status b_and 7)==2)
-   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
-   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
-   $P_UIFR[ me_frame-1,X,FI]=-0.5*me_deviation
-   msg("$66023")
-   gotof kraj
-endif
-
-;merenje precnika i kalibracija
-;korekcija ide u duzinu 2 alata, pola greske precnika
-if ( (me_status b_and 7)==5 )
-   If( ( me_tolerance>0) AND ( me_tolerance<=ABS(me_deviation))) gotof greska
-   If( ( me_runout_tolerance>0) AND ( me_runout_tolerance<=ABS(me_span))) gotof greska
-   $tc_dp4[ me_tool_number, me_tool_Dnumber]=$tc_dp4[ me_tool_number, me_tool_Dnumber]-0.5*me_deviation
 endif
 
 KRAJ:

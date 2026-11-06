@@ -7,7 +7,6 @@ if (me_c_type == 0) gotof kraj
 me_tool=Sonda
 me_tool_number = gett(sonda)
 me_tool_Dnumber = DBrojSonde
-me_diameter = xnom+duzmer
 me_c_diameter = Xnom
 me_c_position = Znom
 me_c_calibration = Ccalib
